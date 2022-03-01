@@ -1,17 +1,18 @@
 import { Button, StyleSheet, Text, View } from "react-native";
-import { AuthNavProps } from "../../navigation/params/AuthParamList";
+import { LoginForm } from "../../components/form/LoginForm";
+import { AuthNavProps } from "../../navigation/types";
 
 export const LoginScreen = ({ navigation, route }: AuthNavProps<"Login">) => {
   return (
     <View style={styles.container}>
       <Text>Login!</Text>
+      <LoginForm />
       <Button
         title="go to register"
         onPress={() => {
           navigation.navigate("Register");
         }}
       />
-      <Button title="Login" onPress={() => {}} />
     </View>
   );
 };
