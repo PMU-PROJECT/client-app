@@ -14,7 +14,7 @@ type FormButtonProps = {
   onPress: ((event: GestureResponderEvent) => void) | undefined;
 };
 
-export const FormButton = ({
+export const FormButton: React.FC<FormButtonProps> = ({
   title,
   backgroundColor,
   style,

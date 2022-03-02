@@ -1,15 +1,16 @@
+import { AntDesign } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { View, StyleSheet, Text, TextInput, Button } from "react-native";
-import { Formik } from "formik";
-import { FormContainer } from "./FormContainer";
-import { FormInput } from "./FormInput";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { primary_main } from "../../constants/Colors";
 import {
   isValidEmail,
   isValidObjField,
   updateError,
 } from "../../utils/inputValidation";
+import { FormContainer } from "./FormContainer";
+import { FormInput } from "./FormInput";
 
-export const LoginForm = () => {
+export const LoginForm: React.FC = () => {
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -43,35 +44,63 @@ export const LoginForm = () => {
   };
 
   return (
-    <FormContainer>
-      {error && error.field === "all" ? (
-        <Text style={styles.textError}>{error.message}</Text>
-      ) : null}
-      <FormInput
-        value={email}
-        onChangeText={(value: string) => handleOnChangeText(value, "email")}
-        label="Email"
-        placeholder="example@email.com"
-        autoCapitalize="none"
-        error={error && error.field === "email" ? error.message : undefined}
-      />
-      <FormInput
-        value={password}
-        onChangeText={(value: string) => handleOnChangeText(value, "password")}
-        label="Password"
-        placeholder="********"
-        autoCapitalize="none"
-        secureTextEntry
-        error={error && error.field === "pass" ? error.message : undefined}
-      />
-      <Button
-        title="Login"
-        onPress={() => {
-          console.log(error.message);
-          submitForm();
-        }}
-      />
-    </FormContainer>
+    <>
+      <FormContainer>
+        <Text style={styles.header}>Welcome Back!</Text>
+        {error && error.field === "all" ? (
+          <Text style={styles.textError}>{error.message}</Text>
+        ) : null}
+        <View style={styles.form}>
+          <FormInput
+            value={email}
+            onChangeText={(value: string) => handleOnChangeText(value, "email")}
+            label="Email"
+            placeholder="example@email.com"
+            autoCapitalize="none"
+            error={error && error.field === "email" ? error.message : undefined}
+            returnKeyType="next"
+          />
+          <FormInput
+            value={password}
+            onChangeText={(value: string) =>
+              handleOnChangeText(value, "password")
+            }
+            label="Password"
+            placeholder="********"
+            autoCapitalize="none"
+            secureTextEntry
+            error={error && error.field === "pass" ? error.message : undefined}
+            returnKeyType="done"
+          />
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.buttons}>
+              <AntDesign.Button
+                name="login"
+                size={25}
+                color={"white"}
+                backgroundColor={"blue"}
+                onPress={() => {
+                  submitForm();
+                }}
+              >
+                Log in
+              </AntDesign.Button>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttons}>
+              <AntDesign.Button
+                name="google"
+                size={25}
+                color={"white"}
+                backgroundColor={"blue"}
+                onPress={() => {}}
+              >
+                Sign up
+              </AntDesign.Button>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </FormContainer>
+    </>
   );
 };
 
@@ -80,5 +109,25 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 18,
     textAlign: "center",
+  },
+  header: {
+    textAlign: "center",
+    marginVertical: 20,
+    color: primary_main,
+    fontWeight: "bold",
+    fontSize: 28,
+  },
+  form: {
+    justifyContent: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttons: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
