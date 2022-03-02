@@ -1,5 +1,6 @@
-import { Button, StyleSheet, Text, View } from "react-native";
-import { AuthNavProps } from "../../navigation/params/AuthParamList";
+import { StyleSheet, View } from "react-native";
+import { RegisterForm } from "../../components/form/RegisterForm";
+import { AuthNavProps } from "../../navigation/types";
 
 export const RegisterScreen = ({
   navigation,
@@ -7,13 +8,7 @@ export const RegisterScreen = ({
 }: AuthNavProps<"Login">) => {
   return (
     <View style={styles.container}>
-      <Text>Register!</Text>
-      <Button
-        title="go to login"
-        onPress={() => {
-          navigation.navigate("Login");
-        }}
-      />
+      <RegisterForm />
     </View>
   );
 };

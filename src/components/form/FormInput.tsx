@@ -6,6 +6,13 @@ import {
   StyleSheet,
   TextInputProps,
 } from "react-native";
+import {
+  error_main,
+  info_main,
+  primary_main,
+  text_disabled,
+  text_ligth_secondary,
+} from "../../constants/Colors";
 
 type InputProps = {
   placeholder: string;
@@ -17,7 +24,7 @@ type InputProps = {
   // onInputChange: Function;
 } & TextInputProps;
 
-export const FormInput = (props: InputProps) => {
+export const FormInput: React.FC<InputProps> = (props: InputProps) => {
   const { placeholder, label, error } = props;
   return (
     <>
@@ -33,9 +40,10 @@ export const FormInput = (props: InputProps) => {
 const styles = StyleSheet.create({
   label: {
     fontWeight: "bold",
+    color: text_ligth_secondary,
   },
   error: {
-    color: "red",
+    color: error_main,
     fontSize: 16,
   },
   formControl: {
@@ -44,8 +52,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#14143b",
+    backgroundColor: "rgba(141, 141, 168, 0.2)",
     height: 35,
     borderRadius: 8,
     fontSize: 16,
