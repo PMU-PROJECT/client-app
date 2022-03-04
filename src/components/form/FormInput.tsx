@@ -1,11 +1,13 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useContext } from "react";
 import {
-  View,
+  StyleSheet,
   Text,
   TextInput,
-  StyleSheet,
   TextInputProps,
+  View,
 } from "react-native";
+import { ColorSchema, text_disabled } from "../../constants/Colors";
+import { ColorContext } from "../../navigation/RootNavigator";
 
 type InputProps = {
   placeholder: string;
@@ -17,15 +19,32 @@ type InputProps = {
   // onInputChange: Function;
 } & TextInputProps;
 
-export const FormInput = (props: InputProps) => {
+export const FormInput: React.FC<InputProps> = (props: InputProps) => {
+  const { theme } = useContext(ColorContext);
   const { placeholder, label, error } = props;
+
   return (
     <>
       <View style={styles.formControl}>
-        <Text style={styles.label}>{label}</Text>
+        <Text
+          style={[
+            styles.label,
+            theme === "dark" ? styles.labelDark : styles.labelLight,
+          ]}
+        >
+          {label}
+        </Text>
         {error ? <Text style={styles.error}>{error}</Text> : null}
       </View>
-      <TextInput {...props} placeholder={placeholder} style={styles.input} />
+      <TextInput
+        {...props}
+        placeholder={placeholder}
+        placeholderTextColor={theme === "dark" ? text_disabled : text_disabled}
+        style={[
+          styles.input,
+          theme === "dark" ? styles.inputBgDark : styles.inputBgLight,
+        ]}
+      />
     </>
   );
 };
@@ -34,8 +53,14 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: "bold",
   },
+  labelDark: {
+    color: ColorSchema.dark.text,
+  },
+  labelLight: {
+    color: ColorSchema.light.text,
+  },
   error: {
-    color: "red",
+    color: ColorSchema.default.error,
     fontSize: 16,
   },
   formControl: {
@@ -44,12 +69,18 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#14143b",
     height: 35,
     borderRadius: 8,
     fontSize: 16,
     paddingLeft: 10,
     marginBottom: 20,
+  },
+  inputBgDark: {
+    backgroundColor: "rgba(141, 141, 168, 0.2)",
+    color: ColorSchema.dark.text,
+  },
+  inputBgLight: {
+    backgroundColor: "rgba(141, 141, 168, 0.2)",
+    color: ColorSchema.light.text,
   },
 });

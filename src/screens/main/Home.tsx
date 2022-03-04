@@ -1,19 +1,31 @@
-import { Button, StyleSheet, Text, View } from "react-native";
-import { PlacesNavProps } from "../../navigation/params/PlacesParamList";
+import { Button, StyleSheet, Text, View, FlatList } from "react-native";
+import { PlaceCard } from "../../components/home/placeCard";
+import { PlacesNavProps } from "../../navigation/types";
 
 export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
-  return (
-    <View style={styles.container}>
-      <Text>Home</Text>
-      <Button
-        title="View Details"
+  const imageUrl =
+    "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
+
+  const renderGridItem = () => {
+    return (
+      <PlaceCard
+        key={`${Math.random()}`}
         onPress={() => {
-          navigation.navigate("PlaceDetails", {
-            id: "Place 1",
-          });
+          navigation.navigate("PlaceDetails", { id: "1" });
         }}
+        title={"Place 1"}
+        imageUrl={imageUrl}
       />
-    </View>
+    );
+  };
+
+  return (
+    <FlatList
+      data={[1, 2, 3, 3]}
+      keyExtractor={(_item, idx) => idx}
+      numColumns={2}
+      renderItem={renderGridItem}
+    />
   );
 };
 

@@ -1,13 +1,12 @@
-import { FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { createStackNavigator } from "@react-navigation/stack";
-import { Text, View } from "react-native";
 import { AchivementsScreen } from "../screens/drawer/Achievements";
-import { SettingScreen } from "../screens/drawer/Settings";
+import { ScanQRScreen } from "../screens/drawer/ScanQR";
 import { AppTabs } from "./MainTabs";
 import { SettingsStack } from "./SettingsStack";
+import { DrawwerParamList } from "./types";
 
-const DrawerNavigator = createDrawerNavigator();
+const DrawerNavigator = createDrawerNavigator<DrawwerParamList>();
 
 export const DrawerNav: React.FC = ({}) => {
   return (
@@ -26,7 +25,15 @@ export const DrawerNav: React.FC = ({}) => {
         component={AppTabs}
       ></DrawerNavigator.Screen>
 
-      <DrawerNavigator.Screen name="Settings" component={SettingsStack} />
+      <DrawerNavigator.Screen
+        name="Settings"
+        options={{
+          drawerIcon: ({ color }) => (
+            <FontAwesome5 name="cog" size={24} color={color} />
+          ),
+        }}
+        component={SettingsStack}
+      />
       <DrawerNavigator.Screen
         name="Achievements"
         options={({ navigation }) => ({
@@ -47,6 +54,28 @@ export const DrawerNav: React.FC = ({}) => {
         })}
         component={AchivementsScreen}
       />
+      {0 === 0 ? (
+        <DrawerNavigator.Screen
+          name="ScanQR"
+          options={({ navigation }) => ({
+            title: "Scan QR code",
+            drawerIcon: ({ color }) => (
+              <AntDesign name="scan1" size={24} color={color} />
+            ),
+            headerRight: () => (
+              <Ionicons
+                name="menu"
+                size={24}
+                color="black"
+                onPress={() => {
+                  navigation.toggleDrawer();
+                }}
+              />
+            ),
+          })}
+          component={ScanQRScreen}
+        />
+      ) : null}
     </DrawerNavigator.Navigator>
   );
 };

@@ -1,15 +1,18 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Text, TextInput, Button } from "react-native";
-import { Formik } from "formik";
-import { FormContainer } from "./FormContainer";
-import { FormInput } from "./FormInput";
+import { AntDesign } from "@expo/vector-icons";
+import React, { useContext, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ColorSchema } from "../../constants/Colors";
+import { ColorContext } from "../../navigation/RootNavigator";
 import {
   isValidEmail,
   isValidObjField,
   updateError,
 } from "../../utils/inputValidation";
+import { FormContainer } from "./FormContainer";
+import { FormInput } from "./FormInput";
 
-export const LoginForm = () => {
+export const LoginForm: React.FC = () => {
+  const { theme } = useContext(ColorContext);
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -43,42 +46,103 @@ export const LoginForm = () => {
   };
 
   return (
-    <FormContainer>
-      {error && error.field === "all" ? (
-        <Text style={styles.textError}>{error.message}</Text>
-      ) : null}
-      <FormInput
-        value={email}
-        onChangeText={(value: string) => handleOnChangeText(value, "email")}
-        label="Email"
-        placeholder="example@email.com"
-        autoCapitalize="none"
-        error={error && error.field === "email" ? error.message : undefined}
-      />
-      <FormInput
-        value={password}
-        onChangeText={(value: string) => handleOnChangeText(value, "password")}
-        label="Password"
-        placeholder="********"
-        autoCapitalize="none"
-        secureTextEntry
-        error={error && error.field === "pass" ? error.message : undefined}
-      />
-      <Button
-        title="Login"
-        onPress={() => {
-          console.log(error.message);
-          submitForm();
-        }}
-      />
-    </FormContainer>
+    <>
+      <FormContainer>
+        <Text
+          style={[
+            styles.header,
+            theme === "dark" ? styles.headerDark : styles.header,
+          ]}
+        >
+          Welcome Back!
+        </Text>
+        {error && error.field === "all" ? (
+          <Text style={styles.textError}>{error.message}</Text>
+        ) : null}
+        <View style={styles.form}>
+          <FormInput
+            value={email}
+            onChangeText={(value: string) => handleOnChangeText(value, "email")}
+            label="Email"
+            placeholder="example@email.com"
+            autoCapitalize="none"
+            error={error && error.field === "email" ? error.message : undefined}
+            returnKeyType="next"
+          />
+          <FormInput
+            value={password}
+            onChangeText={(value: string) =>
+              handleOnChangeText(value, "password")
+            }
+            label="Password"
+            placeholder="********"
+            autoCapitalize="none"
+            secureTextEntry
+            error={error && error.field === "pass" ? error.message : undefined}
+            returnKeyType="done"
+          />
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.buttons}>
+              <AntDesign.Button
+                name="login"
+                size={25}
+                color={"white"}
+                backgroundColor={ColorSchema.dark.headerButton}
+                onPress={() => {
+                  submitForm();
+                }}
+              >
+                LOG IN
+              </AntDesign.Button>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttons}>
+              <AntDesign.Button
+                name="google"
+                size={25}
+                color={"white"}
+                backgroundColor={ColorSchema.dark.headerButton}
+                onPress={() => {}}
+              >
+                SIGN UP
+              </AntDesign.Button>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </FormContainer>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   textError: {
-    color: "red",
+    color: ColorSchema.default.error,
     fontSize: 18,
     textAlign: "center",
+  },
+  header: {
+    textAlign: "center",
+    marginVertical: 20,
+    fontWeight: "bold",
+    fontSize: 28,
+  },
+  headerLight: {
+    color: ColorSchema.light.text,
+  },
+  headerDark: {
+    color: ColorSchema.dark.text,
+  },
+  form: {
+    justifyContent: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 15,
+  },
+  buttons: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

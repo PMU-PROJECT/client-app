@@ -1,21 +1,44 @@
 import React from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { FormNavButtons } from "./FormNavButtons";
 
-export const FormContainer = (props: any) => {
+export const FormContainer: React.FC = (props: any) => {
   return (
-    <KeyboardAvoidingView
-      enabled
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      style={styles.container}
-    >
-      {props.children}
-    </KeyboardAvoidingView>
+    <>
+      <KeyboardAvoidingView
+        enabled
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={styles.container}
+      >
+        <View style={styles.navButtons}>
+          <FormNavButtons />
+        </View>
+        {props.children}
+      </KeyboardAvoidingView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: "80%",
-    paddingHorizontal: 20,
+    flex: 1,
+    width: "100%",
+    shadowColor: "black",
+    justifyContent: "center",
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 8,
+    elevation: 5,
+    borderRadius: 10,
+    padding: 20,
+  },
+  navButtons: {
+    alignSelf: "flex-start",
   },
 });
