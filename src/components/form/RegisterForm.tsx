@@ -1,17 +1,12 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Text, Button, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { Formik, FormikHelpers } from "formik";
-import { FormInput } from "./FormInput";
-import { FormContainer } from "./FormContainer";
-import {
-  isValidEmail,
-  isValidObjField,
-  updateError,
-} from "../../utils/inputValidation";
+import React, { useContext, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ColorSchema } from "../../constants/Colors";
+import { ColorContext } from "../../navigation/RootNavigator";
 import { ValidationSchema } from "../../utils/ValidationSchema";
-import { CustomButton } from "../general/CustomButton";
-import { primary_main } from "../../constants/Colors";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { FormContainer } from "./FormContainer";
+import { FormInput } from "./FormInput";
 
 type UserInfo = {
   firstName: string;
@@ -22,6 +17,7 @@ type UserInfo = {
 };
 
 export const RegisterForm: React.FC = () => {
+  const { theme } = useContext(ColorContext);
   const [userInfo, setUserInfo] = useState<UserInfo>({
     firstName: "",
     lastName: "",
@@ -36,7 +32,14 @@ export const RegisterForm: React.FC = () => {
 
   return (
     <FormContainer>
-      <Text style={styles.header}>Register</Text>
+      <Text
+        style={[
+          styles.header,
+          theme === "dark" ? styles.headerDark : styles.headerLight,
+        ]}
+      >
+        Register
+      </Text>
       <Formik
         style={styles.form}
         initialValues={userInfo}
@@ -135,10 +138,10 @@ export const RegisterForm: React.FC = () => {
                     name="create-outline"
                     size={25}
                     color={"white"}
-                    backgroundColor={"blue"}
+                    backgroundColor={ColorSchema.dark.headerButton}
                     onPress={handleSubmit as any}
                   >
-                    Register
+                    REGISTER
                   </Ionicons.Button>
                 </TouchableOpacity>
               </View>
@@ -154,9 +157,14 @@ const styles = StyleSheet.create({
   header: {
     textAlign: "center",
     marginVertical: 20,
-    color: primary_main,
     fontWeight: "bold",
     fontSize: 28,
+  },
+  headerLight: {
+    color: ColorSchema.light.text,
+  },
+  headerDark: {
+    color: ColorSchema.dark.text,
   },
   form: {
     justifyContent: "center",
@@ -165,6 +173,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    marginVertical: 15,
   },
   buttons: {
     flex: 1,

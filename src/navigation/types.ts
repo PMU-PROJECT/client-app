@@ -39,3 +39,10 @@ export type RootTabScreenProps<Screen extends keyof MainTabParamList> =
     BottomTabScreenProps<MainTabParamList, Screen>,
     NativeStackScreenProps<PlacesParamList>
   >;
+
+export type DrawwerParamList = {
+  Tabs: undefined;
+  Settings: undefined;
+  ScanQR: undefined;
+  Achievements: undefined;
+};

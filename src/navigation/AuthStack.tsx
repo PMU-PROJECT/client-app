@@ -1,5 +1,4 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import LoginForm from "../components/form/LoginForm";
 import { LoginScreen } from "../screens/auth/LoginScreen";
 import { RegisterScreen } from "../screens/auth/RegisterScreen";
 import { AuthParamList } from "./types";

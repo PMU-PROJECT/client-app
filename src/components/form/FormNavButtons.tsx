@@ -1,39 +1,74 @@
 import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
-import React from "react";
-import { primary_main } from "../../constants/Colors";
+import React, { useContext } from "react";
+import { ColorSchema } from "../../constants/Colors";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { ColorContext } from "../../navigation/RootNavigator";
 
 export const FormNavButtons: React.FC = (props) => {
   const navigation = useNavigation();
   const route = useRoute();
+  const { theme } = useContext(ColorContext);
 
-  let stylesLogin,
-    stylesRegister = null;
+  let active: "login" | "register" = "login";
+
   if (route.name === "Login") {
-    stylesLogin = styles.buttonActive;
-    stylesRegister = styles.buttonOther;
+    active = "login";
   } else if (route.name === "Register") {
-    stylesLogin = styles.buttonOther;
-    stylesRegister = styles.buttonActive;
+    active = "register";
   }
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        theme === "dark" ? styles.containerDark : styles.containerLight,
+      ]}
+    >
       <TouchableOpacity
-        style={[stylesLogin, styles.buttonLeft]}
+        style={[
+          active === "login" ? styles.buttonActive : styles.buttonOther,
+          styles.buttonLeft,
+        ]}
         onPress={() => {
           navigation.navigate("Login");
         }}
       >
-        <Text style={styles.title}>Login</Text>
+        <Text
+          style={[
+            styles.title,
+            active === "login"
+              ? styles.titleDark
+              : theme === "dark"
+              ? styles.titleDark
+              : styles.titleLight,
+          ]}
+        >
+          Login
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[stylesRegister, styles.buttonRight]}
+        style={[
+          active === "register" ? styles.buttonActive : styles.buttonOther,
+          ,
+          styles.buttonRight,
+        ]}
         onPress={() => {
           navigation.navigate("Register");
         }}
       >
-        <Text style={styles.title}>Register</Text>
+        <Text
+          style={[
+            styles.title,
+            ,
+            active === "register"
+              ? styles.titleDark
+              : theme === "dark"
+              ? styles.titleDark
+              : styles.titleLight,
+          ]}
+        >
+          Register
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -41,30 +76,43 @@ export const FormNavButtons: React.FC = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     flexDirection: "row",
     alignItems: "flex-start",
     marginVertical: 50,
     justifyContent: "space-evenly",
+    borderRadius: 22,
+  },
+  containerLight: {
+    backgroundColor: ColorSchema.default.disabledButton,
+  },
+  containerDark: {
+    backgroundColor: "#000",
+    borderColor: ColorSchema.dark.headerButtonAlpha,
+    borderWidth: 2,
   },
   title: {
     textAlign: "center",
-    color: "white",
     fontSize: 16,
     fontWeight: "bold",
   },
+  titleDark: {
+    color: ColorSchema.dark.text,
+  },
+  titleLight: {
+    color: ColorSchema.light.text,
+  },
   buttonActive: {
-    backgroundColor: "rgba(78, 36, 242, 0.85)",
-    width: "50%",
-    color: primary_main,
+    backgroundColor: ColorSchema.dark.headerButtonAlpha,
+    width: "55%",
+    color: "#fff",
     height: 40,
     textAlign: "center",
     justifyContent: "space-evenly",
+    borderRadius: 20,
   },
   buttonOther: {
-    backgroundColor: "rgba(141, 141, 168, 0.85)",
-    width: "50%",
-    color: primary_main,
+    width: "45%",
+    color: ColorSchema.light.text,
     height: 40,
     textAlign: "center",
     justifyContent: "space-evenly",

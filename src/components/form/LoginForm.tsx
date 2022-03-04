@@ -1,7 +1,8 @@
 import { AntDesign } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { primary_main } from "../../constants/Colors";
+import { ColorSchema } from "../../constants/Colors";
+import { ColorContext } from "../../navigation/RootNavigator";
 import {
   isValidEmail,
   isValidObjField,
@@ -11,6 +12,7 @@ import { FormContainer } from "./FormContainer";
 import { FormInput } from "./FormInput";
 
 export const LoginForm: React.FC = () => {
+  const { theme } = useContext(ColorContext);
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -46,7 +48,14 @@ export const LoginForm: React.FC = () => {
   return (
     <>
       <FormContainer>
-        <Text style={styles.header}>Welcome Back!</Text>
+        <Text
+          style={[
+            styles.header,
+            theme === "dark" ? styles.headerDark : styles.header,
+          ]}
+        >
+          Welcome Back!
+        </Text>
         {error && error.field === "all" ? (
           <Text style={styles.textError}>{error.message}</Text>
         ) : null}
@@ -78,12 +87,12 @@ export const LoginForm: React.FC = () => {
                 name="login"
                 size={25}
                 color={"white"}
-                backgroundColor={"blue"}
+                backgroundColor={ColorSchema.dark.headerButton}
                 onPress={() => {
                   submitForm();
                 }}
               >
-                Log in
+                LOG IN
               </AntDesign.Button>
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttons}>
@@ -91,10 +100,10 @@ export const LoginForm: React.FC = () => {
                 name="google"
                 size={25}
                 color={"white"}
-                backgroundColor={"blue"}
+                backgroundColor={ColorSchema.dark.headerButton}
                 onPress={() => {}}
               >
-                Sign up
+                SIGN UP
               </AntDesign.Button>
             </TouchableOpacity>
           </View>
@@ -106,16 +115,21 @@ export const LoginForm: React.FC = () => {
 
 const styles = StyleSheet.create({
   textError: {
-    color: "red",
+    color: ColorSchema.default.error,
     fontSize: 18,
     textAlign: "center",
   },
   header: {
     textAlign: "center",
     marginVertical: 20,
-    color: primary_main,
     fontWeight: "bold",
     fontSize: 28,
+  },
+  headerLight: {
+    color: ColorSchema.light.text,
+  },
+  headerDark: {
+    color: ColorSchema.dark.text,
   },
   form: {
     justifyContent: "center",
@@ -124,6 +138,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    marginVertical: 15,
   },
   buttons: {
     flex: 1,

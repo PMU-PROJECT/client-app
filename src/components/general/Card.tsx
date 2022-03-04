@@ -1,12 +1,16 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 
 interface CardProps {
-  style: {};
+  style?: {};
 }
 
 export const Card: React.FC<CardProps> = (props) => {
-  return <View style={[styles.card, props.style]}>{props.children}</View>;
+  return (
+    <View style={[styles.card, props.style ? props.style : null]}>
+      {props.children}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
