@@ -1,8 +1,10 @@
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React from "react";
+import React, { useContext } from "react";
+import { ColorSchema } from "../constants/Colors";
 import { QRCodeScreen } from "../screens/main/QRCodeScreen";
 import { PlacesStack } from "./PlacesStack";
+import { ColorContext } from "./RootNavigator";
 import { MainTabParamList, PlacesParamList } from "./types";
 
 interface TabsProps {}
@@ -10,11 +12,21 @@ interface TabsProps {}
 const Tabs = createBottomTabNavigator<MainTabParamList>();
 
 export const AppTabs: React.FC<TabsProps> = ({}) => {
+  const { theme } = useContext(ColorContext);
   return (
     <Tabs.Navigator
       screenOptions={({ navigation }) => ({
-        tabBarActiveTintColor: "tomato",
-        tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor:
+          theme === "dark"
+            ? ColorSchema.dark.headerButton
+            : ColorSchema.light.formButton,
+        tabBarInactiveTintColor: ColorSchema.default.disabled,
+        tabBarStyle: {
+          // backgroundColor:
+          //   theme === "dark"
+          //     ? ColorSchema.dark.headerButton
+          //     : ColorSchema.light.formButton,
+        },
       })}
     >
       <Tabs.Screen

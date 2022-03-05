@@ -1,4 +1,4 @@
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import React, { useContext, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ColorSchema } from "../../constants/Colors";
@@ -96,7 +96,7 @@ export const LoginForm: React.FC = () => {
               </AntDesign.Button>
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttons}>
-              <AntDesign.Button
+              <FontAwesome.Button
                 name="google"
                 size={25}
                 color={"white"}
@@ -104,7 +104,7 @@ export const LoginForm: React.FC = () => {
                 onPress={() => {}}
               >
                 SIGN UP
-              </AntDesign.Button>
+              </FontAwesome.Button>
             </TouchableOpacity>
           </View>
         </View>

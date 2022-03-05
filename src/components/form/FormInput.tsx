@@ -6,7 +6,7 @@ import {
   TextInputProps,
   View,
 } from "react-native";
-import { ColorSchema, text_disabled } from "../../constants/Colors";
+import { ColorSchema } from "../../constants/Colors";
 import { ColorContext } from "../../navigation/RootNavigator";
 
 type InputProps = {
@@ -39,7 +39,11 @@ export const FormInput: React.FC<InputProps> = (props: InputProps) => {
       <TextInput
         {...props}
         placeholder={placeholder}
-        placeholderTextColor={theme === "dark" ? text_disabled : text_disabled}
+        placeholderTextColor={
+          theme === "dark"
+            ? ColorSchema.default.disabled
+            : ColorSchema.default.disabled
+        }
         style={[
           styles.input,
           theme === "dark" ? styles.inputBgDark : styles.inputBgLight,
