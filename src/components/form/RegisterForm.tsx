@@ -138,7 +138,7 @@ export const RegisterForm: React.FC = () => {
                     name="create-outline"
                     size={25}
                     color={"white"}
-                    backgroundColor={ColorSchema.dark.headerButton}
+                    backgroundColor={ColorSchema.default.dark_green}
                     onPress={handleSubmit as any}
                   >
                     REGISTER

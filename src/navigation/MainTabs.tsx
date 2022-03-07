@@ -5,7 +5,7 @@ import { ColorSchema } from "../constants/Colors";
 import { QRCodeScreen } from "../screens/main/QRCodeScreen";
 import { PlacesStack } from "./PlacesStack";
 import { ColorContext } from "./RootNavigator";
-import { MainTabParamList, PlacesParamList } from "./types";
+import { MainTabParamList } from "./types";
 
 interface TabsProps {}
 
@@ -15,24 +15,25 @@ export const AppTabs: React.FC<TabsProps> = ({}) => {
   const { theme } = useContext(ColorContext);
   return (
     <Tabs.Navigator
-      screenOptions={({ navigation }) => ({
+      screenOptions={() => ({
         tabBarActiveTintColor:
           theme === "dark"
-            ? ColorSchema.dark.headerButton
+            ? ColorSchema.dark.formButton
             : ColorSchema.light.formButton,
-        tabBarInactiveTintColor: ColorSchema.default.disabled,
+        tabBarInactiveTintColor:
+          theme === "dark"
+            ? ColorSchema.dark.tabIconDefault
+            : ColorSchema.default.disabled,
         tabBarStyle: {
-          // backgroundColor:
-          //   theme === "dark"
-          //     ? ColorSchema.dark.headerButton
-          //     : ColorSchema.light.formButton,
+          border: theme === "dark" ? "none" : null,
+          backgroundColor: theme === "dark" ? "rgba(0,0,0,0.5)" : null,
         },
       })}
     >
       <Tabs.Screen
         name="Main"
         component={PlacesStack}
-        options={({ navigation }) => ({
+        options={() => ({
           header: () => null,
           tabBarIcon: ({ color }) => (
             <AntDesign name="home" size={24} color={color} />

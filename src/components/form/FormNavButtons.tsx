@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useContext } from "react";
 import { ColorSchema } from "../../constants/Colors";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   containerDark: {
     backgroundColor: "#000",
-    borderColor: ColorSchema.dark.headerButtonAlpha,
+    borderColor: ColorSchema.default.dark_green_alpha,
     borderWidth: 2,
   },
   title: {
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     color: ColorSchema.light.text,
   },
   buttonActive: {
-    backgroundColor: ColorSchema.dark.headerButtonAlpha,
+    backgroundColor: ColorSchema.default.dark_green_alpha,
     width: "55%",
     color: "#fff",
     height: 40,

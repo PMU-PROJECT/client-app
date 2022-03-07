@@ -87,7 +87,7 @@ export const LoginForm: React.FC = () => {
                 name="login"
                 size={25}
                 color={"white"}
-                backgroundColor={ColorSchema.dark.headerButton}
+                backgroundColor={ColorSchema.default.dark_green}
                 onPress={() => {
                   submitForm();
                 }}
@@ -100,7 +100,7 @@ export const LoginForm: React.FC = () => {
                 name="google"
                 size={25}
                 color={"white"}
-                backgroundColor={ColorSchema.dark.headerButton}
+                backgroundColor={ColorSchema.default.dark_green}
                 onPress={() => {}}
               >
                 SIGN UP
