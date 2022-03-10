@@ -6,7 +6,7 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 import { ColorContext } from "../../navigation/RootNavigator";
-import { ColorSchema } from "../../constants/Colors";
+import { ColorSchema, new_green } from "../../constants/Colors";
 
 export const CustomDrawer = (props: any) => {
   const { theme } = useContext(ColorContext);
@@ -37,9 +37,7 @@ export const CustomDrawer = (props: any) => {
             styles.userInfoContainer,
             {
               backgroundColor:
-                theme === "light"
-                  ? ColorSchema.light.formButton
-                  : ColorSchema.light.formButton,
+                theme === "light" ? new_green : ColorSchema.light.formButton,
               borderBottomColor: theme === "light" ? "black" : "none",
               borderBottomWidth: theme === "light" ? 1 : 0,
             },

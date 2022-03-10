@@ -25,7 +25,7 @@ export const DrawerNav: React.FC = ({}) => {
         drawerActiveBackgroundColor:
           theme === "dark"
             ? ColorSchema.default.formButtonAlpha
-            : ColorSchema.light.formButton,
+            : ColorSchema.light.formButton, //new_green
         drawerActiveTintColor:
           theme === "dark" ? ColorSchema.dark.text : ColorSchema.light.text,
         drawerInactiveBackgroundColor:

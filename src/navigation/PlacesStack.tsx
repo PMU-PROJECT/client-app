@@ -18,9 +18,9 @@ export const PlacesStack: React.FC = (props) => {
         headerTintColor:
           theme === "dark" ? ColorSchema.dark.text : ColorSchema.light.text,
         headerStyle: {
-          backgroundColor: theme === "dark" ? "rgba(0,0,0,0.5)" : null,
-          // border: theme === "dark" ? "none" : null,
-          borderBottomWidth: theme === "dark" ? 0 : 1,
+          backgroundColor: theme === "dark" ? "rgb(0,0,0)" : "white",
+          borderBottomWidth: theme === "dark" ? 1 : 1,
+          borderBottomColor: theme === "dark" ? "grey" : "grey",
         },
       })}
     >

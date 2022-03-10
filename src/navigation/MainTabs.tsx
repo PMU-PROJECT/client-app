@@ -22,11 +22,11 @@ export const AppTabs: React.FC<TabsProps> = ({}) => {
             : ColorSchema.light.formButton,
         tabBarInactiveTintColor:
           theme === "dark"
-            ? ColorSchema.dark.tabIconDefault
+            ? ColorSchema.default.disabled
             : ColorSchema.default.disabled,
         tabBarStyle: {
-          border: theme === "dark" ? "none" : null,
-          backgroundColor: theme === "dark" ? "rgba(0,0,0,0.5)" : null,
+          // border: theme === "dark" ? "none" : null,
+          backgroundColor: theme === "dark" ? "rgb(0,0,0)" : "white",
         },
       })}
     >

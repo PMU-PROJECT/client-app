@@ -18,6 +18,9 @@ export const text_dark_primary = "#ffffff";
 export const text_dark_secondary = "#e1e1fc";
 export const text_disabled = "#8d8da8";
 
+export const new_green = "#00B761"; //"#53B476";
+export const new_black = "#343535";
+
 export const ColorSchema = {
   light: {
     text: text_light_primary,

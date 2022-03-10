@@ -1,21 +1,19 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useContext } from "react";
-import { ColorSchema } from "../../constants/Colors";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { ColorSchema, new_green } from "../../constants/Colors";
+// import { useNavigation, useRoute } from "@react-navigation/native";
 import { ColorContext } from "../../navigation/RootNavigator";
 
-export const FormNavButtons: React.FC = () => {
-  const navigation = useNavigation();
-  const route = useRoute();
+type HeaderButtonProps = {
+  active: "all" | "visited" | "other";
+  setActive: React.Dispatch<React.SetStateAction<"all" | "visited" | "other">>;
+};
+
+export const HeaderSelectorButtons: React.FC<HeaderButtonProps> = ({
+  active,
+  setActive,
+}) => {
   const { theme } = useContext(ColorContext);
-
-  let active: "login" | "register" = "login";
-
-  if (route.name === "Login") {
-    active = "login";
-  } else if (route.name === "Register") {
-    active = "register";
-  }
 
   return (
     <View
@@ -25,50 +23,30 @@ export const FormNavButtons: React.FC = () => {
       ]}
     >
       <TouchableOpacity
-        style={[
-          active === "login" ? styles.buttonActive : styles.buttonOther,
-          styles.buttonLeft,
-        ]}
+        style={[active === "all" ? styles.buttonActive : styles.buttonOther]}
         onPress={() => {
-          navigation.navigate("Login");
+          setActive("all");
         }}
       >
-        <Text
-          style={[
-            styles.title,
-            active === "login"
-              ? styles.titleDark
-              : theme === "dark"
-              ? styles.titleDark
-              : styles.titleLight,
-          ]}
-        >
-          Login
-        </Text>
+        <Text style={[styles.title]}>All Sites</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[
-          active === "register" ? styles.buttonActive : styles.buttonOther,
-          ,
-          styles.buttonRight,
+          active === "visited" ? styles.buttonActive : styles.buttonOther,
         ]}
         onPress={() => {
-          navigation.navigate("Register");
+          setActive("visited");
         }}
       >
-        <Text
-          style={[
-            styles.title,
-            ,
-            active === "register"
-              ? styles.titleDark
-              : theme === "dark"
-              ? styles.titleDark
-              : styles.titleLight,
-          ]}
-        >
-          Register
-        </Text>
+        <Text style={[styles.title]}>Vistied</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[active === "other" ? styles.buttonActive : styles.buttonOther]}
+        onPress={() => {
+          setActive("other");
+        }}
+      >
+        <Text style={[styles.title]}>Not Visited</Text>
       </TouchableOpacity>
     </View>
   );
@@ -78,7 +56,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "flex-start",
-    marginVertical: 50,
+    marginVertical: 20,
     justifyContent: "space-evenly",
     borderRadius: 22,
   },
@@ -102,20 +80,21 @@ const styles = StyleSheet.create({
     color: ColorSchema.light.text,
   },
   buttonActive: {
-    backgroundColor: ColorSchema.default.dark_green_alpha,
-    width: "55%",
+    backgroundColor: new_green,
+    width: "34%",
     color: "#fff",
     height: 40,
     textAlign: "center",
     justifyContent: "space-evenly",
-    borderRadius: 20,
+    borderRadius: 10,
   },
   buttonOther: {
-    width: "45%",
+    width: "33%",
     color: ColorSchema.light.text,
     height: 40,
     textAlign: "center",
     justifyContent: "space-evenly",
+    borderRadius: 10,
   },
   buttonLeft: {
     borderTopLeftRadius: 20,
