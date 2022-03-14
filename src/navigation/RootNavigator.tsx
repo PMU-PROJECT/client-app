@@ -12,7 +12,7 @@ export const ColorContext = createContext<ColorTheme>({ theme: "dark" });
 
 export const RootNavigator: React.FC = ({}) => {
   return (
-    <ColorContext.Provider value={{ theme: "light" }}>
+    <ColorContext.Provider value={{ theme: "dark" }}>
       <NavigationContainer>
         <DrawerNav />
         {/* <AuthStack /> */}

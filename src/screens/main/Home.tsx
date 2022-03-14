@@ -31,12 +31,13 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, paddingHorizontal: 20, backgroundColor: "#fff" }}
+      style={[styles.container, theme==='dark' ? styles.containerDark : styles.containerLight]}
     >
       <View style={styles.header}>
         <View>
-          <Text style={{ fontSize: 38, color: new_green, fontWeight: "bold" }}>
-            Main Screen
+          <Text style={[{ fontSize: 25, fontWeight: "bold" }, theme === 'dark' ? styles.darkText : styles.lightText]}>Welcome to</Text>
+          <Text style={[styles.title, theme === 'dark' ? { color: new_green } : styles.lightText]}>
+            APP NAME
           </Text>
         </View>
       </View>
@@ -44,6 +45,7 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
       <View style={styles.categoryContainer}>
         {categories.map((item, index) => (
           <Categories
+            key={index}
             index={index}
             onSelect={setCategoryIndex}
             item={item}
@@ -73,7 +75,7 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
           <PlaceCard
             key={`${Math.random()}`}
             onPress={() => {
-              navigation.navigate("PlaceDetails", { id: "1" });
+              navigation.navigate("PlaceDetails", { id: `${item.key}` });
             }}
             description={`Place ${item.key} location`}
             title={`Place ${item.key}`}
@@ -133,14 +135,14 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    paddingHorizontal: 20,
   },
   title: {
-    fontWeight: "bold",
-    fontSize: 34,
-    marginVertical: 5,
-    padding: 5,
+    // marginVertical: 5,
+    // padding: 5,
+    fontSize: 38, 
+    color: new_green, 
+    fontWeight: "bold"
   },
   darkText: {
     color: ColorSchema.dark.text,

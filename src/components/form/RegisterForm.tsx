@@ -4,6 +4,7 @@ import React, { useContext, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ColorSchema } from "../../constants/Colors";
 import { ColorContext } from "../../navigation/RootNavigator";
+import { makeRequest } from "../../utils/makeRequestToServer";
 import { ValidationSchema } from "../../utils/ValidationSchema";
 import { FormContainer } from "./FormContainer";
 import { FormInput } from "./FormInput";
@@ -44,11 +45,18 @@ export const RegisterForm: React.FC = () => {
         style={styles.form}
         initialValues={userInfo}
         validationSchema={ValidationSchema}
-        onSubmit={(
+        onSubmit={async (
           values: UserInfo,
           formikHelpers: FormikHelpers<UserInfo>
         ) => {
           console.log(values);
+          const res = await makeRequest('registration', {
+            first_name: values.firstName,
+            last_name: values.lastName,
+            email: values.email, 
+            password: values.password
+          });
+          console.log(res);
           formikHelpers.resetForm();
           formikHelpers.setSubmitting(false);
         }}

@@ -8,6 +8,7 @@ import {
   isValidObjField,
   updateError,
 } from "../../utils/inputValidation";
+import { makeRequest } from "../../utils/makeRequestToServer";
 import { FormContainer } from "./FormContainer";
 import { FormInput } from "./FormInput";
 
@@ -39,9 +40,10 @@ export const LoginForm: React.FC = () => {
     return true;
   };
 
-  const submitForm = () => {
+  const submitForm = async () => {
     if (isValidForm()) {
-      console.log(userInfo);
+     const res = await makeRequest('login', {...userInfo});
+     console.log(res);
     }
   };
 
