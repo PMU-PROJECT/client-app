@@ -1,12 +1,14 @@
-export const makeRequest = async (path: string, values: {
+export const makeAuthRequest = async (path: string, values: {
     first_name? : string,
     last_name? : string, 
     email: string,
     password: string,
 }): Promise<{} | null> => {
     try {
-        const res = await fetch(`http://356f-78-90-52-121.ngrok.io/api/${path}`, {
-          headers: {
+      //http://356f-78-90-52-121.ngrok.io
+        const res = await fetch(`http://0.0.0.0:37888/api/${path}`, {
+          headers: { 
+            //x-www-form-urlencoded
             "Content-Type": "application/json",
           },
           method: "POST",

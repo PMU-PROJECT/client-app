@@ -4,7 +4,7 @@ import React, { useContext, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ColorSchema } from "../../constants/Colors";
 import { ColorContext } from "../../navigation/RootNavigator";
-import { makeRequest } from "../../utils/makeRequestToServer";
+import { makeAuthRequest } from "../../utils/makeRequestToServer";
 import { ValidationSchema } from "../../utils/ValidationSchema";
 import { FormContainer } from "./FormContainer";
 import { FormInput } from "./FormInput";
@@ -50,7 +50,7 @@ export const RegisterForm: React.FC = () => {
           formikHelpers: FormikHelpers<UserInfo>
         ) => {
           console.log(values);
-          const res = await makeRequest('registration', {
+          const res = await makeAuthRequest('registration', {
             first_name: values.firstName,
             last_name: values.lastName,
             email: values.email, 

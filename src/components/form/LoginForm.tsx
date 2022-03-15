@@ -1,6 +1,7 @@
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import React, { useContext, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { openDatabase } from "react-native-sqlite-storage";
 import { ColorSchema } from "../../constants/Colors";
 import { ColorContext } from "../../navigation/RootNavigator";
 import {
@@ -8,7 +9,7 @@ import {
   isValidObjField,
   updateError,
 } from "../../utils/inputValidation";
-import { makeRequest } from "../../utils/makeRequestToServer";
+import { makeAuthRequest } from "../../utils/makeRequestToServer";
 import { FormContainer } from "./FormContainer";
 import { FormInput } from "./FormInput";
 
@@ -34,7 +35,7 @@ export const LoginForm: React.FC = () => {
     if (!isValidEmail(email))
       return updateError("Invalid email!", "email", setError);
 
-    if (!password.trim() || password.length < 8)
+    if (!password.trim() || password.length < 6)
       return updateError("Password is too short!", "pass", setError);
 
     return true;
@@ -42,7 +43,7 @@ export const LoginForm: React.FC = () => {
 
   const submitForm = async () => {
     if (isValidForm()) {
-     const res = await makeRequest('login', {...userInfo});
+     const res = await makeAuthRequest('login', {...userInfo});
      console.log(res);
     }
   };
