@@ -2,8 +2,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { Formik, FormikHelpers } from "formik";
 import React, { useContext, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch } from "react-redux";
 import { ColorSchema } from "../../constants/Colors";
 import { ColorContext } from "../../navigation/RootNavigator";
+import { UserActions } from "../../store/actions/UserActions";
 import { makeAuthRequest } from "../../utils/makeRequestToServer";
 import { ValidationSchema } from "../../utils/ValidationSchema";
 import { FormContainer } from "./FormContainer";
@@ -19,6 +21,8 @@ type UserInfo = {
 
 export const RegisterForm: React.FC = () => {
   const { theme } = useContext(ColorContext);
+  const dispatch = useDispatch();
+
   const [userInfo, setUserInfo] = useState<UserInfo>({
     firstName: "",
     lastName: "",
@@ -50,13 +54,17 @@ export const RegisterForm: React.FC = () => {
           formikHelpers: FormikHelpers<UserInfo>
         ) => {
           console.log(values);
-          const res = await makeAuthRequest('registration', {
+          const res = await makeAuthRequest("registration", {
             first_name: values.firstName,
             last_name: values.lastName,
-            email: values.email, 
-            password: values.password
+            email: values.email,
+            password: values.password,
           });
           console.log(res);
+          dispatch({
+            type: UserActions.REGISTER,
+            payload: { token: "12345678" },
+          });
           formikHelpers.resetForm();
           formikHelpers.setSubmitting(false);
         }}

@@ -1,9 +1,10 @@
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import React, { useContext, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { openDatabase } from "react-native-sqlite-storage";
+import { useDispatch } from "react-redux";
 import { ColorSchema } from "../../constants/Colors";
 import { ColorContext } from "../../navigation/RootNavigator";
+import { UserActions } from "../../store/actions/UserActions";
 import {
   isValidEmail,
   isValidObjField,
@@ -15,6 +16,8 @@ import { FormInput } from "./FormInput";
 
 export const LoginForm: React.FC = () => {
   const { theme } = useContext(ColorContext);
+  const dispatch = useDispatch();
+
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -43,8 +46,9 @@ export const LoginForm: React.FC = () => {
 
   const submitForm = async () => {
     if (isValidForm()) {
-     const res = await makeAuthRequest('login', {...userInfo});
-     console.log(res);
+      // const res = await makeAuthRequest("login", { ...userInfo });
+      // console.log(res);
+      dispatch({ type: UserActions.LOGIN, payload: { token: "12345678" } });
     }
   };
 
