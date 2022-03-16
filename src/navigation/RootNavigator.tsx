@@ -45,7 +45,8 @@ export const RootNavigator: React.FC = ({}) => {
   return (
     <ColorContext.Provider value={{ theme: "dark" }}>
       <NavigationContainer>
-        {token ? <DrawerNav /> : <AuthStack />}
+        {/* {token ? <DrawerNav /> : <AuthStack />} */}
+        <DrawerNav />
       </NavigationContainer>
     </ColorContext.Provider>
   );

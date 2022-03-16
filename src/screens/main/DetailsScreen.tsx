@@ -1,7 +1,8 @@
 import { Button, StyleSheet, Text, View } from "react-native";
-import { androidId } from "expo-application";
+// import { androidId } from "expo-application";
 import * as Google from "expo-auth-session/providers/google";
 import { useEffect } from "react";
+import { CustomMap } from "../../components/general/CustomMap";
 
 export const DetailsScreen = () => {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
@@ -55,6 +56,14 @@ export const DetailsScreen = () => {
             console.log(e);
           }
         }}
+      />
+      <CustomMap
+        latitude={41.970035}
+        longitude={23.477082}
+        markerTitle={"Title"}
+        markerDesc={"Description"}
+        height={400}
+        width={500}
       />
       {/* <Button
         disabled={!request}
