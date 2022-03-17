@@ -1,6 +1,6 @@
 import React from "react";
 import MapView from "react-native-maps";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, Platform, StyleSheet, Text, View } from "react-native";
 import { Marker } from "react-native-maps";
 // import Geolocation from "react-native-geolocation-service";
 
@@ -38,10 +38,13 @@ export const CustomMap: React.FC<MapProps> = ({
         //   latitudeDelta: 0.0922,
         //   longitudeDelta: 0.0421,
         // }}
+        showsUserLocation={true}
+        minZoomLevel={1}
+        maxZoomLevel={15}
         region={{
           latitude,
           longitude,
-          latitudeDelta: LATITUDE_DELTA,
+          latitudeDelta: 0.3822,
           longitudeDelta: LONGITUDE_DELTA,
         }}
         style={[
@@ -52,24 +55,30 @@ export const CustomMap: React.FC<MapProps> = ({
           },
         ]}
       >
-        <Marker
-          key={1}
-          coordinate={{
-            latitude,
-            longitude,
-          }}
-          title={markerTitle}
-          description={markerDesc}
-        />
-        <Marker
-          key={2}
-          coordinate={{
-            latitude: latitude + 5,
-            longitude: longitude + 5,
-          }}
-          title={markerTitle}
-          description={markerDesc}
-        />
+        {Platform.OS !== "web" ? (
+          <>
+            <Marker
+              key={1}
+              coordinate={{
+                latitude,
+                longitude,
+              }}
+              title={markerTitle}
+              description={markerDesc}
+            />
+            <Marker
+              key={2}
+              coordinate={{
+                latitude: 41.970035,
+                longitude: 23.477082,
+              }}
+              title={markerTitle}
+              description={markerDesc}
+            />
+          </>
+        ) : (
+          <Text>Web</Text>
+        )}
       </MapView>
     </View>
   );

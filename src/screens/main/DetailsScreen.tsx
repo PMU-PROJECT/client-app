@@ -1,8 +1,13 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, Platform, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
 // import { androidId } from "expo-application";
 import * as Google from "expo-auth-session/providers/google";
-import { useEffect } from "react";
 import { CustomMap } from "../../components/general/CustomMap";
+import { ImageCarousel } from "../../components/general/ImageCarousel";
+import Constants from "expo-constants";
+import * as Location from "expo-location";
+import { LocationObject } from "expo-location";
+import { CustomImageCarousel } from "../../components/general/CustomImageCarousel";
 
 export const DetailsScreen = () => {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
@@ -25,6 +30,40 @@ export const DetailsScreen = () => {
       console.log(authentication);
     }
   }, [response]);
+
+  const [location, setLocation] = useState<LocationObject | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS === "android" && !Constants.isDevice) {
+        setErrorMsg(
+          "Oops, this will not work on Snack in an Android emulator. Try it on your device!"
+        );
+        return;
+      }
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+
+  let userLong = 0;
+  let userLat = 0;
+
+  let text = "Waiting..";
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+    userLat = location.coords.latitude;
+    userLong = location.coords.longitude;
+  }
 
   return (
     <View style={styles.container}>
@@ -57,14 +96,21 @@ export const DetailsScreen = () => {
           }
         }}
       />
+      <View style={{ marginVertical: 50 }}>
+        <CustomImageCarousel images={[]} />
+      </View>
       <CustomMap
-        latitude={41.970035}
-        longitude={23.477082}
+        latitude={userLat !== 0 ? userLat : 41.970035}
+        longitude={userLong !== 0 ? userLong : 23.477082}
         markerTitle={"Title"}
         markerDesc={"Description"}
-        height={400}
-        width={500}
+        height={300}
+        width={300}
       />
+      <View style={styles.container}>
+        <Text style={styles.paragraph}>{text}</Text>
+      </View>
+      {/* <ImageCarousel images={[]} /> */}
       {/* <Button
         disabled={!request}
         title="Login G"
@@ -82,5 +128,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  paragraph: {
+    fontSize: 18,
+    textAlign: "center",
   },
 });

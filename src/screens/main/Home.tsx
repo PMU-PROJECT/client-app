@@ -4,7 +4,6 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   FlatList,
   Dimensions,
 } from "react-native";
@@ -21,22 +20,48 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
   const [categoryIndex, setCategoryIndex] = useState(0);
   // const [active, setActive] = useState<"all" | "visited" | "other">("all");
 
+  // const [loading, setLoading] = useState<boolean>(false);
+  // const [sites, setSites] = useState([]);
+
   const categories = ["ALL SITES", "VISITED", "OTHER"];
   const imgUri =
     "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
 
   // useEffect(() => {
-  //   console.log("fetch new data");
-  // }, [active]);
+  //   // console.log("fetch new data");
+  //   const fetchSites = async () => {
+  //     setLoading(true);
+  //     const sites = await fetchAllSites("123456789");
+  //     setSites((currSites) => (sites ? sites : currSites));
+  //     setLoading(false);
+  //   };
+
+  //   fetchSites();
+  // }, []);
 
   return (
     <SafeAreaView
-      style={[styles.container, theme==='dark' ? styles.containerDark : styles.containerLight]}
+      style={[
+        styles.container,
+        theme === "dark" ? styles.containerDark : styles.containerLight,
+      ]}
     >
       <View style={styles.header}>
         <View>
-          <Text style={[{ fontSize: 25, fontWeight: "bold" }, theme === 'dark' ? styles.darkText : styles.lightText]}>Welcome to</Text>
-          <Text style={[styles.title, theme === 'dark' ? { color: new_green } : styles.lightText]}>
+          <Text
+            style={[
+              { fontSize: 25, fontWeight: "bold" },
+              theme === "dark" ? styles.darkText : styles.lightText,
+            ]}
+          >
+            Welcome to
+          </Text>
+          <Text
+            style={[
+              styles.title,
+              theme === "dark" ? { color: new_green } : styles.lightText,
+            ]}
+          >
             APP NAME
           </Text>
         </View>
@@ -140,9 +165,9 @@ const styles = StyleSheet.create({
   title: {
     // marginVertical: 5,
     // padding: 5,
-    fontSize: 38, 
-    color: new_green, 
-    fontWeight: "bold"
+    fontSize: 38,
+    color: new_green,
+    fontWeight: "bold",
   },
   darkText: {
     color: ColorSchema.dark.text,
