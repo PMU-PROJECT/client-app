@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet, View } from "react-native";
 import Carousel from "react-native-snap-carousel";
 
 type CarouselProps = {

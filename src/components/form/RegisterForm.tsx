@@ -54,16 +54,16 @@ export const RegisterForm: React.FC = () => {
           formikHelpers: FormikHelpers<UserInfo>
         ) => {
           console.log(values);
-          const res = await makeAuthRequest("registration", {
+          const token = await makeAuthRequest("registration", {
             first_name: values.firstName,
             last_name: values.lastName,
             email: values.email,
             password: values.password,
           });
-          console.log(res);
+          console.log(token);
           dispatch({
             type: UserActions.REGISTER,
-            payload: { token: "12345678" },
+            payload: { token: token },
           });
           formikHelpers.resetForm();
           formikHelpers.setSubmitting(false);

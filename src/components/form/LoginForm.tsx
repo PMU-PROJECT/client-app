@@ -1,6 +1,6 @@
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import React, { useContext, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { ColorSchema } from "../../constants/Colors";
 import { ColorContext } from "../../navigation/RootNavigator";
@@ -10,7 +10,7 @@ import {
   isValidObjField,
   updateError,
 } from "../../utils/inputValidation";
-import { makeAuthRequest } from "../../utils/makeRequestToServer";
+import { getSelfInfo, makeAuthRequest } from "../../utils/makeRequestToServer";
 import { FormContainer } from "./FormContainer";
 import { FormInput } from "./FormInput";
 
@@ -46,9 +46,15 @@ export const LoginForm: React.FC = () => {
 
   const submitForm = async () => {
     if (isValidForm()) {
-      // const res = await makeAuthRequest("login", { ...userInfo });
-      // console.log(res);
-      dispatch({ type: UserActions.LOGIN, payload: { token: "12345678" } });
+      const token = await makeAuthRequest("login", { ...userInfo });
+      if (token !== null) {
+        const info = await getSelfInfo(token);
+        dispatch({ type: UserActions.LOGIN, payload: { token } });
+      } else {
+        Alert.alert("Invalid Credentials!", "Check what you have entered!", [
+          { text: "Okay" },
+        ]);
+      }
     }
   };
 

@@ -40,7 +40,7 @@ export const CustomMap: React.FC<MapProps> = ({
         // }}
         showsUserLocation={true}
         minZoomLevel={1}
-        maxZoomLevel={15}
+        maxZoomLevel={1}
         region={{
           latitude,
           longitude,
@@ -57,7 +57,7 @@ export const CustomMap: React.FC<MapProps> = ({
       >
         {Platform.OS !== "web" ? (
           <>
-            <Marker
+            {/* <Marker
               key={1}
               coordinate={{
                 latitude,
@@ -65,7 +65,7 @@ export const CustomMap: React.FC<MapProps> = ({
               }}
               title={markerTitle}
               description={markerDesc}
-            />
+            /> */}
             <Marker
               key={2}
               coordinate={{

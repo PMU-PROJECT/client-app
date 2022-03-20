@@ -7,9 +7,13 @@ import {
 } from "@react-navigation/drawer";
 import { ColorContext } from "../../navigation/RootNavigator";
 import { ColorSchema, new_green } from "../../constants/Colors";
+import { useDispatch } from "react-redux";
+import { UserActions } from "../../store/actions/UserActions";
 
 export const CustomDrawer = (props: any) => {
   const { theme } = useContext(ColorContext);
+  const dispatch = useDispatch();
+
   return (
     <View style={{ flex: 1, padding: 0 }}>
       <DrawerContentScrollView
@@ -78,7 +82,9 @@ export const CustomDrawer = (props: any) => {
         ]}
       >
         <TouchableOpacity
-          onPress={() => {}}
+          onPress={() => {
+            dispatch({ type: UserActions.LOGOUT });
+          }}
           style={{
             paddingVertical: 15,
           }}
