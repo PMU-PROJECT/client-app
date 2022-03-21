@@ -46,3 +46,8 @@ export type DrawerParamList = {
   ScanQR: undefined;
   Achievements: undefined;
 };
+
+export type DrawerNavProps<T extends keyof DrawerParamList> = {
+  navigation: StackNavigationProp<DrawerParamList, T>;
+  route: RouteProp<DrawerParamList, T>;
+};

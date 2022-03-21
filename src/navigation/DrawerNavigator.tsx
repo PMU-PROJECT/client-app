@@ -75,7 +75,7 @@ export const DrawerNav: React.FC = ({}) => {
           drawerIcon: ({ color }) => (
             <FontAwesome5 name={"medal"} size={24} color={color} />
           ),
-          headerRight: () => (
+          headerLeft: () => (
             <Ionicons
               name="menu"
               size={24}
@@ -92,15 +92,30 @@ export const DrawerNav: React.FC = ({}) => {
         <DrawerNavigator.Screen
           name="ScanQR"
           options={({ navigation }) => ({
+            headerShown: true,
             title: "Scan QR code",
+            headerTintColor:
+              theme === "dark" ? ColorSchema.dark.text : ColorSchema.light.text,
+            headerStyle: {
+              backgroundColor:
+                theme === "dark"
+                  ? ColorSchema.dark.background
+                  : ColorSchema.light.background,
+              borderBottomWidth: theme === "dark" ? 1 : 1,
+              borderBottomColor: theme === "dark" ? "grey" : "grey",
+            },
             drawerIcon: ({ color }) => (
               <AntDesign name="scan1" size={24} color={color} />
             ),
-            headerRight: () => (
+            headerLeft: () => (
               <Ionicons
                 name="menu"
                 size={24}
-                color="black"
+                color={
+                  theme === "dark"
+                    ? ColorSchema.dark.text
+                    : ColorSchema.light.text
+                }
                 onPress={() => {
                   navigation.toggleDrawer();
                 }}

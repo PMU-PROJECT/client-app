@@ -41,7 +41,9 @@ export const CustomDrawer = (props: any) => {
             styles.userInfoContainer,
             {
               backgroundColor:
-                theme === "light" ? new_green : ColorSchema.light.formButton,
+                theme === "dark"
+                  ? ColorSchema.default.disabledButton
+                  : ColorSchema.light.background,
               borderBottomColor: theme === "light" ? "black" : "none",
               borderBottomWidth: theme === "light" ? 1 : 0,
             },
@@ -131,7 +133,7 @@ export const CustomDrawer = (props: any) => {
 const styles = StyleSheet.create({
   contentContainerDark: {
     paddingTop: 0,
-    backgroundColor: ColorSchema.default.formButtonAlpha,
+    backgroundColor: ColorSchema.dark.background,
   },
   contentContainerLight: {
     paddingTop: 0,

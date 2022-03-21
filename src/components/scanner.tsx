@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import { ColorContext } from "../navigation/RootNavigator";
+import { ColorSchema } from "../constants/Colors";
 
 export default function Scanner() {
+  const { theme } = useContext(ColorContext);
+
   const [hasPermission, setHasPermission] = useState<null | boolean>(null);
   const [scanned, setScanned] = useState<boolean>(false);
   const [text, setText] = useState("Not yet scanned");
@@ -23,8 +27,8 @@ export default function Scanner() {
     setText(params.data);
     console.log("Type: " + params.type + "\nData: " + params.data);
 
-    if (params.type === 256 && params.data.includes("https://")) {
-      console.log("make req");
+    if (params.type === 256) {
+      console.log("make req with token");
     } else {
       Alert.alert("Invalid Scan!", "Please scan a valid QR code!", [
         { text: "Okay" },
@@ -52,7 +56,17 @@ export default function Scanner() {
   }
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            theme === "dark"
+              ? ColorSchema.dark.background
+              : ColorSchema.light.background,
+        },
+      ]}
+    >
       <View style={styles.barcodebox}>
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : (handleBarCodeScanned as any)}

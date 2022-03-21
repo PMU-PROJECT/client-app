@@ -26,7 +26,10 @@ export const AppTabs: React.FC<TabsProps> = ({}) => {
             : ColorSchema.default.disabled,
         tabBarStyle: {
           // border: theme === "dark" ? "none" : null,
-          backgroundColor: theme === "dark" ? "rgb(0,0,0)" : "white",
+          backgroundColor:
+            theme === "dark"
+              ? ColorSchema.dark.background
+              : ColorSchema.light.background,
         },
       })}
     >
@@ -46,6 +49,16 @@ export const AppTabs: React.FC<TabsProps> = ({}) => {
         component={QRCodeScreen}
         options={({ navigation }) => ({
           headerTitle: "QR Code",
+          headerTintColor:
+            theme === "dark" ? ColorSchema.dark.text : ColorSchema.light.text,
+          headerStyle: {
+            backgroundColor:
+              theme === "dark"
+                ? ColorSchema.dark.background
+                : ColorSchema.light.background,
+            borderBottomWidth: theme === "dark" ? 1 : 1,
+            borderBottomColor: theme === "dark" ? "grey" : "grey",
+          },
           tabBarIcon: ({ color }) => (
             <AntDesign name="qrcode" size={24} color={color} />
           ),
@@ -53,7 +66,11 @@ export const AppTabs: React.FC<TabsProps> = ({}) => {
             <Ionicons
               name="menu"
               size={24}
-              color="black"
+              color={
+                theme === "dark"
+                  ? ColorSchema.dark.text
+                  : ColorSchema.light.text
+              }
               onPress={() => {
                 navigation.toggleDrawer();
               }}

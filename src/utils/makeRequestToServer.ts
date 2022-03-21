@@ -25,8 +25,6 @@ export const makeAuthRequest = async (
       method: "POST",
       body: formData, //JSON.stringify(values),
     });
-
-    console.log("********************");
     console.log(JSON.stringify(res));
 
     const data = await res.json();
@@ -43,7 +41,6 @@ export const getSelfInfo = async (token: string): Promise<[] | null> => {
   console.log("token");
   console.log(token);
   try {
-    //http://356f-78-90-52-121.ngrok.io
     const res = await fetch(
       `http://086d-78-90-52-121.ngrok.io/api/get_self_info`,
       {
@@ -54,7 +51,6 @@ export const getSelfInfo = async (token: string): Promise<[] | null> => {
         },
       }
     );
-    console.log("********************");
     console.log(JSON.stringify(res));
 
     const data = await res.json();
@@ -69,7 +65,6 @@ export const getSelfInfo = async (token: string): Promise<[] | null> => {
 
 export const fetchAllSites = async (token: string): Promise<[] | null> => {
   try {
-    //http://356f-78-90-52-121.ngrok.io
     const res = await fetch(
       `http://086d-78-90-52-121.ngrok.io/api/get_all_sites`,
       {
