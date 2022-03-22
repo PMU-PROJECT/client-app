@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -7,11 +7,16 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { Categories } from "../../components/home/Categories";
 import { PlaceCard } from "../../components/home/PlaceCard";
 import { ColorSchema, new_green } from "../../constants/Colors";
 import { ColorContext } from "../../navigation/RootNavigator";
 import { PlacesNavProps } from "../../navigation/types";
+import { fetchAllSites } from "../../utils/makeRequestToServer";
+import { UserState } from "../../store/reducers/UserReducer";
+import { SitesState } from "../../store/reducers/SitesReducer";
+import { SitesActions } from "../../store/actions/SitesActions";
 
 const width = Dimensions.get("window").width / 2 - 30;
 
@@ -20,24 +25,56 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
   const [categoryIndex, setCategoryIndex] = useState(0);
   // const [active, setActive] = useState<"all" | "visited" | "other">("all");
 
-  // const [loading, setLoading] = useState<boolean>(false);
-  // const [sites, setSites] = useState([]);
+  const token = useSelector((state: { user: UserState }) => state.user.token);
+  const sites = useSelector(
+    (state: { sites: SitesState }) => state.sites.sites
+  );
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const categories = ["ALL SITES", "VISITED", "OTHER"];
+  const categories = ["all", "visited", "unvisited"];
   const imgUri =
     "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
 
-  // useEffect(() => {
-  //   // console.log("fetch new data");
-  //   const fetchSites = async () => {
-  //     setLoading(true);
-  //     const sites = await fetchAllSites("123456789");
-  //     setSites((currSites) => (sites ? sites : currSites));
-  //     setLoading(false);
-  //   };
+  useEffect(() => {
+    if (!token) return;
 
-  //   fetchSites();
-  // }, []);
+    const fetchSites = async () => {
+      setLoading(true);
+      const fetchedSites = await fetchAllSites(
+        token,
+        categories[categoryIndex] as any
+      );
+      dispatch({
+        type: SitesActions.SET_SITES,
+        payload: { sites: fetchedSites },
+      });
+      setLoading(false);
+    };
+
+    fetchSites();
+  }, [categoryIndex, token]);
+
+  if (loading) {
+    return (
+      <View
+        style={[
+          styles.container,
+          { alignItems: "center", justifyContent: "center" },
+          theme === "dark" ? styles.containerDark : styles.containerLight,
+        ]}
+      >
+        <Text
+          style={[
+            { fontSize: 25, fontWeight: "bold", textAlign: "center" },
+            theme === "dark" ? styles.darkText : styles.lightText,
+          ]}
+        >
+          Loading...
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView
@@ -79,35 +116,38 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
         ))}
       </View>
 
-      <FlatList
-        // columnWrapperStyle={{ justifyContent: "space-between" }}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ marginTop: 10, paddingBottom: 50 }}
-        numColumns={2}
-        data={[
-          { key: " 1" },
-          { key: "2" },
-          { key: "3" },
-          { key: "4" },
-          { key: "5" },
-          { key: "6" },
-          { key: "7" },
-          { key: "8" },
-          { key: "9" },
-          { key: "10" },
-        ]}
-        renderItem={({ item }) => (
-          <PlaceCard
-            key={`${Math.random()}`}
-            onPress={() => {
-              navigation.navigate("PlaceDetails", { id: `${item.key}` });
-            }}
-            description={`Place ${item.key} location`}
-            title={`Place ${item.key}`}
-            imageUrl={imgUri}
-          />
-        )}
-      />
+      {sites ? (
+        <FlatList
+          // columnWrapperStyle={{ justifyContent: "space-between" }}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ marginTop: 10, paddingBottom: 50 }}
+          numColumns={2}
+          data={sites}
+          keyExtractor={(item, _idx) => item.name}
+          renderItem={({ item }) => (
+            <PlaceCard
+              key={`${Math.random()}`}
+              onPress={() => {
+                navigation.navigate("PlaceDetails", { id: `${item.name}` });
+              }}
+              description={`Place ${item.name} location`}
+              title={`Place ${item.name}`}
+              imageUrl={imgUri}
+            />
+          )}
+        />
+      ) : (
+        <View>
+          <Text
+            style={[
+              { fontSize: 25, fontWeight: "bold", textAlign: "center" },
+              theme === "dark" ? styles.darkText : styles.lightText,
+            ]}
+          >
+            Sorry we F
+          </Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
