@@ -47,14 +47,14 @@ export const LoginForm: React.FC = () => {
   const submitForm = async () => {
     if (isValidForm()) {
       const token = await makeAuthRequest("login", { ...userInfo });
-      if (token !== null) {
-        const info = await getSelfInfo(token);
-        dispatch({ type: UserActions.LOGIN, payload: { token } });
-      } else {
-        Alert.alert("Invalid Credentials!", "Check what you have entered!", [
-          { text: "Okay" },
-        ]);
-      }
+      dispatch({ type: UserActions.LOGIN, payload: { token } });
+      // if (token !== null) {
+      //   const info = await getSelfInfo(token);
+      // } else {
+      //   Alert.alert("Invalid Credentials!", "Check what you have entered!", [
+      //     { text: "Okay" },
+      //   ]);
+      // }
     }
   };
 

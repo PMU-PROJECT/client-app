@@ -4,6 +4,9 @@ import { PlacesNavProps } from "../../navigation/types";
 import QRCode from "react-native-qrcode-svg";
 import { ColorContext } from "../../navigation/RootNavigator";
 import { ColorSchema } from "../../constants/Colors";
+import { getQRCode } from "../../utils/makeRequestToServer";
+import { useSelector } from "react-redux";
+import { UserState } from "../../store/reducers/UserReducer";
 
 export const QRCodeScreen = ({}: PlacesNavProps<"Home">) => {
   // const QR =
@@ -11,16 +14,50 @@ export const QRCodeScreen = ({}: PlacesNavProps<"Home">) => {
 
   const { theme } = useContext(ColorContext);
 
-  const [token, setToken] = useState(
-    "a5be8a71ec8a2a1e7b351b965571cbd56a4de43c2d43aea4df5fc53cf2a75e0bd159851c884975e5d5e2bfac7cc44c08e026f61acb67e778b583221ec09110799e79068713cb41e69c4cb28f"
+  const [token, setToken] = useState<null | string>(null);
+  const userToken = useSelector(
+    (state: { user: UserState }) => state.user.token
   );
 
   useEffect(() => {
-    // const generateNewQR = async () => {};
-    setInterval(() => {
-      setToken(token.concat("1"));
-    }, 3000);
+    if (!userToken) return;
+
+    const generateNewQR = async () => {
+      const res = await getQRCode(userToken);
+      if (res!.stamp_token !== null || res!.stamp_token !== undefined) {
+        console.log(res!.stamp_token);
+        setToken(res!.stamp_token);
+      }
+    };
+    // setInterval(() => {
+    generateNewQR();
+    // }, 100000);
   }, []);
+
+  if (!token) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor:
+              theme === "dark"
+                ? ColorSchema.dark.background
+                : ColorSchema.light.background,
+          },
+        ]}
+      >
+        <Text
+          style={{
+            color:
+              theme === "dark" ? ColorSchema.dark.text : ColorSchema.light.text,
+          }}
+        >
+          nO QR
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View

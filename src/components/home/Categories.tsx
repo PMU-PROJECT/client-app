@@ -27,7 +27,7 @@ export const Categories: React.FC<CategoryProps> = ({
           selectedIdx === index && styles.categoryTextSelected,
         ]}
       >
-        {item}
+        {item.toUpperCase()}
       </Text>
     </TouchableOpacity>
   );

@@ -3,9 +3,13 @@ import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { ColorContext } from "../navigation/RootNavigator";
 import { ColorSchema } from "../constants/Colors";
+import { useSelector } from "react-redux";
+import { UserState } from "../store/reducers/UserReducer";
+import { receiveStamp } from "../utils/makeRequestToServer";
 
 export default function Scanner() {
   const { theme } = useContext(ColorContext);
+  const token = useSelector((state: { user: UserState }) => state.user.token);
 
   const [hasPermission, setHasPermission] = useState<null | boolean>(null);
   const [scanned, setScanned] = useState<boolean>(false);
@@ -22,13 +26,16 @@ export default function Scanner() {
     askForCameraPermission();
   }, []);
 
-  const handleBarCodeScanned = (params: { type: number; data: string }) => {
+  const handleBarCodeScanned = async (params: {
+    type: number;
+    data: string;
+  }) => {
     setScanned(true);
     setText(params.data);
-    console.log("Type: " + params.type + "\nData: " + params.data);
+    // console.log("Type: " + params.type + "\nData: " + params.data);
 
     if (params.type === 256) {
-      console.log("make req with token");
+      const res = await receiveStamp(token!, params.data);
     } else {
       Alert.alert("Invalid Scan!", "Please scan a valid QR code!", [
         { text: "Okay" },
@@ -73,7 +80,17 @@ export default function Scanner() {
           style={{ height: 600, width: 600 }}
         />
       </View>
-      <Text style={styles.maintext}>{text}</Text>
+      <Text
+        style={[
+          styles.maintext,
+          {
+            color:
+              theme === "dark" ? ColorSchema.dark.text : ColorSchema.light.text,
+          },
+        ]}
+      >
+        {text}
+      </Text>
 
       {scanned && (
         <Button

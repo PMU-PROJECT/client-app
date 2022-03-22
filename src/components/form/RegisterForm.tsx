@@ -1,12 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Formik, FormikHelpers } from "formik";
 import React, { useContext, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { ColorSchema } from "../../constants/Colors";
 import { ColorContext } from "../../navigation/RootNavigator";
 import { UserActions } from "../../store/actions/UserActions";
-import { makeAuthRequest } from "../../utils/makeRequestToServer";
+import { getSelfInfo, makeAuthRequest } from "../../utils/makeRequestToServer";
 import { ValidationSchema } from "../../utils/ValidationSchema";
 import { FormContainer } from "./FormContainer";
 import { FormInput } from "./FormInput";
@@ -53,14 +53,22 @@ export const RegisterForm: React.FC = () => {
           values: UserInfo,
           formikHelpers: FormikHelpers<UserInfo>
         ) => {
-          console.log(values);
           const token = await makeAuthRequest("registration", {
             first_name: values.firstName,
             last_name: values.lastName,
             email: values.email,
             password: values.password,
           });
-          console.log(token);
+          if (token !== null) {
+            const info = await getSelfInfo(token);
+            dispatch({ type: UserActions.LOGIN, payload: { token } });
+          } else {
+            Alert.alert(
+              "Invalid Credentials!",
+              "Check what you have entered!",
+              [{ text: "Okay" }]
+            );
+          }
           dispatch({
             type: UserActions.REGISTER,
             payload: { token: token },

@@ -16,7 +16,6 @@ export const UserReducer = (
   switch (action.type) {
     case UserActions.LOGIN: {
       deleteTable();
-      console.log(action.payload.token);
       saveToken(action.payload.token);
       return { token: action.payload.token };
     }

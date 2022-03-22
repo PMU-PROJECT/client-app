@@ -13,7 +13,7 @@ export const setupDB = () => {
       );
     });
   } catch (err) {
-    console.log("Error");
+    console.log("Error setupDB");
     console.log(err);
   }
 };
@@ -35,14 +35,15 @@ export const getToken: () => Promise<string> = async () => {
         throw Error("Failed to get token!");
       },
       () => {
-        console.log(token);
+        // console.log(token);
         return token;
       }
     );
     // console.log(token);
     return token;
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.log("Error getTokenDB");
+    console.log(err);
     // return null;
     throw Error("Failed to get token!");
   }
@@ -55,7 +56,7 @@ export const saveToken = (token: string) => {
       tx.executeSql(`INSERT INTO token (value) values (?)`, [token]);
     });
   } catch (err) {
-    console.log("Error");
+    console.log("Error saveTokenDB");
     console.log(err);
   }
 };
@@ -67,7 +68,7 @@ export const deleteToken = async (id: number) => {
       tx.executeSql(`DELETE from token where id = (?)`, [id]);
     });
   } catch (err) {
-    console.log("Error");
+    console.log("Error deleteTokenDB");
     console.log(err);
   }
 };
@@ -85,7 +86,7 @@ export const deleteTable = () => {
       );
     });
   } catch (err) {
-    console.log("Error");
+    console.log("Error deleteTable");
     console.log(err);
   }
 };
