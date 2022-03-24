@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   GestureResponderEvent,
   StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { ColorSchema } from "../../constants/Colors";
+import { ScalableText } from "../general/ScalableText";
 
 type ImageButtonProps = {
   title: string;
@@ -21,8 +23,31 @@ export default function ImageButton({
   return (
     <>
       <TouchableOpacity onPress={onPress} style={styles.imageButton}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.description}>{description}</Text>
+        {/* 
+        <Text style={styles.description}>{description}</Text> */}
+        {/* <Text style={styles.title}>{title}</Text> */}
+        <View
+          style={{
+            height: "75%",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <ScalableText
+            numberOfLines={4}
+            styles={styles.title}
+            fontSize={16}
+            text={title}
+          />
+        </View>
+        <View style={{ height: "25%" }}>
+          <ScalableText
+            numberOfLines={2}
+            styles={styles.description}
+            fontSize={12}
+            text={description}
+          />
+        </View>
       </TouchableOpacity>
     </>
   );
@@ -32,21 +57,20 @@ const styles = StyleSheet.create({
   imageButton: {
     backgroundColor: "rgba(0,0,0,0.5)",
     width: "100%",
-    height: "30%",
+    height: "33%",
     position: "absolute",
-    borderRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
     bottom: 0,
     left: 0,
+    justifyContent: "center",
   },
   title: {
-    fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
     color: ColorSchema.dark.text,
   },
   description: {
-    fontSize: 16,
-    marginVertical: 3,
     textAlign: "center",
     color: ColorSchema.dark.text,
   },

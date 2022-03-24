@@ -1,3 +1,5 @@
+const linkURL = "http://d13f-78-90-52-121.ngrok.io/api/";
+
 export const makeAuthRequest = async (
   path: string,
   values: {
@@ -16,7 +18,7 @@ export const makeAuthRequest = async (
     formData.append("email", values.email);
     formData.append("password", values.password);
 
-    const res = await fetch(`http://d13f-78-90-52-121.ngrok.io/api/${path}`, {
+    const res = await fetch(`${linkURL}${path}`, {
       // headers: {
       //   //x-www-form-urlencoded
       //   "Content-Type": "application/json",
@@ -38,16 +40,13 @@ export const makeAuthRequest = async (
 
 export const getSelfInfo = async (token: string): Promise<[] | null> => {
   try {
-    const res = await fetch(
-      `http://d13f-78-90-52-121.ngrok.io/api/get_self_info`,
-      {
-        mode: "cors",
-        method: "GET",
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
+    const res = await fetch(`${linkURL}get_self_info`, {
+      mode: "cors",
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    });
     const data = await res.json();
     return data;
   } catch (err: any) {
@@ -63,15 +62,12 @@ export const fetchAllSites = async (
 ): Promise<[] | null> => {
   try {
     console.log(filter);
-    const res = await fetch(
-      `http://d13f-78-90-52-121.ngrok.io/api/get_all_sites?filter=${filter}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
+    const res = await fetch(`${linkURL}get_all_sites?filter=${filter}`, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    });
     const data: { sites: [] } = await res.json();
     return data.sites;
   } catch (err: any) {
@@ -85,16 +81,13 @@ export const getQRCode = async (
   token: string
 ): Promise<{ stamp_token: string } | null> => {
   try {
-    const res = await fetch(
-      `http://d13f-78-90-52-121.ngrok.io/api/get_stamp_token`,
-      {
-        method: "GET",
-        mode: "cors",
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
+    const res = await fetch(`${linkURL}get_stamp_token`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        Authorization: token,
+      },
+    });
     const data = await res.json();
     return data;
   } catch (err: any) {
@@ -110,17 +103,14 @@ export const receiveStamp = async (token: string, stampToken: string) => {
     formData.append("stamp_token", stampToken);
     console.log("Auth " + token);
     console.log("ST " + stampToken);
-    const res = await fetch(
-      `http://d13f-78-90-52-121.ngrok.io/api/receive_stamp`,
-      {
-        method: "POST",
-        mode: "cors",
-        body: formData,
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
+    const res = await fetch(`${linkURL}receive_stamp`, {
+      method: "POST",
+      mode: "cors",
+      body: formData,
+      headers: {
+        Authorization: token,
+      },
+    });
     // const data = await res.json();
     const data2 = await res.text();
     // console.log(data);
@@ -128,6 +118,26 @@ export const receiveStamp = async (token: string, stampToken: string) => {
     return data2;
   } catch (err: any) {
     console.log("Error getQRCode");
+    console.log(err);
+    return null;
+  }
+};
+
+export const refreshAuthToken = async (oldToken: string) => {
+  try {
+    const res = await fetch(`${linkURL}refresh_token`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        Authorization: oldToken,
+      },
+    });
+    // console.log(JSON.stringify(res));
+    const data: { token: string } = await res.json();
+    // console.log(data);
+    return data.token;
+  } catch (err: any) {
+    console.log("Error getRefreshToken");
     console.log(err);
     return null;
   }

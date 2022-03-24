@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import Scanner from "../../components/scanner";
+import { StyleSheet, View } from "react-native";
+import Scanner from "../../components/QR/scanner";
 import { ColorSchema } from "../../constants/Colors";
 import { ColorContext } from "../../navigation/RootNavigator";
 import { DrawerNavProps } from "../../navigation/types";
@@ -14,7 +14,6 @@ export const ScanQRScreen = ({}: DrawerNavProps<"ScanQR">) => {
         theme === "dark" ? styles.containerDark : styles.containerLight,
       ]}
     >
-      <Text>Scan the QR code</Text>
       <Scanner />
     </View>
   );

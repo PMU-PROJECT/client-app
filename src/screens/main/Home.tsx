@@ -17,6 +17,7 @@ import { fetchAllSites } from "../../utils/makeRequestToServer";
 import { UserState } from "../../store/reducers/UserReducer";
 import { SitesState } from "../../store/reducers/SitesReducer";
 import { SitesActions } from "../../store/actions/SitesActions";
+import { Loading } from "../../components/general/Loading";
 
 const width = Dimensions.get("window").width / 2 - 30;
 
@@ -56,24 +57,7 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
   }, [categoryIndex, token]);
 
   if (loading) {
-    return (
-      <View
-        style={[
-          styles.container,
-          { alignItems: "center", justifyContent: "center" },
-          theme === "dark" ? styles.containerDark : styles.containerLight,
-        ]}
-      >
-        <Text
-          style={[
-            { fontSize: 25, fontWeight: "bold", textAlign: "center" },
-            theme === "dark" ? styles.darkText : styles.lightText,
-          ]}
-        >
-          Loading...
-        </Text>
-      </View>
-    );
+    <Loading />;
   }
 
   return (
@@ -123,15 +107,15 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
           contentContainerStyle={{ marginTop: 10, paddingBottom: 50 }}
           numColumns={2}
           data={sites}
-          keyExtractor={(item, _idx) => item.name}
+          keyExtractor={(item, _idx) => `${item.id}`}
           renderItem={({ item }) => (
             <PlaceCard
-              key={`${Math.random()}`}
+              key={item.id}
               onPress={() => {
-                navigation.navigate("PlaceDetails", { id: `${item.name}` });
+                navigation.navigate("PlaceDetails", { id: `${item.id}` });
               }}
-              description={`Place ${item.name} location`}
-              title={`Place ${item.name}`}
+              description={`${item.city.trim()}`}
+              title={item.name}
               imageUrl={imgUri}
             />
           )}
@@ -144,7 +128,7 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
               theme === "dark" ? styles.darkText : styles.lightText,
             ]}
           >
-            Sorry we F
+            Sorry we Fucked
           </Text>
         </View>
       )}

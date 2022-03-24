@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { ColorContext } from "../navigation/RootNavigator";
-import { ColorSchema } from "../constants/Colors";
+import { ColorContext } from "../../navigation/RootNavigator";
+import { ColorSchema, new_green } from "../../constants/Colors";
 import { useSelector } from "react-redux";
-import { UserState } from "../store/reducers/UserReducer";
-import { receiveStamp } from "../utils/makeRequestToServer";
+import { UserState } from "../../store/reducers/UserReducer";
+import { receiveStamp } from "../../utils/makeRequestToServer";
 
 export default function Scanner() {
   const { theme } = useContext(ColorContext);
@@ -96,7 +96,7 @@ export default function Scanner() {
         <Button
           title={"Scan again?"}
           onPress={() => setScanned(false)}
-          color="tomato"
+          color={theme === "dark" ? ColorSchema.default.dark_green : new_green}
         />
       )}
     </View>
@@ -115,8 +115,8 @@ const styles = StyleSheet.create({
   barcodebox: {
     alignItems: "center",
     justifyContent: "center",
-    height: 300,
-    width: 300,
+    height: 400,
+    width: 400,
     overflow: "hidden",
     borderRadius: 30,
   },

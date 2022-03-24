@@ -2957,6 +2957,11 @@ expo-random@^12.1.2:
   dependencies:
     base64-js "^1.3.0"
 
+expo-screen-capture@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/expo-screen-capture/-/expo-screen-capture-4.1.1.tgz#b8cda9f0417f67213b86395853f7d7a6ea1ba67a"
+  integrity sha512-DtR95PQ/ZAdfwV1SvSHZG0iSxx4O7bv7oZhymDKWupC+8PPYP6rCv9IU50Mj3nF//Sm2EdkVnSUnufhO3+r09A==
+
 expo-splash-screen@~0.14.0:
   version "0.14.2"
   resolved "https://registry.npmjs.org/expo-splash-screen/-/expo-splash-screen-0.14.2.tgz"

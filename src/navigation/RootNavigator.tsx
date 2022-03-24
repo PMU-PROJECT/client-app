@@ -1,10 +1,16 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createContext, useEffect } from "react";
-import { setupDB } from "../utils/databaseUtils";
+import {
+  deleteTable,
+  getToken,
+  saveToken,
+  setupDB,
+} from "../utils/databaseUtils";
 import { AuthStack } from "./AuthStack";
 import { DrawerNav } from "./DrawerNavigator";
 import { useSelector } from "react-redux";
 import { UserState } from "../store/reducers/UserReducer";
+import { refreshAuthToken } from "../utils/makeRequestToServer";
 
 // const Root = createStackNavigator();
 export type ColorTheme = {
@@ -36,8 +42,19 @@ export const RootNavigator: React.FC = ({}) => {
     // deleteToken(1);
     // saveToken("1224");
 
-    // const fetchedToken = await getToken();
-    // console.log(fetchedToken);
+    // values@first_name.com
+
+    async function aa() {
+      console.log("******************");
+      const fetchedToken = await getToken();
+      console.log("f " + fetchedToken);
+      if (fetchedToken !== null) {
+        const res = await refreshAuthToken(fetchedToken);
+        console.log(res);
+      }
+    }
+    aa();
+
     // setToken(fetchedToken);
     // console.log(JSON.stringify(token));;
   }, []);
