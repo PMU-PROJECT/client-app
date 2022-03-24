@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Formik, FormikHelpers } from "formik";
 import React, { useContext, useState } from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { ColorSchema } from "../../constants/Colors";
 import { ColorContext } from "../../navigation/RootNavigator";
@@ -23,7 +23,7 @@ export const RegisterForm: React.FC = () => {
   const { theme } = useContext(ColorContext);
   const dispatch = useDispatch();
 
-  const [userInfo, setUserInfo] = useState<UserInfo>({
+  const [userInfo, _setUserInfo] = useState<UserInfo>({
     firstName: "",
     lastName: "",
     email: "",
@@ -34,6 +34,34 @@ export const RegisterForm: React.FC = () => {
   // const handleOnChangeText = (value: string, fieldName: string) => {
   //   setUserInfo({ ...userInfo, [fieldName]: value });
   // };
+
+  const handleSubmit = async (
+    values: UserInfo,
+    formikHelpers: FormikHelpers<UserInfo>
+  ) => {
+    const token = await makeAuthRequest("registration", {
+      first_name: values.firstName,
+      last_name: values.lastName,
+      email: values.email,
+      password: values.password,
+    });
+    if (token !== null) {
+      const userInfo = await getSelfInfo(token);
+      if (userInfo !== null) {
+        dispatch({
+          type: UserActions.REGISTER,
+          payload: {
+            token,
+            userData: {
+              ...userInfo,
+            },
+          },
+        });
+      }
+    }
+    formikHelpers.resetForm();
+    formikHelpers.setSubmitting(false);
+  };
 
   return (
     <FormContainer>
@@ -49,33 +77,7 @@ export const RegisterForm: React.FC = () => {
         style={styles.form}
         initialValues={userInfo}
         validationSchema={ValidationSchema}
-        onSubmit={async (
-          values: UserInfo,
-          formikHelpers: FormikHelpers<UserInfo>
-        ) => {
-          const token = await makeAuthRequest("registration", {
-            first_name: values.firstName,
-            last_name: values.lastName,
-            email: values.email,
-            password: values.password,
-          });
-          if (token !== null) {
-            const info = await getSelfInfo(token);
-            dispatch({ type: UserActions.LOGIN, payload: { token } });
-          } else {
-            Alert.alert(
-              "Invalid Credentials!",
-              "Check what you have entered!",
-              [{ text: "Okay" }]
-            );
-          }
-          dispatch({
-            type: UserActions.REGISTER,
-            payload: { token: token },
-          });
-          formikHelpers.resetForm();
-          formikHelpers.setSubmitting(false);
-        }}
+        onSubmit={handleSubmit}
       >
         {({
           values,

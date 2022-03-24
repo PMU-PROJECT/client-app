@@ -1,5 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 import {
   deleteTable,
   getToken,
@@ -8,9 +8,12 @@ import {
 } from "../utils/databaseUtils";
 import { AuthStack } from "./AuthStack";
 import { DrawerNav } from "./DrawerNavigator";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { UserState } from "../store/reducers/UserReducer";
-import { refreshAuthToken } from "../utils/makeRequestToServer";
+import { getSelfInfo, refreshAuthToken } from "../utils/makeRequestToServer";
+import { UserActions } from "../store/actions/UserActions";
+import AppLoading from "expo-app-loading";
+import { Alert } from "react-native";
 
 // const Root = createStackNavigator();
 export type ColorTheme = {
@@ -30,11 +33,38 @@ export const ColorContext = createContext<ColorTheme>({ theme: "dark" });
 // });
 
 export const RootNavigator: React.FC = ({}) => {
-  // const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean | null>(false);
   const token = useSelector((state: { user: UserState }) => state.user.token);
+  const dispatch = useDispatch();
+
+  const getNewToken = async () => {
+    const dbToken = await getToken();
+    console.log(dbToken);
+    if (dbToken !== null) {
+      const refreshedToken = await refreshAuthToken(dbToken);
+      if (refreshedToken !== null) {
+        const userInfo = await getSelfInfo(refreshedToken);
+        // console.log(userInfo);
+        if (userInfo !== null) {
+          dispatch({
+            type: UserActions.LOGIN,
+            payload: {
+              token: refreshedToken,
+              userData: {
+                ...userInfo,
+              },
+            },
+          });
+          // setValidToken(refreshedToken);
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     setupDB();
+    setLoading(true);
+    // getNewToken();
     // deleteTable();
     // console.log("****");
     // console.log(JSON.stringify(token));
@@ -43,21 +73,22 @@ export const RootNavigator: React.FC = ({}) => {
     // saveToken("1224");
 
     // values@first_name.com
-
-    async function aa() {
-      console.log("******************");
-      const fetchedToken = await getToken();
-      console.log("f " + fetchedToken);
-      if (fetchedToken !== null) {
-        const res = await refreshAuthToken(fetchedToken);
-        console.log(res);
-      }
-    }
-    aa();
-
-    // setToken(fetchedToken);
-    // console.log(JSON.stringify(token));;
+    () => setLoading(null);
   }, []);
+
+  if (loading) {
+    return (
+      <AppLoading
+        startAsync={getNewToken}
+        onFinish={() => {
+          setLoading(false);
+        }}
+        onError={(error) =>
+          Alert.alert(`${error.name}`, `${error.message}`, [{ text: "Okay" }])
+        }
+      />
+    );
+  }
 
   return (
     <ColorContext.Provider value={{ theme: "dark" }}>

@@ -1,6 +1,6 @@
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import React, { useContext, useState } from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { ColorSchema } from "../../constants/Colors";
 import { ColorContext } from "../../navigation/RootNavigator";
@@ -47,14 +47,21 @@ export const LoginForm: React.FC = () => {
   const submitForm = async () => {
     if (isValidForm()) {
       const token = await makeAuthRequest("login", { ...userInfo });
-      dispatch({ type: UserActions.LOGIN, payload: { token } });
-      // if (token !== null) {
-      //   const info = await getSelfInfo(token);
-      // } else {
-      //   Alert.alert("Invalid Credentials!", "Check what you have entered!", [
-      //     { text: "Okay" },
-      //   ]);
-      // }
+      if (token !== null) {
+        const userInfo = await getSelfInfo(token);
+        // console.log(userInfo);
+        if (userInfo !== null) {
+          dispatch({
+            type: UserActions.LOGIN,
+            payload: {
+              token,
+              userData: {
+                ...userInfo,
+              },
+            },
+          });
+        }
+      }
     }
   };
 
