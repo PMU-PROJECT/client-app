@@ -1,6 +1,6 @@
 import { Alert } from "react-native";
 
-const linkURL = "http://d13f-78-90-52-121.ngrok.io/api/";
+const linkURL = "http://0af1-78-90-52-121.eu.ngrok.io/api/";
 
 export const makeAuthRequest = async (
   path: string,
@@ -95,6 +95,7 @@ export const fetchAllSites = async (
     }
 
     const data: { sites: [] } = await res.json();
+    // console.log(data);
     return data.sites;
   } catch (err: any) {
     console.log("Error fetchAllSites");

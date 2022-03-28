@@ -13,7 +13,7 @@ import { PlaceCard } from "../../components/home/PlaceCard";
 import { ColorSchema, new_green } from "../../constants/Colors";
 import { ColorContext } from "../../navigation/RootNavigator";
 import { PlacesNavProps } from "../../navigation/types";
-import { fetchAllSites } from "../../utils/makeRequestToServer";
+import { fetchAllSites, getImage } from "../../utils/makeRequestToServer";
 import { UserState } from "../../store/reducers/UserReducer";
 import { SitesState } from "../../store/reducers/SitesReducer";
 import { SitesActions } from "../../store/actions/SitesActions";
@@ -34,8 +34,8 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const categories = ["all", "visited", "unvisited"];
-  const imgUri =
-    "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
+  // const imgUri =
+  //   "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
 
   useEffect(() => {
     if (!token) return;
@@ -116,7 +116,14 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
               }}
               description={`${item.city.trim()}`}
               title={item.name}
-              imageUrl={imgUri}
+              imageUrl={
+                item.image
+                // async () => {
+                // const res = await getImage(token!, item.image);
+                // console.log(res);
+                // return res;
+                // }
+              }
             />
           )}
         />

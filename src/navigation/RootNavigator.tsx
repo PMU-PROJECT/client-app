@@ -1,19 +1,14 @@
 import { NavigationContainer } from "@react-navigation/native";
+import AppLoading from "expo-app-loading";
 import { createContext, useEffect, useState } from "react";
-import {
-  deleteTable,
-  getToken,
-  saveToken,
-  setupDB,
-} from "../utils/databaseUtils";
+import { Alert } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { UserActions } from "../store/actions/UserActions";
+import { UserState } from "../store/reducers/UserReducer";
+import { getToken, setupDB } from "../utils/databaseUtils";
+import { getSelfInfo, refreshAuthToken } from "../utils/makeRequestToServer";
 import { AuthStack } from "./AuthStack";
 import { DrawerNav } from "./DrawerNavigator";
-import { useDispatch, useSelector } from "react-redux";
-import { UserState } from "../store/reducers/UserReducer";
-import { getSelfInfo, refreshAuthToken } from "../utils/makeRequestToServer";
-import { UserActions } from "../store/actions/UserActions";
-import AppLoading from "expo-app-loading";
-import { Alert } from "react-native";
 
 // const Root = createStackNavigator();
 export type ColorTheme = {
@@ -34,6 +29,7 @@ export const ColorContext = createContext<ColorTheme>({ theme: "dark" });
 
 export const RootNavigator: React.FC = ({}) => {
   const [loading, setLoading] = useState<boolean | null>(false);
+  // const [image, setImage] = useState();
   const token = useSelector((state: { user: UserState }) => state.user.token);
   const dispatch = useDispatch();
 
@@ -71,7 +67,6 @@ export const RootNavigator: React.FC = ({}) => {
     // console.log("****");
     // deleteToken(1);
     // saveToken("1224");
-
     // values@first_name.com
     () => setLoading(null);
   }, []);
@@ -93,8 +88,8 @@ export const RootNavigator: React.FC = ({}) => {
   return (
     <ColorContext.Provider value={{ theme: "dark" }}>
       <NavigationContainer>
-        {token ? <DrawerNav /> : <AuthStack />}
-        {/* <DrawerNav /> */}
+        {/* {token ? <DrawerNav /> : <AuthStack />} */}
+        <DrawerNav />
         {/* <AuthStack /> */}
       </NavigationContainer>
     </ColorContext.Provider>
