@@ -1,15 +1,20 @@
-import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  FontAwesome,
+  FontAwesome5,
+  Ionicons,
+} from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { useContext } from "react";
 import { useSelector } from "react-redux";
 import { CustomDrawer } from "../components/drawer/CustomDrawer";
 import { ColorSchema } from "../constants/Colors";
-import { AchivementsScreen } from "../screens/drawer/Achievements";
+import { RewardsScreen } from "../screens/drawer/Rewards";
 import { ScanQRScreen } from "../screens/drawer/ScanQR";
+import { SettingScreen } from "../screens/drawer/Settings";
 import { UserState } from "../store/reducers/UserReducer";
 import { AppTabs } from "./MainTabs";
 import { ColorContext } from "./RootNavigator";
-import { SettingsStack } from "./SettingsStack";
 import { DrawerParamList } from "./types";
 
 const DrawerNavigator = createDrawerNavigator<DrawerParamList>();
@@ -65,19 +70,11 @@ export const DrawerNav: React.FC = ({}) => {
 
       <DrawerNavigator.Screen
         name="Settings"
-        options={{
-          drawerIcon: ({ color }) => (
-            <FontAwesome5 name="cog" size={24} color={color} />
-          ),
-        }}
-        component={SettingsStack}
-      />
-      <DrawerNavigator.Screen
-        name="Achievements"
         options={({ navigation }) => ({
-          title: "Achievements",
+          headerShown: true,
+          headerTitle: "Settings",
           drawerIcon: ({ color }) => (
-            <FontAwesome5 name={"medal"} size={24} color={color} />
+            <FontAwesome name="cog" size={24} color={color} />
           ),
           headerLeft: () => (
             <Ionicons
@@ -90,44 +87,106 @@ export const DrawerNav: React.FC = ({}) => {
             />
           ),
         })}
-        component={AchivementsScreen}
+        component={SettingScreen}
+      />
+      <DrawerNavigator.Screen
+        name="Rewards"
+        options={({ navigation }) => ({
+          title: "Rewards",
+          headerShown: true,
+          drawerIcon: ({ color }) => (
+            <FontAwesome5 name="gift" size={24} color={color} />
+          ),
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={24}
+              color="black"
+              onPress={() => {
+                navigation.toggleDrawer();
+              }}
+            />
+          ),
+        })}
+        component={RewardsScreen}
       />
       {user?.employeeInfo !== null ? (
-        <DrawerNavigator.Screen
-          name="ScanQR"
-          options={({ navigation }) => ({
-            headerShown: true,
-            title: "Scan QR code",
-            headerTintColor:
-              theme === "dark" ? ColorSchema.dark.text : ColorSchema.light.text,
-            headerStyle: {
-              backgroundColor:
+        <>
+          <DrawerNavigator.Screen
+            name="ScanQR"
+            options={({ navigation }) => ({
+              headerShown: true,
+              title: "Scan QR code",
+              headerTintColor:
                 theme === "dark"
-                  ? ColorSchema.dark.background
-                  : ColorSchema.light.background,
-              borderBottomWidth: theme === "dark" ? 1 : 1,
-              borderBottomColor: theme === "dark" ? "grey" : "grey",
-            },
-            drawerIcon: ({ color }) => (
-              <AntDesign name="scan1" size={24} color={color} />
-            ),
-            headerLeft: () => (
-              <Ionicons
-                name="menu"
-                size={24}
-                color={
+                  ? ColorSchema.dark.text
+                  : ColorSchema.light.text,
+              headerStyle: {
+                backgroundColor:
                   theme === "dark"
-                    ? ColorSchema.dark.text
-                    : ColorSchema.light.text
-                }
-                onPress={() => {
-                  navigation.toggleDrawer();
-                }}
-              />
-            ),
-          })}
-          component={ScanQRScreen}
-        />
+                    ? ColorSchema.dark.background
+                    : ColorSchema.light.background,
+                borderBottomWidth: theme === "dark" ? 1 : 1,
+                borderBottomColor: theme === "dark" ? "grey" : "grey",
+              },
+              drawerIcon: ({ color }) => (
+                <AntDesign name="scan1" size={24} color={color} />
+              ),
+              headerLeft: () => (
+                <Ionicons
+                  name="menu"
+                  size={24}
+                  color={
+                    theme === "dark"
+                      ? ColorSchema.dark.text
+                      : ColorSchema.light.text
+                  }
+                  onPress={() => {
+                    navigation.toggleDrawer();
+                  }}
+                />
+              ),
+            })}
+            component={ScanQRScreen}
+          />
+          <DrawerNavigator.Screen
+            name="EmployeeRewards"
+            options={({ navigation }) => ({
+              headerShown: true,
+              title: "Give Rewards",
+              headerTintColor:
+                theme === "dark"
+                  ? ColorSchema.dark.text
+                  : ColorSchema.light.text,
+              headerStyle: {
+                backgroundColor:
+                  theme === "dark"
+                    ? ColorSchema.dark.background
+                    : ColorSchema.light.background,
+                borderBottomWidth: theme === "dark" ? 1 : 1,
+                borderBottomColor: theme === "dark" ? "grey" : "grey",
+              },
+              drawerIcon: ({ color }) => (
+                <FontAwesome5 name="user-check" size={24} color={color} />
+              ),
+              headerLeft: () => (
+                <Ionicons
+                  name="menu"
+                  size={24}
+                  color={
+                    theme === "dark"
+                      ? ColorSchema.dark.text
+                      : ColorSchema.light.text
+                  }
+                  onPress={() => {
+                    navigation.toggleDrawer();
+                  }}
+                />
+              ),
+            })}
+            component={ScanQRScreen}
+          />
+        </>
       ) : null}
     </DrawerNavigator.Navigator>
   );

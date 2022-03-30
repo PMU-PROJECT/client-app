@@ -7,12 +7,15 @@ import {
 } from "@react-navigation/drawer";
 import { ColorContext } from "../../navigation/RootNavigator";
 import { ColorSchema } from "../../constants/Colors";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { UserActions } from "../../store/actions/UserActions";
+import { UserState } from "../../store/reducers/UserReducer";
+import { ScalableText } from "../general/ScalableText";
 
 export const CustomDrawer = (props: any) => {
   const { theme } = useContext(ColorContext);
   const dispatch = useDispatch();
+  const user = useSelector((state: { user: UserState }) => state.user.user);
 
   return (
     <View style={{ flex: 1, padding: 0 }}>
@@ -53,14 +56,20 @@ export const CustomDrawer = (props: any) => {
             source={require("../../../assets/images/user-profile.png")}
             style={styles.profilePic}
           />
-          <Text
-            style={[
-              styles.usernameText,
-              theme === "dark" ? styles.textDark : styles.textLight,
-            ]}
-          >
-            User Names
-          </Text>
+          <ScalableText
+            fontSize={18}
+            text={user ? `${user.firstName} ${user.lastName}` : "User Names"}
+            styles={{
+              fontWeight: "bold",
+              marginBottom: 5,
+              marginLeft: 20,
+              color:
+                theme === "dark"
+                  ? ColorSchema.dark.text
+                  : ColorSchema.light.text,
+            }}
+            numberOfLines={2}
+          />
         </View>
         <View
           style={
@@ -146,7 +155,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   usernameText: {
-    fontSize: 18,
     fontWeight: "bold",
     marginBottom: 5,
     marginLeft: 20,
