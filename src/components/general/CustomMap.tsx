@@ -1,7 +1,15 @@
-import React from "react";
-import MapView from "react-native-maps";
-import { Dimensions, Platform, StyleSheet, Text, View } from "react-native";
-import { Marker } from "react-native-maps";
+import React, { LegacyRef, useRef } from "react";
+import MapView, { Camera } from "react-native-maps";
+import {
+  Button,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Marker, Polyline } from "react-native-maps";
+import { windowHeight, windowWidth } from "../../utils/Dimensions";
 // import Geolocation from "react-native-geolocation-service";
 
 type MapProps = {
@@ -9,15 +17,13 @@ type MapProps = {
   longitude: number;
   markerTitle: string;
   markerDesc: string;
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
 };
-
-const { width, height } = Dimensions.get("window");
 
 // const SCREEN_HEIGHT = height;
 // const SCREEN_WIDTH = width;
-const ASPECT_RATIO = width / height;
+const ASPECT_RATIO = windowWidth / windowHeight;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
@@ -29,9 +35,19 @@ export const CustomMap: React.FC<MapProps> = ({
   width,
   height,
 }) => {
+  const map: LegacyRef<MapView> = useRef(null);
+
+  const onZoomInPress = () => {
+    map?.current?.getCamera().then((cam: Camera) => {
+      cam.zoom += 1;
+      map?.current?.animateCamera(cam);
+    });
+  };
+
   return (
     <View style={styles.container}>
       <MapView
+        ref={map}
         // initialRegion={{
         //   latitude,
         //   longitude,
@@ -50,11 +66,15 @@ export const CustomMap: React.FC<MapProps> = ({
         style={[
           styles.map,
           {
-            width: width !== 0 ? width : 300,
+            width: width !== 0 ? width : windowWidth,
             height: height !== 0 ? height : 300,
           },
         ]}
       >
+        <TouchableOpacity
+          style={{ position: "absolute", bottom: 400, left: 0 }}
+          onPress={onZoomInPress}
+        ></TouchableOpacity>
         {Platform.OS !== "web" ? (
           <>
             {/* <Marker
@@ -66,7 +86,7 @@ export const CustomMap: React.FC<MapProps> = ({
               title={markerTitle}
               description={markerDesc}
             /> */}
-            <Marker
+            {/* <Marker
               key={2}
               coordinate={{
                 latitude: 41.970035,
@@ -74,7 +94,7 @@ export const CustomMap: React.FC<MapProps> = ({
               }}
               title={markerTitle}
               description={markerDesc}
-            />
+            /> */}
           </>
         ) : (
           <Text>Web</Text>
@@ -86,8 +106,6 @@ export const CustomMap: React.FC<MapProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },

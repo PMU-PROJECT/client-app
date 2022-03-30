@@ -1,13 +1,7 @@
 import React, { useState } from "react";
-import {
-  Dimensions,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { windowWidth } from "../../utils/Dimensions";
 
 type CarouselProps = {
   images: [];
@@ -20,22 +14,20 @@ export const CustomImageCarousel = ({}: CarouselProps) => {
     "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg";
   const [activeIndex, setIndex] = useState<number>(0);
 
-  const { width } = Dimensions.get("window");
-  const height = width * 0.6;
+  const height = windowWidth * 0.6;
   const images = [imgUri, img2, imgUri, img2];
 
   return (
     <View
       style={{
-        marginVertical: 50,
-        width,
+        width: windowWidth,
         height,
       }}
     >
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={{ width, height }}
+        style={{ width: windowWidth, height }}
         onScroll={({ nativeEvent }) => {
           const slide = Math.ceil(
             nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
@@ -51,7 +43,7 @@ export const CustomImageCarousel = ({}: CarouselProps) => {
               key={idx}
               source={{ uri: imageUrl }}
               style={{
-                width,
+                width: windowWidth,
                 height,
                 resizeMode: "cover",
               }}
@@ -77,12 +69,20 @@ export const CustomImageCarousel = ({}: CarouselProps) => {
               margin: 3,
             }}
           >
-            {/* • */}●
+            ●
           </Text>
         ))}
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  text: {
+    color: "white",
+    fontSize: 18,
+    textAlign: "center",
+  },
+});

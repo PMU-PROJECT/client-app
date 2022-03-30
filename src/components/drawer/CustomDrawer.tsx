@@ -6,7 +6,7 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 import { ColorContext } from "../../navigation/RootNavigator";
-import { ColorSchema, new_green } from "../../constants/Colors";
+import { ColorSchema } from "../../constants/Colors";
 import { useDispatch } from "react-redux";
 import { UserActions } from "../../store/actions/UserActions";
 

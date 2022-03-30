@@ -59,7 +59,7 @@ export const RootNavigator: React.FC = ({}) => {
 
   useEffect(() => {
     setupDB();
-    setLoading(true);
+    // setLoading(true);
     // getNewToken();
     // deleteTable();
     // console.log("****");

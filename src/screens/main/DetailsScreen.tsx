@@ -1,38 +1,43 @@
-import { Button, Platform, StyleSheet, Text, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-// import { androidId } from "expo-application";
-import * as Google from "expo-auth-session/providers/google";
 import { CustomMap } from "../../components/general/CustomMap";
-import { ImageCarousel } from "../../components/general/ImageCarousel";
 import Constants from "expo-constants";
 import * as Location from "expo-location";
 import { LocationObject } from "expo-location";
 import { CustomImageCarousel } from "../../components/general/CustomImageCarousel";
+import { windowWidth } from "../../utils/Dimensions";
+import { ColorSchema } from "../../constants/Colors";
+
+type Details = {
+  city: string;
+  description: string;
+  employees: [] | null;
+  // [ # Only if employees are assigned
+  //   {
+  //   "added_by": int,
+  //   "can_reward": bool,
+  //   "email": str,
+  //   "first_name": str,
+  //   "last_name": str,
+  //   "place_id": int,
+  //   "profile_picture": str
+  //   }, ...
+  // ],
+  images: [string];
+  latitude: number;
+  longitude: number;
+  name: string;
+  region: string;
+};
 
 export const DetailsScreen = () => {
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    expoClientId:
-      "798626048018-95mqg2bugasu4572nhb15p11s51cfbh5.apps.googleusercontent.com",
-    iosClientId:
-      "798626048018-95mqg2bugasu4572nhb15p11s51cfbh5.apps.googleusercontent.com",
-    androidClientId:
-      "798626048018-95mqg2bugasu4572nhb15p11s51cfbh5.apps.googleusercontent.com",
-    webClientId:
-      "798626048018-95mqg2bugasu4572nhb15p11s51cfbh5.apps.googleusercontent.com",
-    clientId:
-      "798626048018-95mqg2bugasu4572nhb15p11s51cfbh5.apps.googleusercontent.com",
-  });
-
-  useEffect(() => {
-    console.log(response);
-    if (response?.type === "success") {
-      const { authentication } = response;
-      console.log(authentication);
-    }
-  }, [response]);
+  useEffect(() => {}, []);
 
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  let userLong = 0;
+  let userLat = 0;
 
   useEffect(() => {
     (async () => {
@@ -53,84 +58,131 @@ export const DetailsScreen = () => {
     })();
   }, []);
 
-  let userLong = 0;
-  let userLat = 0;
-
-  let text = "Waiting..";
+  // let text = "Waiting..";
   if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
+    // text = errorMsg;
+  }
+  if (location) {
+    // text = JSON.stringify(location);
     userLat = location.coords.latitude;
     userLong = location.coords.longitude;
   }
 
   return (
-    <View style={styles.container}>
-      <Text>Details</Text>
-      <Button
-        title={"Login"}
-        onPress={async () => {
-          try {
-            const res = await fetch(
-              "http://356f-78-90-52-121.ngrok.io/api/get_all_sites",
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization:
-                    "ae6fd49e6309089650e9f4bd0c47b4cca9652dd3676a34df8266bdd4eb69b25b59dea0bf9b7d3f6356b4a3fea50e7b6ac0ce348ca1a2afb7ea0f513f1b9ee30db157a02becdeaa4e93e0e756",
-                },
-
-                method: "GET",
-                // body: JSON.stringify({
-                //   email: "yeet2@abv.bg",
-                //   password: "123456",
-                // }),
-              }
-            );
-            // console.log(res);
-            const data = await res.json();
-            console.log(data);
-          } catch (e) {
-            console.log(e);
-          }
-        }}
-      />
-      <View style={{ marginVertical: 50 }}>
+    <>
+      <View style={styles.topContainer}>
         <CustomImageCarousel images={[]} />
+        {/* <View style={styles.imageContainer}>
+          <View>
+            <CustomImageCarousel images={[]} />
+            <View
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+                justifyContent: "flex-end",
+                alignItems: "flex-start",
+                marginBottom: 20,
+                marginLeft: 20,
+                padding: 10,
+              }}
+            >
+              <Text style={styles.text}>Site Name</Text>
+              <Text style={styles.text}>Site City and Region</Text>
+            </View>
+          </View>
+        </View> */}
       </View>
-      <CustomMap
-        latitude={userLat !== 0 ? userLat : 41.970035}
-        longitude={userLong !== 0 ? userLong : 23.477082}
-        markerTitle={"Title"}
-        markerDesc={"Description"}
-        height={300}
-        width={300}
-      />
-      <View style={styles.container}>
-        <Text style={styles.paragraph}>{text}</Text>
+      <View style={[styles.bottomContainer]}>
+        <ScrollView>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text style={{ marginLeft: 10 }}>Site Name</Text>
+            <Text style={{ marginRight: 10 }}>Site City, Region</Text>
+          </View>
+          <Text
+            style={[styles.typeContainerTop, { marginTop: 12, fontSize: 13 }]}
+          >
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industry's standard dummy text
+            ever since the 1500s, when an unknown printer took a galley of type
+            and scrambled it to make a type specimen book. Lorem ipsum dolor sit
+            amet consectetur adipisicing elit. Labore iste expedita, voluptas
+            laudantium dolor quibusdam placeat ab doloribus reprehenderit,
+            perferendis consequatur a accusamus necessitatibus. Sequi quis fugit
+            neque ea. Cumque. Lorem ipsum dolor sit amet consectetur adipisicing
+            elit. Rem vitae rerum debitis nobis animi non voluptatum possimus.
+            Iusto placeat dolores necessitatibus exercitationem quisquam itaque
+            deserunt quod suscipit illum! Nobis, consequatur! Lorem ipsum dolor
+            sit amet consectetur adipisicing elit. Aspernatur ex non fugiat
+            veritatis atque, repudiandae tempore quae aliquam, esse nulla
+            reprehenderit quia quas sequi architecto assumenda nostrum, nisi
+            enim deserunt.
+          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              marginTop: 24.0,
+            }}
+          >
+            <CustomMap
+              latitude={userLat !== 0 ? userLat : 41.970035}
+              longitude={userLong !== 0 ? userLong : 23.477082}
+              markerTitle={"Title"}
+              markerDesc={"Description"}
+              height={300}
+              width={400}
+            />
+          </View>
+        </ScrollView>
       </View>
-      {/* <ImageCarousel images={[]} /> */}
-      {/* <Button
-        disabled={!request}
-        title="Login G"
-        onPress={() => {
-          promptAsync();
-        }}
-      /> */}
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#5192FC",
   },
-  paragraph: {
-    fontSize: 18,
-    textAlign: "center",
+  topContainer: {
+    backgroundColor: "transparent",
+    flex: 1.5,
+  },
+  bottomContainer: {
+    backgroundColor: "white",
+    flex: 2,
+    padding: 20,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+  },
+  typeContainer: {
+    height: 115,
+    width: 100,
+    marginTop: 24.0,
+    marginRight: 10.0,
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    borderRadius: 20,
+    borderWidth: 3,
+    borderColor: "#F3F2F7",
+  },
+  typeContainerTop: {
+    fontSize: 12.0,
+    color: "#BCBEBF",
+    fontWeight: "bold",
+  },
+  imageContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 10,
   },
 });

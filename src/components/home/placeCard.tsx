@@ -1,7 +1,7 @@
 import React from "react";
 import {
-  Dimensions,
   Image,
+  ImageBackground,
   ImageSourcePropType,
   StyleSheet,
   TouchableOpacity,
@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useSelector } from "react-redux";
 import { UserState } from "../../store/reducers/UserReducer";
+import { windowHeight, windowWidth } from "../../utils/Dimensions";
 import ImageButton from "./ImageButton";
 
 type CardProps = {
@@ -17,12 +18,15 @@ type CardProps = {
   imageUrl: string;
   description: string;
   onPress: Function; // onPress: ((event: GestureResponderEvent) => void) | undefined
+  vistited?: boolean;
 };
 
 export const PlaceCard: React.FC<CardProps> = (props: CardProps) => {
   // https://reactnative.dev/img/tiny_logo.png
   console.log(props.imageUrl);
   const token = useSelector((state: { user: UserState }) => state.user.token);
+  // const imgUri =
+  //   "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
 
   return (
     <TouchableOpacity
@@ -33,11 +37,14 @@ export const PlaceCard: React.FC<CardProps> = (props: CardProps) => {
     >
       <View style={styles.imageContainer}>
         <View style={styles.imageView}>
-          <Image
+          <ImageBackground
+            style={[styles.imageBg]}
+            imageStyle={styles.image}
             source={
               {
                 // velyanova-kushta.jpg
                 uri: `http://0af1-78-90-52-121.eu.ngrok.io/imageserver/tourist_sites?name=${props.imageUrl}`,
+                // uri: imgUri,
                 headers: {
                   Authorization: token,
                   // "da32e590530ed0d486effc634b76ef10b77c19b4e1bbbf55d6fe861de1c75c72b4c2c292de5c27c2d87a8d158e7f370a0f2975295ada6c841e8d87da7996c194feff402fab5ae4277adcc6cb",
@@ -45,8 +52,14 @@ export const PlaceCard: React.FC<CardProps> = (props: CardProps) => {
                 },
               } as ImageSourcePropType
             }
-            style={styles.image}
-          />
+          >
+            {true ? (
+              <Image
+                source={require("../../../assets/images/visited.png")}
+                style={styles.imageVisited}
+              />
+            ) : null}
+          </ImageBackground>
           <ImageButton
             onPress={() => {
               props.onPress();
@@ -59,7 +72,6 @@ export const PlaceCard: React.FC<CardProps> = (props: CardProps) => {
     </TouchableOpacity>
   );
 };
-const { width, height } = Dimensions.get("screen");
 const styles = StyleSheet.create({
   imageContainer: {
     flexDirection: "row",
@@ -67,14 +79,27 @@ const styles = StyleSheet.create({
   },
 
   imageView: {
-    width: width / 2.4,
-    height: height / 3.5,
+    width: windowWidth / 2.4,
+    height: windowHeight / 3.5,
     marginHorizontal: 10,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
 
   image: {
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  imageBg: {
     width: "100%",
     height: "100%",
-    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  imageVisited: {
+    width: 150,
+    height: 150,
+    transform: [{ rotate: "315deg" }],
   },
 });

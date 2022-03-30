@@ -9,7 +9,7 @@ import { ColorSchema } from "../constants/Colors";
 
 const PlacesNavigator = createStackNavigator<PlacesParamList>();
 
-export const PlacesStack: React.FC = (props) => {
+export const PlacesStack: React.FC = () => {
   const { theme } = useContext(ColorContext);
   return (
     <PlacesNavigator.Navigator
