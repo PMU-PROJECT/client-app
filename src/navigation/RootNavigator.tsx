@@ -35,7 +35,7 @@ export const RootNavigator: React.FC = ({}) => {
 
   const getNewToken = async () => {
     const dbToken = await getToken();
-    console.log(dbToken);
+    // console.log(dbToken);
     if (dbToken !== null) {
       const refreshedToken = await refreshAuthToken(dbToken);
       if (refreshedToken !== null) {
@@ -59,8 +59,8 @@ export const RootNavigator: React.FC = ({}) => {
 
   useEffect(() => {
     setupDB();
-    // setLoading(true);
-    // getNewToken();
+    setLoading(true);
+    getNewToken();
     // deleteTable();
     // console.log("****");
     // console.log(JSON.stringify(token));
@@ -86,10 +86,10 @@ export const RootNavigator: React.FC = ({}) => {
   }
 
   return (
-    <ColorContext.Provider value={{ theme: "dark" }}>
+    <ColorContext.Provider value={{ theme: "light" }}>
       <NavigationContainer>
-        {/* {token ? <DrawerNav /> : <AuthStack />} */}
-        <DrawerNav />
+        {token ? <DrawerNav /> : <AuthStack />}
+        {/* <DrawerNav /> */}
         {/* <AuthStack /> */}
       </NavigationContainer>
     </ColorContext.Provider>

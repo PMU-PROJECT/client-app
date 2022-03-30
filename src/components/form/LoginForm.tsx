@@ -49,7 +49,6 @@ export const LoginForm: React.FC = () => {
       const token = await makeAuthRequest("login", { ...userInfo });
       if (token !== null) {
         const userInfo = await getSelfInfo(token);
-        // console.log(userInfo);
         if (userInfo !== null) {
           dispatch({
             type: UserActions.LOGIN,

@@ -1,10 +1,12 @@
 import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { useContext } from "react";
+import { useSelector } from "react-redux";
 import { CustomDrawer } from "../components/drawer/CustomDrawer";
 import { ColorSchema } from "../constants/Colors";
 import { AchivementsScreen } from "../screens/drawer/Achievements";
 import { ScanQRScreen } from "../screens/drawer/ScanQR";
+import { UserState } from "../store/reducers/UserReducer";
 import { AppTabs } from "./MainTabs";
 import { ColorContext } from "./RootNavigator";
 import { SettingsStack } from "./SettingsStack";
@@ -14,6 +16,8 @@ const DrawerNavigator = createDrawerNavigator<DrawerParamList>();
 
 export const DrawerNav: React.FC = ({}) => {
   const { theme } = useContext(ColorContext);
+
+  const user = useSelector((state: { user: UserState }) => state.user.user);
 
   return (
     <DrawerNavigator.Navigator
@@ -88,7 +92,7 @@ export const DrawerNav: React.FC = ({}) => {
         })}
         component={AchivementsScreen}
       />
-      {0 === 0 ? (
+      {user?.employeeInfo !== null ? (
         <DrawerNavigator.Screen
           name="ScanQR"
           options={({ navigation }) => ({

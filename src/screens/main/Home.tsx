@@ -1,25 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Dimensions,
-} from "react-native";
+import { SafeAreaView, View, Text, StyleSheet, FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Categories } from "../../components/home/Categories";
 import { PlaceCard } from "../../components/home/PlaceCard";
 import { ColorSchema, new_green } from "../../constants/Colors";
 import { ColorContext } from "../../navigation/RootNavigator";
 import { PlacesNavProps } from "../../navigation/types";
-import { fetchAllSites, getImage } from "../../utils/makeRequestToServer";
+import { fetchAllSites } from "../../utils/makeRequestToServer";
 import { UserState } from "../../store/reducers/UserReducer";
 import { SitesState } from "../../store/reducers/SitesReducer";
 import { SitesActions } from "../../store/actions/SitesActions";
 import { Loading } from "../../components/general/Loading";
-
-const width = Dimensions.get("window").width / 2 - 30;
+import { windowWidth } from "../../utils/Dimensions";
 
 export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
   const { theme } = useContext(ColorContext);
@@ -112,18 +104,14 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
             <PlaceCard
               key={item.id}
               onPress={() => {
-                navigation.navigate("PlaceDetails", { id: `${item.id}` });
+                navigation.navigate("PlaceDetails", {
+                  id: item.id,
+                  title: item.region,
+                });
               }}
               description={`${item.city.trim()}`}
               title={item.name}
-              imageUrl={
-                item.image
-                // async () => {
-                // const res = await getImage(token!, item.image);
-                // console.log(res);
-                // return res;
-                // }
-              }
+              imageUrl={item.image}
             />
           )}
         />
@@ -183,7 +171,7 @@ const styles = StyleSheet.create({
   card: {
     height: 225,
     backgroundColor: "#f1f1f1",
-    width,
+    width: windowWidth / 2 - 30,
     marginHorizontal: 2,
     marginBottom: 20,
     padding: 15,

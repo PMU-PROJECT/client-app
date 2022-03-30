@@ -20,7 +20,8 @@ export type AuthNavProps<T extends keyof AuthParamList> = {
 export type PlacesParamList = {
   Home: undefined;
   PlaceDetails: {
-    id: string;
+    id: number;
+    title: string;
   };
 };
 

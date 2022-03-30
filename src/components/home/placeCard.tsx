@@ -10,6 +10,7 @@ import {
 import { useSelector } from "react-redux";
 import { UserState } from "../../store/reducers/UserReducer";
 import { windowHeight, windowWidth } from "../../utils/Dimensions";
+import { createImageUrl } from "../../utils/imageUrls";
 import ImageButton from "./ImageButton";
 
 type CardProps = {
@@ -23,7 +24,6 @@ type CardProps = {
 
 export const PlaceCard: React.FC<CardProps> = (props: CardProps) => {
   // https://reactnative.dev/img/tiny_logo.png
-  console.log(props.imageUrl);
   const token = useSelector((state: { user: UserState }) => state.user.token);
   // const imgUri =
   //   "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
@@ -43,7 +43,7 @@ export const PlaceCard: React.FC<CardProps> = (props: CardProps) => {
             source={
               {
                 // velyanova-kushta.jpg
-                uri: `http://0af1-78-90-52-121.eu.ngrok.io/imageserver/tourist_sites?name=${props.imageUrl}`,
+                uri: createImageUrl(props.imageUrl),
                 // uri: imgUri,
                 headers: {
                   Authorization: token,
@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
   imageVisited: {
     width: 150,
     height: 150,
+    marginBottom: 25,
     transform: [{ rotate: "315deg" }],
   },
 });

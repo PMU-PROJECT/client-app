@@ -30,10 +30,10 @@ export const QRCodeScreen = ({}: PlacesNavProps<"Home">) => {
 
     const generateNewQR = async () => {
       setLoading(true);
-      const res = await getQRCode(userToken);
-      if (res!.stamp_token !== null || res!.stamp_token !== undefined) {
-        console.log(res);
-        setToken(res!.stamp_token);
+      const id_token = await getQRCode(userToken);
+      if (id_token !== null || id_token !== undefined) {
+        // console.log(res);
+        setToken(id_token);
       }
       setLoading(false);
     };

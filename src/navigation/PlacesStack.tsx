@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useContext } from "react";
 import { ColorContext } from "./RootNavigator";
 import { ColorSchema } from "../constants/Colors";
+import { splitW } from "../utils/regex";
 
 const PlacesNavigator = createStackNavigator<PlacesParamList>();
 
@@ -50,7 +51,7 @@ export const PlacesStack: React.FC = () => {
       <PlacesNavigator.Screen
         name="PlaceDetails"
         options={({ route }: PlacesNavProps<"PlaceDetails">) => ({
-          headerTitle: `${route.params.id}`,
+          headerTitle: `${route.params.title}`,
         })}
         component={DetailsScreen}
       ></PlacesNavigator.Screen>

@@ -2,21 +2,22 @@ import React, { useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { windowWidth } from "../../utils/Dimensions";
+import { createImageUrl } from "../../utils/imageUrls";
 
 type CarouselProps = {
   images: [];
 };
 
-export const CustomImageCarousel = ({}: CarouselProps) => {
-  const imgUri =
-    "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
-  const img2 =
-    "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg";
+export const CustomImageCarousel = ({ images }: CarouselProps) => {
+  // const imgUri =
+  //   "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
+  // const img2 =
+  //   "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg";
   const [activeIndex, setIndex] = useState<number>(0);
 
   const height = windowWidth * 0.6;
-  const images = [imgUri, img2, imgUri, img2];
-
+  // const images = [imgUri, img2, imgUri, img2];
+  // console.log(images);
   return (
     <View
       style={{
@@ -41,7 +42,7 @@ export const CustomImageCarousel = ({}: CarouselProps) => {
           return (
             <Image
               key={idx}
-              source={{ uri: imageUrl }}
+              source={{ uri: createImageUrl(imageUrl) }}
               style={{
                 width: windowWidth,
                 height,

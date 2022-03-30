@@ -44,6 +44,8 @@ export const CustomMap: React.FC<MapProps> = ({
     });
   };
 
+  // console.log(latitude, longitude);
+
   return (
     <View style={styles.container}>
       <MapView
@@ -56,7 +58,7 @@ export const CustomMap: React.FC<MapProps> = ({
         // }}
         showsUserLocation={true}
         minZoomLevel={1}
-        maxZoomLevel={1}
+        maxZoomLevel={15}
         region={{
           latitude,
           longitude,
@@ -77,7 +79,7 @@ export const CustomMap: React.FC<MapProps> = ({
         ></TouchableOpacity>
         {Platform.OS !== "web" ? (
           <>
-            {/* <Marker
+            <Marker
               key={1}
               coordinate={{
                 latitude,
@@ -85,7 +87,7 @@ export const CustomMap: React.FC<MapProps> = ({
               }}
               title={markerTitle}
               description={markerDesc}
-            /> */}
+            />
             {/* <Marker
               key={2}
               coordinate={{
