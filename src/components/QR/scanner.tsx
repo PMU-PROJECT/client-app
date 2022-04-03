@@ -94,7 +94,7 @@ export default function Scanner() {
 
       {scanned && (
         <Button
-          title={"Scan again?"}
+          title={"Сканирай отново"}
           onPress={() => setScanned(false)}
           color={theme === "dark" ? ColorSchema.default.dark_green : new_green}
         />

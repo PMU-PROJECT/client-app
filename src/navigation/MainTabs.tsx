@@ -37,6 +37,7 @@ export const AppTabs: React.FC<TabsProps> = ({}) => {
         name="Main"
         component={PlacesStack}
         options={() => ({
+          title: "Начало",
           header: () => null,
           tabBarIcon: ({ color }) => (
             <AntDesign name="home" size={24} color={color} />
@@ -48,7 +49,8 @@ export const AppTabs: React.FC<TabsProps> = ({}) => {
         name="QRCode"
         component={QRCodeScreen}
         options={({ navigation }) => ({
-          headerTitle: "QR Code",
+          headerTitle: "QR Код",
+          title: "QR Код",
           headerTintColor:
             theme === "dark" ? ColorSchema.dark.text : ColorSchema.light.text,
           headerStyle: {

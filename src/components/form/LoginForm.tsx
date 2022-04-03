@@ -73,7 +73,7 @@ export const LoginForm: React.FC = () => {
             theme === "dark" ? styles.headerDark : styles.header,
           ]}
         >
-          Welcome Back!
+          Добре дошли отново!
         </Text>
         {error && error.field === "all" ? (
           <Text style={styles.textError}>{error.message}</Text>
@@ -82,7 +82,7 @@ export const LoginForm: React.FC = () => {
           <FormInput
             value={email}
             onChangeText={(value: string) => handleOnChangeText(value, "email")}
-            label="Email"
+            label="Имейл адрес"
             placeholder="example@email.com"
             autoCapitalize="none"
             error={error && error.field === "email" ? error.message : undefined}
@@ -93,7 +93,7 @@ export const LoginForm: React.FC = () => {
             onChangeText={(value: string) =>
               handleOnChangeText(value, "password")
             }
-            label="Password"
+            label="Парола"
             placeholder="********"
             autoCapitalize="none"
             secureTextEntry
@@ -111,7 +111,7 @@ export const LoginForm: React.FC = () => {
                   submitForm();
                 }}
               >
-                LOG IN
+                {"Вход".toUpperCase()}
               </AntDesign.Button>
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttons}>
@@ -122,7 +122,7 @@ export const LoginForm: React.FC = () => {
                 backgroundColor={ColorSchema.default.dark_green}
                 onPress={() => {}}
               >
-                SIGN UP
+                {"Регистрация".toUpperCase()}
               </FontAwesome.Button>
             </TouchableOpacity>
           </View>

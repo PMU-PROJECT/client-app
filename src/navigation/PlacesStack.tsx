@@ -31,6 +31,7 @@ export const PlacesStack: React.FC = () => {
         name="Home"
         component={HomeScreen}
         options={({ navigation }) => ({
+          title: "Начало",
           headerLeft: () => (
             <Ionicons
               name="menu"

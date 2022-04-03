@@ -12,7 +12,7 @@ export const VisitedBadge: React.FC = () => {
         numberOfLines={2}
         styles={styles.text}
         fontSize={12}
-        text={"Visited"}
+        text={"Посетено"}
       />
     </View>
   );

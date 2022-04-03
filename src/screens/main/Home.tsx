@@ -15,6 +15,7 @@ import { windowWidth } from "../../utils/Dimensions";
 import { Site } from "../../models/Site";
 
 import { useSwipe } from "../../hooks/useSwipe";
+import { mapCategory } from "../../utils/mapCategories";
 
 export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
   const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
@@ -94,7 +95,7 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
               theme === "dark" ? styles.darkText : styles.lightText,
             ]}
           >
-            Welcome to
+            Остроумно заглавие
           </Text>
           <Text
             style={[
@@ -102,7 +103,7 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
               theme === "dark" ? { color: new_green } : styles.lightText,
             ]}
           >
-            APP NAME
+            Име На Приложението
           </Text>
         </View>
       </View>
@@ -113,7 +114,7 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
             key={index}
             index={index}
             onSelect={setCategoryIndex}
-            item={item}
+            item={mapCategory(item as any)}
             selectedIdx={categoryIndex}
           />
         ))}

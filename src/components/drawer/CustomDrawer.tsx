@@ -130,7 +130,7 @@ export const CustomDrawer = (props: any) => {
                   : styles.textLight,
               ]}
             >
-              Sign Out
+              Изход
             </Text>
           </View>
         </TouchableOpacity>

@@ -61,7 +61,7 @@ export const DrawerNav: React.FC = ({}) => {
       <DrawerNavigator.Screen
         name="Tabs"
         options={{
-          title: "Home",
+          title: "Начало",
           drawerIcon: ({ color }) => (
             <FontAwesome5 name="home" size={24} color={color} />
           ),
@@ -73,7 +73,7 @@ export const DrawerNav: React.FC = ({}) => {
         name="Settings"
         options={({ navigation }) => ({
           headerShown: true,
-          headerTitle: "Settings",
+          title: "Настройки",
           drawerIcon: ({ color }) => (
             <FontAwesome name="cog" size={24} color={color} />
           ),
@@ -93,7 +93,7 @@ export const DrawerNav: React.FC = ({}) => {
       <DrawerNavigator.Screen
         name="Rewards"
         options={({ navigation }) => ({
-          title: "Rewards",
+          title: "Награди",
           headerShown: true,
           drawerIcon: ({ color }) => (
             <FontAwesome5 name="gift" size={24} color={color} />
@@ -117,7 +117,7 @@ export const DrawerNav: React.FC = ({}) => {
             name="ScanQR"
             options={({ navigation }) => ({
               headerShown: true,
-              title: "Scan QR code",
+              title: "Сканирай QR код",
               headerTintColor:
                 theme === "dark"
                   ? ColorSchema.dark.text
@@ -154,7 +154,7 @@ export const DrawerNav: React.FC = ({}) => {
             name="EmployeeRewards"
             options={({ navigation }) => ({
               headerShown: true,
-              title: "Give Rewards",
+              title: "Дай Награди",
               headerTintColor:
                 theme === "dark"
                   ? ColorSchema.dark.text

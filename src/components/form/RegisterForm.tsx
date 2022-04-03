@@ -71,7 +71,7 @@ export const RegisterForm: React.FC = () => {
           theme === "dark" ? styles.headerDark : styles.headerLight,
         ]}
       >
-        Register
+        {"Регистрация"}
       </Text>
       <Formik
         style={styles.form}
@@ -101,8 +101,8 @@ export const RegisterForm: React.FC = () => {
                 }
                 onChangeText={handleChange("firstName")}
                 onBlur={handleBlur("firstName")}
-                label="First Name"
-                placeholder="John"
+                label="Първо име"
+                placeholder="Иван"
                 returnKeyType="next"
               />
               <FormInput
@@ -114,8 +114,8 @@ export const RegisterForm: React.FC = () => {
                 }
                 onChangeText={handleChange("lastName")}
                 onBlur={handleBlur("lastName")}
-                label="Last Name"
-                placeholder="Smith"
+                label="Фамилия"
+                placeholder="Иванов"
                 returnKeyType="next"
               />
               <FormInput
@@ -124,7 +124,7 @@ export const RegisterForm: React.FC = () => {
                 onChangeText={handleChange("email")}
                 onBlur={handleBlur("email")}
                 autoCapitalize="none"
-                label="Email"
+                label="Имейл Адрес"
                 placeholder="example@email.com"
                 returnKeyType="next"
               />
@@ -139,7 +139,7 @@ export const RegisterForm: React.FC = () => {
                 onBlur={handleBlur("password")}
                 autoCapitalize="none"
                 secureTextEntry
-                label="Password"
+                label="Парола"
                 placeholder="********"
                 returnKeyType="next"
               />
@@ -154,7 +154,7 @@ export const RegisterForm: React.FC = () => {
                 onBlur={handleBlur("confirmPassword")}
                 autoCapitalize="none"
                 secureTextEntry
-                label="Confirm Password"
+                label="Потвърди Парола"
                 placeholder="********"
                 returnKeyType="done"
               />
@@ -167,7 +167,7 @@ export const RegisterForm: React.FC = () => {
                     backgroundColor={ColorSchema.default.dark_green}
                     onPress={handleSubmit as any}
                   >
-                    REGISTER
+                    {"Регистрация".toUpperCase()}
                   </Ionicons.Button>
                 </TouchableOpacity>
               </View>

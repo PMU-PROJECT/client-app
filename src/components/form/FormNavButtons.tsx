@@ -43,7 +43,7 @@ export const FormNavButtons: React.FC = () => {
               : styles.titleLight,
           ]}
         >
-          Login
+          Вход
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -67,7 +67,7 @@ export const FormNavButtons: React.FC = () => {
               : styles.titleLight,
           ]}
         >
-          Register
+          Регистрация
         </Text>
       </TouchableOpacity>
     </View>
