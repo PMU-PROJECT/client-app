@@ -1,7 +1,9 @@
+import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
   GestureResponderEvent,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -22,9 +24,6 @@ export default function ImageButton({
   return (
     <>
       <TouchableOpacity onPress={onPress} style={styles.imageButton}>
-        {/* 
-        <Text style={styles.description}>{description}</Text> */}
-        {/* <Text style={styles.title}>{title}</Text> */}
         <View
           style={{
             height: "75%",

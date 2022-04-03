@@ -1,4 +1,11 @@
-import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { CustomMap } from "../../components/general/CustomMap";
 import Constants from "expo-constants";
@@ -121,9 +128,8 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
           ]}
         >
           <ScrollView
-            onScroll={(e) => {
-              e.preventDefault();
-            }}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
           >
             <View
               style={{
@@ -168,12 +174,12 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
               }}
             >
               <CustomMap
-                // latitude={userLat !== 0 ? userLat : 41.970035}
-                latitude={parseFloat(details!.latitude)}
-                longitude={parseFloat(details!.longitude)}
-                // longitude={userLong !== 0 ? userLong : 23.477082}
-                markerTitle={"Title"}
-                markerDesc={"Description"}
+                userLatitude={userLat !== 0 ? userLat : undefined}
+                userLongitude={userLong !== 0 ? userLong : undefined}
+                markerLongitude={parseFloat(details!.longitude)}
+                markerLatitude={parseFloat(details!.latitude)}
+                markerTitle={details.name}
+                markerDesc={details.region}
                 height={300}
                 width={400}
               />
@@ -202,11 +208,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
+    textAlign: "center",
     marginVertical: 5,
     fontSize: 22,
     fontWeight: "bold",
   },
   info: {
+    textAlign: "center",
     fontSize: 18,
   },
   textLight: { color: ColorSchema.light.text },
@@ -218,7 +226,7 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     flex: 2,
-    padding: 20,
+    // padding: 20,
     alignItems: "center",
     justifyContent: "center",
     borderTopLeftRadius: 40,
@@ -226,8 +234,8 @@ const styles = StyleSheet.create({
   },
   description: {
     textAlign: "center",
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 17,
+    // fontWeight: "bold",
   },
   imageContainer: {
     justifyContent: "center",

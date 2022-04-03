@@ -1,20 +1,21 @@
 import React, { LegacyRef, useRef } from "react";
 import MapView, { Camera } from "react-native-maps";
 import {
-  Button,
   Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { Marker, Polyline } from "react-native-maps";
+import { Marker } from "react-native-maps";
 import { windowHeight, windowWidth } from "../../utils/Dimensions";
 // import Geolocation from "react-native-geolocation-service";
 
 type MapProps = {
-  latitude: number;
-  longitude: number;
+  userLatitude?: number;
+  userLongitude?: number;
+  markerLatitude: number;
+  markerLongitude: number;
   markerTitle: string;
   markerDesc: string;
   width?: number | string;
@@ -28,8 +29,10 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export const CustomMap: React.FC<MapProps> = ({
-  latitude,
-  longitude,
+  userLatitude,
+  userLongitude,
+  markerLatitude,
+  markerLongitude,
   markerTitle,
   markerDesc,
   width,
@@ -37,14 +40,16 @@ export const CustomMap: React.FC<MapProps> = ({
 }) => {
   const map: LegacyRef<MapView> = useRef(null);
 
-  const onZoomInPress = () => {
-    map?.current?.getCamera().then((cam: Camera) => {
-      cam.zoom += 1;
-      map?.current?.animateCamera(cam);
-    });
-  };
+  // const onZoomInPress = () => {
+  //   if (map === undefined) return;
+  //   map.current?.getCamera().then((cam: Camera) => {
+  //     cam.zoom += 1;
+  //     map?.current?.animateCamera(cam);
+  //   });
+  // };
 
-  // console.log(latitude, longitude);
+  console.log(userLatitude, userLongitude);
+  console.log(markerLatitude, markerLongitude);
 
   return (
     <View style={styles.container}>
@@ -60,8 +65,8 @@ export const CustomMap: React.FC<MapProps> = ({
         minZoomLevel={1}
         maxZoomLevel={15}
         region={{
-          latitude,
-          longitude,
+          latitude: userLatitude ? userLatitude : markerLatitude,
+          longitude: userLongitude ? userLongitude : markerLongitude,
           latitudeDelta: 0.3822,
           longitudeDelta: LONGITUDE_DELTA,
         }}
@@ -73,33 +78,37 @@ export const CustomMap: React.FC<MapProps> = ({
           },
         ]}
       >
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{ position: "absolute", bottom: 400, left: 0 }}
           onPress={onZoomInPress}
-        ></TouchableOpacity>
+        ></TouchableOpacity> */}
         {Platform.OS !== "web" ? (
           <>
             <Marker
               key={1}
               coordinate={{
-                latitude,
-                longitude,
+                latitude: markerLatitude,
+                longitude: markerLongitude,
               }}
               title={markerTitle}
               description={markerDesc}
             />
-            {/* <Marker
-              key={2}
-              coordinate={{
-                latitude: 41.970035,
-                longitude: 23.477082,
-              }}
-              title={markerTitle}
-              description={markerDesc}
-            /> */}
+            {/* {userLatitude && userLongitude ? (
+              <Marker
+                pinColor="blue"
+                key={2}
+                coordinate={{
+                  latitude: userLatitude,
+                  longitude: userLongitude,
+                }}
+                // icon={require("../../../assets/images/user-profile.png")}
+              />
+            ) : null} */}
           </>
         ) : (
-          <Text>Web</Text>
+          <View>
+            <Text>Web</Text>
+          </View>
         )}
       </MapView>
     </View>

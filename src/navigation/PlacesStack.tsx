@@ -6,7 +6,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useContext } from "react";
 import { ColorContext } from "./RootNavigator";
 import { ColorSchema } from "../constants/Colors";
-import { splitW } from "../utils/regex";
 
 const PlacesNavigator = createStackNavigator<PlacesParamList>();
 

@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Image,
   ImageBackground,
   ImageSourcePropType,
   StyleSheet,
@@ -12,6 +11,7 @@ import { UserState } from "../../store/reducers/UserReducer";
 import { windowHeight, windowWidth } from "../../utils/Dimensions";
 import { createImageUrl } from "../../utils/imageUrls";
 import ImageButton from "./ImageButton";
+import { VisitedBadge } from "./VisitedBadge";
 
 type CardProps = {
   id?: string;
@@ -19,7 +19,7 @@ type CardProps = {
   imageUrl: string;
   description: string;
   onPress: Function; // onPress: ((event: GestureResponderEvent) => void) | undefined
-  vistited?: boolean;
+  visited: boolean;
 };
 
 export const PlaceCard: React.FC<CardProps> = (props: CardProps) => {
@@ -53,12 +53,13 @@ export const PlaceCard: React.FC<CardProps> = (props: CardProps) => {
               } as ImageSourcePropType
             }
           >
-            {true ? (
+            {props.visited ? <VisitedBadge /> : null}
+            {/* {props.vistited ? (
               <Image
-                source={require("../../../assets/images/visited.png")}
-                style={styles.imageVisited}
+              source={require("../../../assets/images/visited.png")}
+              style={styles.imageVisited}
               />
-            ) : null}
+            ) : null} */}
           </ImageBackground>
           <ImageButton
             onPress={() => {
@@ -82,13 +83,11 @@ const styles = StyleSheet.create({
     width: windowWidth / 2.4,
     height: windowHeight / 3.5,
     marginHorizontal: 10,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    borderRadius: 20,
   },
 
   image: {
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    borderRadius: 20,
   },
   imageBg: {
     width: "100%",

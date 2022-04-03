@@ -9,6 +9,7 @@ import { getToken, setupDB } from "../utils/databaseUtils";
 import { getSelfInfo, refreshAuthToken } from "../utils/makeRequestToServer";
 import { AuthStack } from "./AuthStack";
 import { DrawerNav } from "./DrawerNavigator";
+import { StatusBar } from "expo-status-bar";
 
 // const Root = createStackNavigator();
 export type ColorTheme = {
@@ -88,6 +89,7 @@ export const RootNavigator: React.FC = ({}) => {
   return (
     <ColorContext.Provider value={{ theme: "light" }}>
       <NavigationContainer>
+        <StatusBar hidden={true} />
         {token ? <DrawerNav /> : <AuthStack />}
         {/* <DrawerNav /> */}
         {/* <AuthStack /> */}

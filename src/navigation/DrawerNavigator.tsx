@@ -9,6 +9,7 @@ import { useContext } from "react";
 import { useSelector } from "react-redux";
 import { CustomDrawer } from "../components/drawer/CustomDrawer";
 import { ColorSchema } from "../constants/Colors";
+import { EmployeeRewardsScreen } from "../screens/drawer/EmployeeRewards";
 import { RewardsScreen } from "../screens/drawer/Rewards";
 import { ScanQRScreen } from "../screens/drawer/ScanQR";
 import { SettingScreen } from "../screens/drawer/Settings";
@@ -184,7 +185,7 @@ export const DrawerNav: React.FC = ({}) => {
                 />
               ),
             })}
-            component={ScanQRScreen}
+            component={EmployeeRewardsScreen}
           />
         </>
       ) : null}

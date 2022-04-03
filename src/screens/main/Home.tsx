@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { SafeAreaView, View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Categories } from "../../components/home/Categories";
 import { PlaceCard } from "../../components/home/PlaceCard";
@@ -12,8 +12,35 @@ import { SitesState } from "../../store/reducers/SitesReducer";
 import { SitesActions } from "../../store/actions/SitesActions";
 import { Loading } from "../../components/general/Loading";
 import { windowWidth } from "../../utils/Dimensions";
+import { Site } from "../../models/Site";
+
+import { useSwipe } from "../../hooks/useSwipe";
 
 export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
+  const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
+
+  function onSwipeLeft() {
+    console.log("SWIPE_LEFT");
+    setCategoryIndex((currentIndex) => {
+      if (currentIndex >= 1) {
+        return currentIndex - 1;
+      } else {
+        return currentIndex;
+      }
+    });
+  }
+
+  function onSwipeRight() {
+    console.log("SWIPE_RIGHT");
+    setCategoryIndex((currentIndex) => {
+      if (currentIndex < 2) {
+        return currentIndex + 1;
+      } else {
+        return currentIndex;
+      }
+    });
+  }
+
   const { theme } = useContext(ColorContext);
   const [categoryIndex, setCategoryIndex] = useState(0);
   // const [active, setActive] = useState<"all" | "visited" | "other">("all");
@@ -53,7 +80,7 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
   }
 
   return (
-    <SafeAreaView
+    <View
       style={[
         styles.container,
         theme === "dark" ? styles.containerDark : styles.containerLight,
@@ -93,28 +120,36 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
       </View>
 
       {sites ? (
-        <FlatList
-          // columnWrapperStyle={{ justifyContent: "space-between" }}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ marginTop: 10, paddingBottom: 50 }}
-          numColumns={2}
-          data={sites}
-          keyExtractor={(item, _idx) => `${item.id}`}
-          renderItem={({ item }) => (
-            <PlaceCard
-              key={item.id}
-              onPress={() => {
-                navigation.navigate("PlaceDetails", {
-                  id: item.id,
-                  title: item.region,
-                });
-              }}
-              description={`${item.city.trim()}`}
-              title={item.name}
-              imageUrl={item.image}
-            />
-          )}
-        />
+        <View
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          // showsHorizontalScrollIndicator={false}
+          // showsVerticalScrollIndicator={false}
+        >
+          <FlatList
+            // columnWrapperStyle={{ justifyContent: "space-between" }}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ marginTop: 10, paddingBottom: 50 }}
+            numColumns={2}
+            data={sites}
+            keyExtractor={(item, _idx) => `${item.id}`}
+            renderItem={({ item }: { item: Site }) => (
+              <PlaceCard
+                key={item.id}
+                onPress={() => {
+                  navigation.navigate("PlaceDetails", {
+                    id: item.id,
+                    title: item.region,
+                  });
+                }}
+                description={`${item.city.trim()}`}
+                title={item.name}
+                imageUrl={item.image}
+                visited={item.is_stamped}
+              />
+            )}
+          />
+        </View>
       ) : (
         <View>
           <Text
@@ -127,7 +162,7 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
           </Text>
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 
