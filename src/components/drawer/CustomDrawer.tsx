@@ -1,11 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import {
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
-import { ColorContext } from "../../navigation/RootNavigator";
 import { ColorSchema } from "../../constants/Colors";
 import { useDispatch, useSelector } from "react-redux";
 import { UserActions } from "../../store/actions/UserActions";
@@ -13,16 +12,20 @@ import { UserState } from "../../store/reducers/UserReducer";
 import { ScalableText } from "../general/ScalableText";
 
 export const CustomDrawer = (props: any) => {
-  const { theme } = useContext(ColorContext);
   const dispatch = useDispatch();
   const user = useSelector((state: { user: UserState }) => state.user.user);
+  const language = useSelector(
+    (state: { user: UserState }) => state.user.language
+  );
+
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
 
   return (
     <View style={{ flex: 1, padding: 0 }}>
       <DrawerContentScrollView
         {...props}
         contentContainerStyle={
-          theme === "dark"
+          theme && theme === "dark"
             ? styles.contentContainerDark
             : styles.contentContainerLight
         }
@@ -44,11 +47,11 @@ export const CustomDrawer = (props: any) => {
             styles.userInfoContainer,
             {
               backgroundColor:
-                theme === "dark"
+                theme && theme === "dark"
                   ? ColorSchema.default.disabledButton
                   : ColorSchema.light.background,
-              borderBottomColor: theme === "light" ? "black" : "none",
-              borderBottomWidth: theme === "light" ? 1 : 0,
+              borderBottomColor: theme && theme === "light" ? "black" : "none",
+              borderBottomWidth: theme && theme === "light" ? 1 : 0,
             },
           ]}
         >
@@ -64,7 +67,7 @@ export const CustomDrawer = (props: any) => {
               marginBottom: 5,
               marginLeft: 20,
               color:
-                theme === "dark"
+                theme && theme === "dark"
                   ? ColorSchema.dark.text
                   : ColorSchema.light.text,
             }}
@@ -73,7 +76,7 @@ export const CustomDrawer = (props: any) => {
         </View>
         <View
           style={
-            theme === "dark"
+            theme && theme === "dark"
               ? styles.itemsContainerDark
               : styles.itemsContainerLight
           }
@@ -86,7 +89,7 @@ export const CustomDrawer = (props: any) => {
           styles.bottomItems,
           {
             backgroundColor:
-              theme === "dark"
+              theme && theme === "dark"
                 ? ColorSchema.dark.background
                 : ColorSchema.light.background,
           },
@@ -105,7 +108,7 @@ export const CustomDrawer = (props: any) => {
               styles.item,
               {
                 backgroundColor:
-                  theme === "dark"
+                  theme && theme === "dark"
                     ? ColorSchema.default.disabledButton
                     : ColorSchema.light.background,
                 padding: 12,
@@ -117,7 +120,7 @@ export const CustomDrawer = (props: any) => {
               name="exit-outline"
               size={24}
               color={
-                theme === "dark"
+                theme && theme === "dark"
                   ? ColorSchema.default.disabled
                   : ColorSchema.light.text
               }
@@ -125,12 +128,12 @@ export const CustomDrawer = (props: any) => {
             <Text
               style={[
                 styles.itemTitle,
-                theme === "dark"
+                theme && theme === "dark"
                   ? { color: ColorSchema.default.disabled }
                   : styles.textLight,
               ]}
             >
-              Изход
+              {language && language === "en" ? "Log out" : "Изход"}
             </Text>
           </View>
         </TouchableOpacity>

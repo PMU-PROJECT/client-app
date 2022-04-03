@@ -1,10 +1,10 @@
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ColorSchema } from "../../constants/Colors";
-import { ColorContext } from "../../navigation/RootNavigator";
 import { UserActions } from "../../store/actions/UserActions";
+import { UserState } from "../../store/reducers/UserReducer";
 import {
   isValidEmail,
   isValidObjField,
@@ -15,7 +15,12 @@ import { FormContainer } from "./FormContainer";
 import { FormInput } from "./FormInput";
 
 export const LoginForm: React.FC = () => {
-  const { theme } = useContext(ColorContext);
+  const language = useSelector(
+    (state: { user: UserState }) => state.user.language
+  );
+
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
+
   const dispatch = useDispatch();
 
   const [userInfo, setUserInfo] = useState({
@@ -70,10 +75,12 @@ export const LoginForm: React.FC = () => {
         <Text
           style={[
             styles.header,
-            theme === "dark" ? styles.headerDark : styles.header,
+            theme && theme === "dark" ? styles.headerDark : styles.header,
           ]}
         >
-          Добре дошли отново!
+          {language && language === "en"
+            ? "Welcome Back!"
+            : "Добре дошли отново!"}
         </Text>
         {error && error.field === "all" ? (
           <Text style={styles.textError}>{error.message}</Text>
@@ -82,7 +89,7 @@ export const LoginForm: React.FC = () => {
           <FormInput
             value={email}
             onChangeText={(value: string) => handleOnChangeText(value, "email")}
-            label="Имейл адрес"
+            label={language && language === "en" ? "Email" : "Имейл адрес"}
             placeholder="example@email.com"
             autoCapitalize="none"
             error={error && error.field === "email" ? error.message : undefined}
@@ -93,7 +100,7 @@ export const LoginForm: React.FC = () => {
             onChangeText={(value: string) =>
               handleOnChangeText(value, "password")
             }
-            label="Парола"
+            label={language && language === "en" ? "Password" : "Парола"}
             placeholder="********"
             autoCapitalize="none"
             secureTextEntry
@@ -111,7 +118,7 @@ export const LoginForm: React.FC = () => {
                   submitForm();
                 }}
               >
-                {"Вход".toUpperCase()}
+                {language && language === "en" ? "LOGIN" : "ВХОД"}
               </AntDesign.Button>
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttons}>
@@ -122,7 +129,9 @@ export const LoginForm: React.FC = () => {
                 backgroundColor={ColorSchema.default.dark_green}
                 onPress={() => {}}
               >
-                {"Регистрация".toUpperCase()}
+                {language && language === "en"
+                  ? "REGISTER"
+                  : "Регистрация".toUpperCase()}
               </FontAwesome.Button>
             </TouchableOpacity>
           </View>

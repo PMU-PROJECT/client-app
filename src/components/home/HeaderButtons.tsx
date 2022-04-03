@@ -1,8 +1,9 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, { useContext } from "react";
+import React from "react";
 import { ColorSchema, new_green } from "../../constants/Colors";
 // import { useNavigation, useRoute } from "@react-navigation/native";
-import { ColorContext } from "../../navigation/RootNavigator";
+import { useSelector } from "react-redux";
+import { UserState } from "../../store/reducers/UserReducer";
 
 type HeaderButtonProps = {
   active: "all" | "visited" | "other";
@@ -13,13 +14,15 @@ export const HeaderSelectorButtons: React.FC<HeaderButtonProps> = ({
   active,
   setActive,
 }) => {
-  const { theme } = useContext(ColorContext);
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
 
   return (
     <View
       style={[
         styles.container,
-        theme === "dark" ? styles.containerDark : styles.containerLight,
+        theme && theme === "dark"
+          ? styles.containerDark
+          : styles.containerLight,
       ]}
     >
       <TouchableOpacity

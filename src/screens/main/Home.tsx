@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Categories } from "../../components/home/Categories";
 import { PlaceCard } from "../../components/home/PlaceCard";
 import { ColorSchema, new_green } from "../../constants/Colors";
-import { ColorContext } from "../../navigation/RootNavigator";
 import { PlacesNavProps } from "../../navigation/types";
 import { fetchAllSites } from "../../utils/makeRequestToServer";
 import { UserState } from "../../store/reducers/UserReducer";
@@ -17,7 +16,12 @@ import { Site } from "../../models/Site";
 import { useSwipe } from "../../hooks/useSwipe";
 import { mapCategory } from "../../utils/mapCategories";
 
-export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
+export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
+  const language = useSelector(
+    (state: { user: UserState }) => state.user.language
+  );
+
   const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
 
   function onSwipeLeft() {
@@ -42,7 +46,6 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
     });
   }
 
-  const { theme } = useContext(ColorContext);
   const [categoryIndex, setCategoryIndex] = useState(0);
   // const [active, setActive] = useState<"all" | "visited" | "other">("all");
 
@@ -84,7 +87,9 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
     <View
       style={[
         styles.container,
-        theme === "dark" ? styles.containerDark : styles.containerLight,
+        theme && theme === "dark"
+          ? styles.containerDark
+          : styles.containerLight,
       ]}
     >
       <View style={styles.header}>
@@ -92,18 +97,22 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
           <Text
             style={[
               { fontSize: 25, fontWeight: "bold" },
-              theme === "dark" ? styles.darkText : styles.lightText,
+              theme && theme === "dark" ? styles.darkText : styles.lightText,
             ]}
           >
-            Остроумно заглавие
+            {language && language === "en"
+              ? "Welcome To"
+              : "Остроумно заглавие"}
           </Text>
           <Text
             style={[
               styles.title,
-              theme === "dark" ? { color: new_green } : styles.lightText,
+              theme && theme === "dark"
+                ? { color: new_green }
+                : styles.lightText,
             ]}
           >
-            Име На Приложението
+            {language && language === "en" ? "App Name" : "Име На Приложението"}
           </Text>
         </View>
       </View>
@@ -114,7 +123,7 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
             key={index}
             index={index}
             onSelect={setCategoryIndex}
-            item={mapCategory(item as any)}
+            item={language && language ? item : mapCategory(item as any)}
             selectedIdx={categoryIndex}
           />
         ))}
@@ -156,7 +165,7 @@ export const HomeScreen = ({ navigation, route }: PlacesNavProps<"Home">) => {
           <Text
             style={[
               { fontSize: 25, fontWeight: "bold", textAlign: "center" },
-              theme === "dark" ? styles.darkText : styles.lightText,
+              theme && theme === "dark" ? styles.darkText : styles.lightText,
             ]}
           >
             Sorry we Fucked

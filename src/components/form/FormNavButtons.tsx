@@ -1,13 +1,18 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, { useContext } from "react";
+import React from "react";
 import { ColorSchema } from "../../constants/Colors";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { ColorContext } from "../../navigation/RootNavigator";
+import { useSelector } from "react-redux";
+import { UserState } from "../../store/reducers/UserReducer";
 
 export const FormNavButtons: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { theme } = useContext(ColorContext);
+  const language = useSelector(
+    (state: { user: UserState }) => state.user.language
+  );
+
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
 
   let active: "login" | "register" = "login";
 
@@ -21,7 +26,9 @@ export const FormNavButtons: React.FC = () => {
     <View
       style={[
         styles.container,
-        theme === "dark" ? styles.containerDark : styles.containerLight,
+        theme && theme === "dark"
+          ? styles.containerDark
+          : styles.containerLight,
       ]}
     >
       <TouchableOpacity
@@ -38,12 +45,12 @@ export const FormNavButtons: React.FC = () => {
             styles.title,
             active === "login"
               ? styles.titleDark
-              : theme === "dark"
+              : theme && theme === "dark"
               ? styles.titleDark
               : styles.titleLight,
           ]}
         >
-          Вход
+          {language && language === "en" ? "Log In" : "Вход"}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -62,12 +69,12 @@ export const FormNavButtons: React.FC = () => {
             ,
             active === "register"
               ? styles.titleDark
-              : theme === "dark"
+              : theme && theme === "dark"
               ? styles.titleDark
               : styles.titleLight,
           ]}
         >
-          Регистрация
+          {language && language === "en" ? "Register" : "Регистрация"}
         </Text>
       </TouchableOpacity>
     </View>

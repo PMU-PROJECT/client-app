@@ -33,11 +33,13 @@ export const makeAuthRequest = async (
     // console.log(JSON.stringify(res));
 
     if (res.status === 400 || res.status === 422) {
-      throw new Error("Insufficient Information!");
+      const text = await res.json();
+      throw new Error(text.error);
     }
 
     if (res.status === 401) {
-      throw new Error("Not Valid Information!");
+      const text = await res.json();
+      throw new Error(text.error);
     }
 
     const data = await res.json();

@@ -5,7 +5,6 @@ import {
   Ionicons,
 } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { useContext } from "react";
 import { useSelector } from "react-redux";
 import { CustomDrawer } from "../components/drawer/CustomDrawer";
 import { ColorSchema } from "../constants/Colors";
@@ -15,14 +14,15 @@ import { ScanQRScreen } from "../screens/drawer/ScanQR";
 import { SettingScreen } from "../screens/drawer/Settings";
 import { UserState } from "../store/reducers/UserReducer";
 import { AppTabs } from "./MainTabs";
-import { ColorContext } from "./RootNavigator";
 import { DrawerParamList } from "./types";
 
 const DrawerNavigator = createDrawerNavigator<DrawerParamList>();
 
 export const DrawerNav: React.FC = ({}) => {
-  const { theme } = useContext(ColorContext);
-
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
+  const language = useSelector(
+    (state: { user: UserState }) => state.user.language
+  );
   const user = useSelector((state: { user: UserState }) => state.user.user);
 
   return (
@@ -33,17 +33,19 @@ export const DrawerNav: React.FC = ({}) => {
         // drawerPosition: "right",
         headerShown: false,
         drawerActiveBackgroundColor:
-          theme === "dark"
+          theme && theme === "dark"
             ? ColorSchema.default.formButtonAlpha
             : ColorSchema.light.formButton, //new_green
         drawerActiveTintColor:
-          theme === "dark" ? ColorSchema.dark.text : ColorSchema.light.text,
+          theme && theme === "dark"
+            ? ColorSchema.dark.text
+            : ColorSchema.light.text,
         drawerInactiveBackgroundColor:
-          theme === "dark"
+          theme && theme === "dark"
             ? ColorSchema.default.disabledButton
             : ColorSchema.light.background,
         drawerInactiveTintColor:
-          theme === "dark"
+          theme && theme === "dark"
             ? ColorSchema.default.disabled
             : ColorSchema.light.text,
         drawerLabelStyle: {
@@ -52,7 +54,7 @@ export const DrawerNav: React.FC = ({}) => {
         },
         drawerStyle: {
           backgroundColor:
-            theme === "dark"
+            theme && theme === "dark"
               ? ColorSchema.dark.background
               : ColorSchema.light.background, // "rgb(141, 141, 168)",
         },
@@ -61,7 +63,7 @@ export const DrawerNav: React.FC = ({}) => {
       <DrawerNavigator.Screen
         name="Tabs"
         options={{
-          title: "Начало",
+          title: language === "en" ? "Home" : "Начало",
           drawerIcon: ({ color }) => (
             <FontAwesome5 name="home" size={24} color={color} />
           ),
@@ -73,7 +75,7 @@ export const DrawerNav: React.FC = ({}) => {
         name="Settings"
         options={({ navigation }) => ({
           headerShown: true,
-          title: "Настройки",
+          title: language === "en" ? "Settings" : "Настройки",
           drawerIcon: ({ color }) => (
             <FontAwesome name="cog" size={24} color={color} />
           ),
@@ -93,7 +95,7 @@ export const DrawerNav: React.FC = ({}) => {
       <DrawerNavigator.Screen
         name="Rewards"
         options={({ navigation }) => ({
-          title: "Награди",
+          title: language === "en" ? "Rewards" : "Награди",
           headerShown: true,
           drawerIcon: ({ color }) => (
             <FontAwesome5 name="gift" size={24} color={color} />
@@ -117,18 +119,18 @@ export const DrawerNav: React.FC = ({}) => {
             name="ScanQR"
             options={({ navigation }) => ({
               headerShown: true,
-              title: "Сканирай QR код",
+              title: language === "en" ? "Scan QR Code" : "Сканирай QR код",
               headerTintColor:
-                theme === "dark"
+                theme && theme === "dark"
                   ? ColorSchema.dark.text
                   : ColorSchema.light.text,
               headerStyle: {
                 backgroundColor:
-                  theme === "dark"
+                  theme && theme === "dark"
                     ? ColorSchema.dark.background
                     : ColorSchema.light.background,
-                borderBottomWidth: theme === "dark" ? 1 : 1,
-                borderBottomColor: theme === "dark" ? "grey" : "grey",
+                borderBottomWidth: theme && theme === "dark" ? 1 : 1,
+                borderBottomColor: theme && theme === "dark" ? "grey" : "grey",
               },
               drawerIcon: ({ color }) => (
                 <AntDesign name="scan1" size={24} color={color} />
@@ -138,7 +140,7 @@ export const DrawerNav: React.FC = ({}) => {
                   name="menu"
                   size={24}
                   color={
-                    theme === "dark"
+                    theme && theme === "dark"
                       ? ColorSchema.dark.text
                       : ColorSchema.light.text
                   }
@@ -154,18 +156,18 @@ export const DrawerNav: React.FC = ({}) => {
             name="EmployeeRewards"
             options={({ navigation }) => ({
               headerShown: true,
-              title: "Дай Награди",
+              title: language === "en" ? "Give Rewards" : "Дай Награди",
               headerTintColor:
-                theme === "dark"
+                theme && theme === "dark"
                   ? ColorSchema.dark.text
                   : ColorSchema.light.text,
               headerStyle: {
                 backgroundColor:
-                  theme === "dark"
+                  theme && theme === "dark"
                     ? ColorSchema.dark.background
                     : ColorSchema.light.background,
-                borderBottomWidth: theme === "dark" ? 1 : 1,
-                borderBottomColor: theme === "dark" ? "grey" : "grey",
+                borderBottomWidth: theme && theme === "dark" ? 1 : 1,
+                borderBottomColor: theme && theme === "dark" ? "grey" : "grey",
               },
               drawerIcon: ({ color }) => (
                 <FontAwesome5 name="user-check" size={24} color={color} />
@@ -175,7 +177,7 @@ export const DrawerNav: React.FC = ({}) => {
                   name="menu"
                   size={24}
                   color={
-                    theme === "dark"
+                    theme && theme === "dark"
                       ? ColorSchema.dark.text
                       : ColorSchema.light.text
                   }

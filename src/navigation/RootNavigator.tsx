@@ -1,8 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import AppLoading from "expo-app-loading";
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import { UserActions } from "../store/actions/UserActions";
 import { UserState } from "../store/reducers/UserReducer";
 import { getToken, setupDB } from "../utils/databaseUtils";
@@ -10,13 +10,14 @@ import { getSelfInfo, refreshAuthToken } from "../utils/makeRequestToServer";
 import { AuthStack } from "./AuthStack";
 import { DrawerNav } from "./DrawerNavigator";
 import { StatusBar } from "expo-status-bar";
+import { store } from "../store/RootReducer";
 
 // const Root = createStackNavigator();
 export type ColorTheme = {
   theme: "dark" | "light";
 };
 
-export const ColorContext = createContext<ColorTheme>({ theme: "dark" });
+// export const ColorContext = createContext<ColorTheme>({ theme: "dark" });
 
 // export type UserToken = {
 //   token: string | null;
@@ -52,6 +53,7 @@ export const RootNavigator: React.FC = ({}) => {
               },
             },
           });
+
           // setValidToken(refreshedToken);
         }
       }
@@ -60,9 +62,9 @@ export const RootNavigator: React.FC = ({}) => {
 
   useEffect(() => {
     setupDB();
+    // deleteTable();
     setLoading(true);
     getNewToken();
-    // deleteTable();
     // console.log("****");
     // console.log(JSON.stringify(token));
     // console.log("****");
@@ -87,13 +89,15 @@ export const RootNavigator: React.FC = ({}) => {
   }
 
   return (
-    <ColorContext.Provider value={{ theme: "light" }}>
+    <Provider store={store}>
       <NavigationContainer>
         <StatusBar hidden={true} />
         {token ? <DrawerNav /> : <AuthStack />}
         {/* <DrawerNav /> */}
         {/* <AuthStack /> */}
       </NavigationContainer>
-    </ColorContext.Provider>
+    </Provider>
+    // <ColorContext.Provider value={{ theme: "light" }}>
+    // </ColorContext.Provider>
   );
 };

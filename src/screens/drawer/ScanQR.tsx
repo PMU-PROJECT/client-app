@@ -1,17 +1,20 @@
-import { useContext } from "react";
 import { StyleSheet, View } from "react-native";
+import { useSelector } from "react-redux";
 import Scanner from "../../components/QR/scanner";
 import { ColorSchema } from "../../constants/Colors";
-import { ColorContext } from "../../navigation/RootNavigator";
 import { DrawerNavProps } from "../../navigation/types";
+import { UserState } from "../../store/reducers/UserReducer";
 
 export const ScanQRScreen = ({}: DrawerNavProps<"ScanQR">) => {
-  const { theme } = useContext(ColorContext);
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
+
   return (
     <View
       style={[
         styles.container,
-        theme === "dark" ? styles.containerDark : styles.containerLight,
+        theme && theme === "dark"
+          ? styles.containerDark
+          : styles.containerLight,
       ]}
     >
       <Scanner />

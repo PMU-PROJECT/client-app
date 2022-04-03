@@ -1,10 +1,16 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { ColorSchema, new_green } from "../../constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { useSelector } from "react-redux";
+import { ColorSchema, new_green } from "../../constants/Colors";
+import { UserState } from "../../store/reducers/UserReducer";
 import { ScalableText } from "../general/ScalableText";
 
 export const VisitedBadge: React.FC = () => {
+  const language = useSelector(
+    (state: { user: UserState }) => state.user.language
+  );
+
   return (
     <View style={styles.container}>
       <Ionicons name="checkmark-circle-outline" size={22} color="white" />
@@ -12,7 +18,7 @@ export const VisitedBadge: React.FC = () => {
         numberOfLines={2}
         styles={styles.text}
         fontSize={12}
-        text={"Посетено"}
+        text={language && language === "en" ? "Visited" : "Посетено"}
       />
     </View>
   );

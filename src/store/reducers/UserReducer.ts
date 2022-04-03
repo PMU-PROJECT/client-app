@@ -5,11 +5,15 @@ import { UserActions } from "../actions/UserActions";
 export interface UserState {
   token: string | null;
   user: User | null;
+  theme: "dark" | "light";
+  language: "bg" | "en";
 }
 
 const initialState: UserState = {
   token: null,
   user: null,
+  theme: "dark",
+  language: "en",
 };
 
 export const UserReducer = (
@@ -40,15 +44,34 @@ export const UserReducer = (
         stamps
       );
       // console.log(user);
-      return { token: action.payload.token, user };
+      return {
+        ...state,
+        token: action.payload.token,
+        user,
+      };
     }
 
     case UserActions.LOGOUT: {
       deleteTable();
-      return { token: null };
+      return { ...state, token: null };
     }
 
-    default:
+    case UserActions.LANGUAGE_CHANGE: {
+      return {
+        ...state,
+        language: action.payload.language,
+      };
+    }
+
+    case UserActions.THEME_CHANGE: {
+      return {
+        ...state,
+        theme: action.payload.theme,
+      };
+    }
+
+    default: {
       return state;
+    }
   }
 };

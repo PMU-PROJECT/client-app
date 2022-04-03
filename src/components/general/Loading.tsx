@@ -1,25 +1,32 @@
-import { useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useSelector } from "react-redux";
 import { ColorSchema } from "../../constants/Colors";
-import { ColorContext } from "../../navigation/RootNavigator";
+import { UserState } from "../../store/reducers/UserReducer";
 
 export const Loading = () => {
-  const { theme } = useContext(ColorContext);
+  const language = useSelector(
+    (state: { user: UserState }) => state.user.language
+  );
+
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
+
   return (
     <View
       style={[
         styles.container,
         { alignItems: "center", justifyContent: "center" },
-        theme === "dark" ? styles.containerDark : styles.containerLight,
+        theme && theme === "dark"
+          ? styles.containerDark
+          : styles.containerLight,
       ]}
     >
       <Text
         style={[
           { fontSize: 25, fontWeight: "bold", textAlign: "center" },
-          theme === "dark" ? styles.darkText : styles.lightText,
+          theme && theme === "dark" ? styles.darkText : styles.lightText,
         ]}
       >
-        Loading...
+        {language === "en" ? "Loading..." : "Зареждане..."}
       </Text>
     </View>
   );

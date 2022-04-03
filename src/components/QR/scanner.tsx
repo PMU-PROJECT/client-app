@@ -1,14 +1,18 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { ColorContext } from "../../navigation/RootNavigator";
 import { ColorSchema, new_green } from "../../constants/Colors";
 import { useSelector } from "react-redux";
 import { UserState } from "../../store/reducers/UserReducer";
 import { receiveStamp } from "../../utils/makeRequestToServer";
 
 export default function Scanner() {
-  const { theme } = useContext(ColorContext);
+  const language = useSelector(
+    (state: { user: UserState }) => state.user.language
+  );
+
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
+
   const token = useSelector((state: { user: UserState }) => state.user.token);
 
   const [hasPermission, setHasPermission] = useState<null | boolean>(null);
@@ -68,7 +72,7 @@ export default function Scanner() {
         styles.container,
         {
           backgroundColor:
-            theme === "dark"
+            theme && theme === "dark"
               ? ColorSchema.dark.background
               : ColorSchema.light.background,
         },
@@ -85,7 +89,9 @@ export default function Scanner() {
           styles.maintext,
           {
             color:
-              theme === "dark" ? ColorSchema.dark.text : ColorSchema.light.text,
+              theme && theme === "dark"
+                ? ColorSchema.dark.text
+                : ColorSchema.light.text,
           },
         ]}
       >
@@ -94,9 +100,15 @@ export default function Scanner() {
 
       {scanned && (
         <Button
-          title={"Сканирай отново"}
+          title={
+            language && language === "en" ? "Scan Again" : "Сканирай отново"
+          }
           onPress={() => setScanned(false)}
-          color={theme === "dark" ? ColorSchema.default.dark_green : new_green}
+          color={
+            theme && theme === "dark"
+              ? ColorSchema.default.dark_green
+              : new_green
+          }
         />
       )}
     </View>

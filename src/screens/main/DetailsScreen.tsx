@@ -1,19 +1,11 @@
-import {
-  Alert,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import { CustomMap } from "../../components/general/CustomMap";
 import Constants from "expo-constants";
 import * as Location from "expo-location";
 import { LocationObject } from "expo-location";
 import { CustomImageCarousel } from "../../components/general/CustomImageCarousel";
 import { ColorSchema } from "../../constants/Colors";
-import { ColorContext } from "../../navigation/RootNavigator";
 import { getSiteInfo } from "../../utils/makeRequestToServer";
 import { PlacesNavProps } from "../../navigation/types";
 import { useSelector } from "react-redux";
@@ -26,7 +18,8 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
   const token = useSelector((state: { user: UserState }) => state.user.token);
   const [details, setDetails] = useState<Details | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const { theme } = useContext(ColorContext);
+
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
 
   useEffect(() => {
     const getInfo = async () => {
@@ -85,7 +78,7 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
           styles.container,
           {
             backgroundColor:
-              theme === "dark"
+              theme && theme === "dark"
                 ? ColorSchema.dark.background
                 : ColorSchema.light.background,
           },
@@ -121,7 +114,7 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
             styles.bottomContainer,
             {
               backgroundColor:
-                theme === "dark"
+                theme && theme === "dark"
                   ? ColorSchema.default.disabledButton
                   : ColorSchema.light.background,
             },
@@ -140,7 +133,9 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
               <Text
                 style={[
                   styles.title,
-                  theme === "dark" ? styles.textDark : styles.textLight,
+                  theme && theme === "dark"
+                    ? styles.textDark
+                    : styles.textLight,
                 ]}
               >
                 {details!.name}
@@ -148,7 +143,9 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
               <Text
                 style={[
                   styles.info,
-                  theme === "dark" ? styles.textDark : styles.textLight,
+                  theme && theme === "dark"
+                    ? styles.textDark
+                    : styles.textLight,
                 ]}
               >
                 {details!.city.trim()}, {details!.region.trim()}
@@ -157,7 +154,7 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
             <Text
               style={[
                 styles.description,
-                theme === "dark"
+                theme && theme === "dark"
                   ? styles.textDescriptionDark
                   : styles.textLight,
               ]}
@@ -194,7 +191,7 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
       <Text
         style={[
           { fontSize: 25, fontWeight: "bold", textAlign: "center" },
-          theme === "dark" ? styles.textDark : styles.textLight,
+          theme && theme === "dark" ? styles.textDark : styles.textLight,
         ]}
       >
         Sorry we Fucked
