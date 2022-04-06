@@ -1,4 +1,4 @@
-import Site from "../../models/Site";
+import { Site } from "../../models/Site";
 import { SitesActions } from "../actions/SitesActions";
 
 export interface SitesState {

@@ -63,6 +63,18 @@ export const DrawerNav: React.FC = ({}) => {
       <DrawerNavigator.Screen
         name="Tabs"
         options={{
+          headerStyle: {
+            backgroundColor:
+              theme && theme === "dark"
+                ? ColorSchema.dark.background
+                : ColorSchema.light.background,
+          },
+          headerTitleStyle: {
+            color:
+              theme && theme === "dark"
+                ? ColorSchema.dark.text
+                : ColorSchema.light.text,
+          },
           title: language === "en" ? "Home" : "Начало",
           drawerIcon: ({ color }) => (
             <FontAwesome5 name="home" size={24} color={color} />
@@ -74,6 +86,18 @@ export const DrawerNav: React.FC = ({}) => {
       <DrawerNavigator.Screen
         name="Settings"
         options={({ navigation }) => ({
+          headerStyle: {
+            backgroundColor:
+              theme && theme === "dark"
+                ? ColorSchema.dark.background
+                : ColorSchema.light.background,
+          },
+          headerTitleStyle: {
+            color:
+              theme && theme === "dark"
+                ? ColorSchema.dark.text
+                : ColorSchema.light.text,
+          },
           headerShown: true,
           title: language === "en" ? "Settings" : "Настройки",
           drawerIcon: ({ color }) => (
@@ -83,7 +107,11 @@ export const DrawerNav: React.FC = ({}) => {
             <Ionicons
               name="menu"
               size={24}
-              color="black"
+              color={
+                theme && theme === "dark"
+                  ? ColorSchema.dark.text
+                  : ColorSchema.light.text
+              }
               onPress={() => {
                 navigation.toggleDrawer();
               }}
