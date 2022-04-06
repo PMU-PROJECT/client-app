@@ -3,7 +3,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
   CompositeScreenProps,
-  NavigatorScreenParams,
+  // NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
@@ -20,7 +20,8 @@ export type AuthNavProps<T extends keyof AuthParamList> = {
 export type PlacesParamList = {
   Home: undefined;
   PlaceDetails: {
-    id: string;
+    id: number;
+    title: string;
   };
 };
 
@@ -40,9 +41,15 @@ export type RootTabScreenProps<Screen extends keyof MainTabParamList> =
     NativeStackScreenProps<PlacesParamList>
   >;
 
-export type DrawwerParamList = {
+export type DrawerParamList = {
   Tabs: undefined;
   Settings: undefined;
   ScanQR: undefined;
-  Achievements: undefined;
+  Rewards: undefined;
+  EmployeeRewards: undefined;
+};
+
+export type DrawerNavProps<T extends keyof DrawerParamList> = {
+  navigation: StackNavigationProp<DrawerParamList, T>;
+  route: RouteProp<DrawerParamList, T>;
 };

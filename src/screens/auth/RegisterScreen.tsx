@@ -1,19 +1,19 @@
-import { useContext } from "react";
 import { StyleSheet, View } from "react-native";
+import { useSelector } from "react-redux";
 import { RegisterForm } from "../../components/form/RegisterForm";
 import { ColorSchema } from "../../constants/Colors";
-import { ColorContext } from "../../navigation/RootNavigator";
 import { AuthNavProps } from "../../navigation/types";
+import { UserState } from "../../store/reducers/UserReducer";
 
-export const RegisterScreen = ({
-  navigation,
-  route,
-}: AuthNavProps<"Register">) => {
-  const { theme } = useContext(ColorContext);
+export const RegisterScreen = ({}: AuthNavProps<"Register">) => {
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
 
   return (
     <View
-      style={[styles.container, theme === "dark" ? styles.dark : styles.light]}
+      style={[
+        styles.container,
+        theme && theme === "dark" ? styles.dark : styles.light,
+      ]}
     >
       <RegisterForm />
     </View>

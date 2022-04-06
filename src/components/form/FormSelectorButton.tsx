@@ -6,6 +6,7 @@ import {
   Text,
   GestureResponderEvent,
 } from "react-native";
+import { ColorSchema } from "../../constants/Colors";
 
 type FormButtonProps = {
   title: string;
@@ -37,5 +38,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  title: { color: "white", fontSize: 16 },
+  title: {
+    color: ColorSchema.light.background,
+    fontSize: 16,
+  },
 });

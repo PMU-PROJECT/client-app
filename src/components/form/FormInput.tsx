@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
@@ -6,8 +6,9 @@ import {
   TextInputProps,
   View,
 } from "react-native";
-import { ColorSchema, text_disabled } from "../../constants/Colors";
-import { ColorContext } from "../../navigation/RootNavigator";
+import { useSelector } from "react-redux";
+import { ColorSchema } from "../../constants/Colors";
+import { UserState } from "../../store/reducers/UserReducer";
 
 type InputProps = {
   placeholder: string;
@@ -20,7 +21,8 @@ type InputProps = {
 } & TextInputProps;
 
 export const FormInput: React.FC<InputProps> = (props: InputProps) => {
-  const { theme } = useContext(ColorContext);
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
+
   const { placeholder, label, error } = props;
 
   return (
@@ -29,7 +31,7 @@ export const FormInput: React.FC<InputProps> = (props: InputProps) => {
         <Text
           style={[
             styles.label,
-            theme === "dark" ? styles.labelDark : styles.labelLight,
+            theme && theme === "dark" ? styles.labelDark : styles.labelLight,
           ]}
         >
           {label}
@@ -39,10 +41,14 @@ export const FormInput: React.FC<InputProps> = (props: InputProps) => {
       <TextInput
         {...props}
         placeholder={placeholder}
-        placeholderTextColor={theme === "dark" ? text_disabled : text_disabled}
+        placeholderTextColor={
+          theme && theme === "dark"
+            ? ColorSchema.default.disabled
+            : ColorSchema.default.disabled
+        }
         style={[
           styles.input,
-          theme === "dark" ? styles.inputBgDark : styles.inputBgLight,
+          theme && theme === "dark" ? styles.inputBgDark : styles.inputBgLight,
         ]}
       />
     </>

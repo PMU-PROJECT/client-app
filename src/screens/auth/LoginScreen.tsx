@@ -1,16 +1,19 @@
-import { useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { useSelector } from "react-redux";
 import { LoginForm } from "../../components/form/LoginForm";
 import { ColorSchema } from "../../constants/Colors";
-import { ColorContext } from "../../navigation/RootNavigator";
 import { AuthNavProps } from "../../navigation/types";
+import { UserState } from "../../store/reducers/UserReducer";
 
-export const LoginScreen = ({ navigation, route }: AuthNavProps<"Login">) => {
-  const { theme } = useContext(ColorContext);
+export const LoginScreen = ({}: AuthNavProps<"Login">) => {
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
 
   return (
     <View
-      style={[styles.container, theme === "dark" ? styles.dark : styles.light]}
+      style={[
+        styles.container,
+        theme && theme === "dark" ? styles.dark : styles.light,
+      ]}
     >
       <LoginForm />
     </View>

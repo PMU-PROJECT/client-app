@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { FormNavButtons } from "./FormNavButtons";
 
 export const FormContainer: React.FC = (props: any) => {
@@ -33,8 +27,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     shadowOpacity: 0.26,
     shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 8,
-    elevation: 5,
     borderRadius: 10,
     padding: 20,
   },

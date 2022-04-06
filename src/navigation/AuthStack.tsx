@@ -7,7 +7,7 @@ const AuthNavigator = createStackNavigator<AuthParamList>();
 
 interface AuthStackProps {}
 
-export const AuthStack: React.FC<AuthStackProps> = (props) => {
+export const AuthStack: React.FC<AuthStackProps> = () => {
   return (
     <AuthNavigator.Navigator
       initialRouteName="Login"

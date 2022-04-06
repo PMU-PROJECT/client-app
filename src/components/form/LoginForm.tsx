@@ -1,18 +1,28 @@
-import { AntDesign } from "@expo/vector-icons";
-import React, { useContext, useState } from "react";
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { ColorSchema } from "../../constants/Colors";
-import { ColorContext } from "../../navigation/RootNavigator";
+import { UserActions } from "../../store/actions/UserActions";
+import { UserState } from "../../store/reducers/UserReducer";
 import {
   isValidEmail,
   isValidObjField,
   updateError,
 } from "../../utils/inputValidation";
+import { getSelfInfo, makeAuthRequest } from "../../utils/makeRequestToServer";
 import { FormContainer } from "./FormContainer";
 import { FormInput } from "./FormInput";
 
 export const LoginForm: React.FC = () => {
-  const { theme } = useContext(ColorContext);
+  const language = useSelector(
+    (state: { user: UserState }) => state.user.language
+  );
+
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
+
+  const dispatch = useDispatch();
+
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -33,15 +43,29 @@ export const LoginForm: React.FC = () => {
     if (!isValidEmail(email))
       return updateError("Invalid email!", "email", setError);
 
-    if (!password.trim() || password.length < 8)
+    if (!password.trim() || password.length < 6)
       return updateError("Password is too short!", "pass", setError);
 
     return true;
   };
 
-  const submitForm = () => {
+  const submitForm = async () => {
     if (isValidForm()) {
-      console.log(userInfo);
+      const token = await makeAuthRequest("login", { ...userInfo });
+      if (token !== null) {
+        const userInfo = await getSelfInfo(token);
+        if (userInfo !== null) {
+          dispatch({
+            type: UserActions.LOGIN,
+            payload: {
+              token,
+              userData: {
+                ...userInfo,
+              },
+            },
+          });
+        }
+      }
     }
   };
 
@@ -51,10 +75,12 @@ export const LoginForm: React.FC = () => {
         <Text
           style={[
             styles.header,
-            theme === "dark" ? styles.headerDark : styles.header,
+            theme && theme === "dark" ? styles.headerDark : styles.header,
           ]}
         >
-          Welcome Back!
+          {language && language === "en"
+            ? "Welcome Back!"
+            : "Добре дошли отново!"}
         </Text>
         {error && error.field === "all" ? (
           <Text style={styles.textError}>{error.message}</Text>
@@ -63,7 +89,7 @@ export const LoginForm: React.FC = () => {
           <FormInput
             value={email}
             onChangeText={(value: string) => handleOnChangeText(value, "email")}
-            label="Email"
+            label={language && language === "en" ? "Email" : "Имейл адрес"}
             placeholder="example@email.com"
             autoCapitalize="none"
             error={error && error.field === "email" ? error.message : undefined}
@@ -74,7 +100,7 @@ export const LoginForm: React.FC = () => {
             onChangeText={(value: string) =>
               handleOnChangeText(value, "password")
             }
-            label="Password"
+            label={language && language === "en" ? "Password" : "Парола"}
             placeholder="********"
             autoCapitalize="none"
             secureTextEntry
@@ -87,24 +113,26 @@ export const LoginForm: React.FC = () => {
                 name="login"
                 size={25}
                 color={"white"}
-                backgroundColor={ColorSchema.dark.headerButton}
+                backgroundColor={ColorSchema.default.dark_green}
                 onPress={() => {
                   submitForm();
                 }}
               >
-                LOG IN
+                {language && language === "en" ? "LOGIN" : "ВХОД"}
               </AntDesign.Button>
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttons}>
-              <AntDesign.Button
+              <FontAwesome.Button
                 name="google"
                 size={25}
                 color={"white"}
-                backgroundColor={ColorSchema.dark.headerButton}
+                backgroundColor={ColorSchema.default.dark_green}
                 onPress={() => {}}
               >
-                SIGN UP
-              </AntDesign.Button>
+                {language && language === "en"
+                  ? "REGISTER"
+                  : "Регистрация".toUpperCase()}
+              </FontAwesome.Button>
             </TouchableOpacity>
           </View>
         </View>

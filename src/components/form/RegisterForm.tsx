@@ -1,9 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Formik, FormikHelpers } from "formik";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { ColorSchema } from "../../constants/Colors";
-import { ColorContext } from "../../navigation/RootNavigator";
+import { UserActions } from "../../store/actions/UserActions";
+import { UserState } from "../../store/reducers/UserReducer";
+import { getSelfInfo, makeAuthRequest } from "../../utils/makeRequestToServer";
 import { ValidationSchema } from "../../utils/ValidationSchema";
 import { FormContainer } from "./FormContainer";
 import { FormInput } from "./FormInput";
@@ -17,8 +20,15 @@ type UserInfo = {
 };
 
 export const RegisterForm: React.FC = () => {
-  const { theme } = useContext(ColorContext);
-  const [userInfo, setUserInfo] = useState<UserInfo>({
+  const language = useSelector(
+    (state: { user: UserState }) => state.user.language
+  );
+
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
+
+  const dispatch = useDispatch();
+
+  const [userInfo, _setUserInfo] = useState<UserInfo>({
     firstName: "",
     lastName: "",
     email: "",
@@ -30,28 +40,49 @@ export const RegisterForm: React.FC = () => {
   //   setUserInfo({ ...userInfo, [fieldName]: value });
   // };
 
+  const handleSubmit = async (
+    values: UserInfo,
+    formikHelpers: FormikHelpers<UserInfo>
+  ) => {
+    const token = await makeAuthRequest("registration", {
+      first_name: values.firstName,
+      last_name: values.lastName,
+      email: values.email,
+      password: values.password,
+    });
+    if (token !== null) {
+      const userInfo = await getSelfInfo(token);
+      if (userInfo !== null) {
+        dispatch({
+          type: UserActions.REGISTER,
+          payload: {
+            token,
+            userData: {
+              ...userInfo,
+            },
+          },
+        });
+      }
+    }
+    formikHelpers.resetForm();
+    formikHelpers.setSubmitting(false);
+  };
+
   return (
     <FormContainer>
       <Text
         style={[
           styles.header,
-          theme === "dark" ? styles.headerDark : styles.headerLight,
+          theme && theme === "dark" ? styles.headerDark : styles.headerLight,
         ]}
       >
-        Register
+        {language && language === "en" ? "Register" : "Регистрация"}
       </Text>
       <Formik
         style={styles.form}
         initialValues={userInfo}
         validationSchema={ValidationSchema}
-        onSubmit={(
-          values: UserInfo,
-          formikHelpers: FormikHelpers<UserInfo>
-        ) => {
-          console.log(values);
-          formikHelpers.resetForm();
-          formikHelpers.setSubmitting(false);
-        }}
+        onSubmit={handleSubmit}
       >
         {({
           values,
@@ -75,8 +106,10 @@ export const RegisterForm: React.FC = () => {
                 }
                 onChangeText={handleChange("firstName")}
                 onBlur={handleBlur("firstName")}
-                label="First Name"
-                placeholder="John"
+                label={
+                  language && language === "en" ? "First Name" : "Първо име"
+                }
+                placeholder={language && language === "en" ? "John" : "Иван"}
                 returnKeyType="next"
               />
               <FormInput
@@ -88,8 +121,10 @@ export const RegisterForm: React.FC = () => {
                 }
                 onChangeText={handleChange("lastName")}
                 onBlur={handleBlur("lastName")}
-                label="Last Name"
-                placeholder="Smith"
+                label={language && language === "en" ? "Last Name" : "Фамилия"}
+                placeholder={
+                  language && language === "en" ? "Johnson" : "Иванов"
+                }
                 returnKeyType="next"
               />
               <FormInput
@@ -98,7 +133,7 @@ export const RegisterForm: React.FC = () => {
                 onChangeText={handleChange("email")}
                 onBlur={handleBlur("email")}
                 autoCapitalize="none"
-                label="Email"
+                label={language && language === "en" ? "Email" : "Имейл Адрес"}
                 placeholder="example@email.com"
                 returnKeyType="next"
               />
@@ -113,7 +148,7 @@ export const RegisterForm: React.FC = () => {
                 onBlur={handleBlur("password")}
                 autoCapitalize="none"
                 secureTextEntry
-                label="Password"
+                label={language && language === "en" ? "Password" : "Парола"}
                 placeholder="********"
                 returnKeyType="next"
               />
@@ -128,7 +163,11 @@ export const RegisterForm: React.FC = () => {
                 onBlur={handleBlur("confirmPassword")}
                 autoCapitalize="none"
                 secureTextEntry
-                label="Confirm Password"
+                label={
+                  language && language === "en"
+                    ? "Confirm Password"
+                    : "Потвърди Парола"
+                }
                 placeholder="********"
                 returnKeyType="done"
               />
@@ -138,10 +177,12 @@ export const RegisterForm: React.FC = () => {
                     name="create-outline"
                     size={25}
                     color={"white"}
-                    backgroundColor={ColorSchema.dark.headerButton}
+                    backgroundColor={ColorSchema.default.dark_green}
                     onPress={handleSubmit as any}
                   >
-                    REGISTER
+                    {language && language === "en"
+                      ? "Register"
+                      : "Регистрация".toUpperCase()}
                   </Ionicons.Button>
                 </TouchableOpacity>
               </View>

@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 
-export const AchivementsScreen = () => {
+export const EmployeeRewardsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>Achivements</Text>
+      <Text>Employee</Text>
     </View>
   );
 };

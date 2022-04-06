@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "stamps-app",
-    "slug": "stamps-app",
+    "name": "pmu-app",
+    "slug": "pmu-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -15,16 +15,24 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "host.exp.exponent",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "76434185540-8mvp8297q2igvrdtjjs3unhkuvbfumq2.apps.googleusercontent.com"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "host.exp.exponent"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
+    },
+    "description": ""
   }
 }

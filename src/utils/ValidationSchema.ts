@@ -12,7 +12,7 @@ export const ValidationSchema = Yup.object({
   email: Yup.string().email("Invalid email!").required("Email is required!"),
   password: Yup.string()
     .trim()
-    .min(8, "Password is too short!")
+    .min(6, "Password is too short!")
     .required("Password is required!"),
   confirmPassword: Yup.string().equals(
     [Yup.ref("password"), null],
