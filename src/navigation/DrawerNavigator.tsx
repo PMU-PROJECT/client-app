@@ -125,6 +125,18 @@ export const DrawerNav: React.FC = ({}) => {
         options={({ navigation }) => ({
           title: language === "en" ? "Rewards" : "Награди",
           headerShown: true,
+          headerTintColor:
+            theme && theme === "dark"
+              ? ColorSchema.dark.text
+              : ColorSchema.light.text,
+          headerStyle: {
+            backgroundColor:
+              theme && theme === "dark"
+                ? ColorSchema.dark.background
+                : ColorSchema.light.background,
+            borderBottomWidth: theme && theme === "dark" ? 1 : 1,
+            borderBottomColor: theme && theme === "dark" ? "grey" : "grey",
+          },
           drawerIcon: ({ color }) => (
             <FontAwesome5 name="gift" size={24} color={color} />
           ),
@@ -132,7 +144,11 @@ export const DrawerNav: React.FC = ({}) => {
             <Ionicons
               name="menu"
               size={24}
-              color="black"
+              color={
+                theme && theme === "dark"
+                  ? ColorSchema.dark.text
+                  : ColorSchema.light.text
+              }
               onPress={() => {
                 navigation.toggleDrawer();
               }}

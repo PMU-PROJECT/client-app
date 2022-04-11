@@ -1,5 +1,5 @@
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { ColorSchema } from "../../constants/Colors";
@@ -13,13 +13,14 @@ import {
 import { getSelfInfo, makeAuthRequest } from "../../utils/makeRequestToServer";
 import { FormContainer } from "./FormContainer";
 import { FormInput } from "./FormInput";
+import * as Google from "expo-auth-session/providers/google";
+import { TokenResponse } from "expo-auth-session";
 
 export const LoginForm: React.FC = () => {
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
   const language = useSelector(
     (state: { user: UserState }) => state.user.language
   );
-
-  const theme = useSelector((state: { user: UserState }) => state.user.theme);
 
   const dispatch = useDispatch();
 
@@ -31,7 +32,6 @@ export const LoginForm: React.FC = () => {
   const [error, setError] = useState({ message: "", field: "" });
 
   const { email, password } = userInfo;
-
   const handleOnChangeText = (value: string, fieldName: string) => {
     setUserInfo({ ...userInfo, [fieldName]: value });
   };
@@ -68,6 +68,46 @@ export const LoginForm: React.FC = () => {
       }
     }
   };
+
+  const [user, setuser] = useState<{ name: string; email: string } | null>(
+    null
+  );
+  const [token, settoken] = useState<TokenResponse | null>(null);
+
+  const [_request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId:
+      "102677665631-i1jrt648jjl95l35c0vde36vlpnsh1bs.apps.googleusercontent.com",
+    expoClientId:
+      "102677665631-2bnoj2r075lhqpgtrdh46of7sq636uj5.apps.googleusercontent.com",
+    redirectUri: "https://auth.expo.io/@gen44o/pmu-app",
+    clientSecret: "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",
+    scopes: ["profile", "email"],
+  });
+
+  useEffect(() => {
+    if (response?.type === "success") {
+      const { authentication } = response;
+      // console.log(response);
+      console.log(authentication);
+      // console.log("/*******************/");
+      // console.log(_request);
+      settoken(authentication);
+    }
+  }, [response]);
+
+  async function getUserData() {
+    let res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+      headers: {
+        Authorization: `Bearer ${token?.accessToken}`,
+        Authentication: `Bearer ${token?.accessToken}`,
+      },
+    });
+
+    // console.log(JSON.stringify(res));
+    const data = await res.json();
+    console.log(data);
+    setuser(data);
+  }
 
   return (
     <>
@@ -127,13 +167,37 @@ export const LoginForm: React.FC = () => {
                 size={25}
                 color={"white"}
                 backgroundColor={ColorSchema.default.dark_green}
-                onPress={() => {}}
+                onPress={async () => {
+                  if (token) {
+                    await getUserData();
+                  } else {
+                    promptAsync({ showInRecents: true });
+                  }
+                }}
               >
                 {language && language === "en"
                   ? "REGISTER"
                   : "Регистрация".toUpperCase()}
               </FontAwesome.Button>
             </TouchableOpacity>
+            {user ? (
+              <View>
+                <Text
+                  style={[
+                    theme === "dark" ? styles.headerDark : styles.headerLight,
+                  ]}
+                >
+                  {user.name}
+                </Text>
+                <Text
+                  style={[
+                    theme === "dark" ? styles.headerDark : styles.headerLight,
+                  ]}
+                >
+                  {user.email}
+                </Text>
+              </View>
+            ) : null}
           </View>
         </View>
       </FormContainer>

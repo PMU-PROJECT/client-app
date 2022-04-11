@@ -1,12 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button, Alert } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { ColorSchema, new_green } from "../../constants/Colors";
 import { useSelector } from "react-redux";
 import { UserState } from "../../store/reducers/UserReducer";
-import { receiveStamp } from "../../utils/makeRequestToServer";
+import { getRewards, receiveStamp } from "../../utils/makeRequestToServer";
+import { ScalableText } from "../general/ScalableText";
 
-export default function Scanner() {
+type ScannerProps = {
+  type: "stamp" | "reward";
+  // navigation: StackNavigationProp<
+  //   DrawerParamList,
+  //   "EmployeeRewards" | "ScanQR"
+  // >;
+};
+
+export default function Scanner({ type }: ScannerProps) {
   const language = useSelector(
     (state: { user: UserState }) => state.user.language
   );
@@ -39,7 +55,11 @@ export default function Scanner() {
     // console.log("Type: " + params.type + "\nData: " + params.data);
 
     if (params.type === 256) {
-      const res = await receiveStamp(token!, params.data);
+      if (type === "stamp") {
+        const res = await receiveStamp(token!, params.data);
+      } else if (type === "reward") {
+        const res = await getRewards(token!, params.data);
+      }
     } else {
       Alert.alert("Invalid Scan!", "Please scan a valid QR code!", [
         { text: "Okay" },
@@ -58,10 +78,25 @@ export default function Scanner() {
     return (
       <View style={styles.container}>
         <Text style={{ margin: 10 }}>No access to camera</Text>
-        <Button
-          title={"Allow Camera"}
-          onPress={() => askForCameraPermission()}
-        />
+        <TouchableOpacity
+          onPress={() => {}}
+          style={{
+            backgroundColor: ColorSchema.default.dark_green_alpha,
+            padding: 10,
+            width: 100,
+            borderRadius: 20,
+          }}
+        >
+          <ScalableText
+            fontSize={18}
+            numberOfLines={2}
+            styles={{
+              color: "#fff",
+              textAlign: "center",
+            }}
+            text={"Allow Camera"}
+          />
+        </TouchableOpacity>
       </View>
     );
   }

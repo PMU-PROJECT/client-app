@@ -17,7 +17,7 @@ export const ScanQRScreen = ({}: DrawerNavProps<"ScanQR">) => {
           : styles.containerLight,
       ]}
     >
-      <Scanner />
+      <Scanner type="stamp" />
     </View>
   );
 };

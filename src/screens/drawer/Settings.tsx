@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { FilterSwitch } from "../../components/settings/FilterSwitch";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +11,6 @@ export const SettingScreen = () => {
     (state: { user: UserState }) => state.user.language
   );
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
-
   const [isDarkTheme, setIsDarkTheme] = useState<boolean>(
     theme === "dark" ? true : false
   );
@@ -21,31 +20,31 @@ export const SettingScreen = () => {
 
   const dispatch = useDispatch();
 
-  const changeLanguage = useCallback(() => {
-    dispatch({
-      type: UserActions.LANGUAGE_CHANGE,
-      payload: {
-        language: language === "en" ? "bg" : "en",
-      },
-    });
-  }, [dispatch, isEnglish]);
+  const changeLanguage = useCallback(
+    (bool: boolean) => {
+      setIsEnglish(bool);
+      dispatch({
+        type: UserActions.LANGUAGE_CHANGE,
+        payload: {
+          language: language === "en" ? "bg" : "en",
+        },
+      });
+    },
+    [dispatch, isEnglish]
+  );
 
-  const changeTheme = useCallback(() => {
-    dispatch({
-      type: UserActions.THEME_CHANGE,
-      payload: {
-        theme: theme === "dark" ? "light" : "dark",
-      },
-    });
-  }, [dispatch, isDarkTheme]);
-
-  useEffect(() => {
-    changeTheme();
-  }, [isDarkTheme]);
-
-  useEffect(() => {
-    changeLanguage();
-  }, [isEnglish]);
+  const changeTheme = useCallback(
+    (bool: boolean) => {
+      setIsDarkTheme(bool);
+      dispatch({
+        type: UserActions.THEME_CHANGE,
+        payload: {
+          theme: theme === "dark" ? "light" : "dark",
+        },
+      });
+    },
+    [dispatch, isDarkTheme]
+  );
 
   return (
     <View
@@ -63,14 +62,14 @@ export const SettingScreen = () => {
         {language === "en" ? "Set Settings" : "Настройки"}
       </Text>
       <FilterSwitch
-        label={language === "en" ? "Light Theme" : "Светла тема"}
+        label={language === "en" ? "Dark Theme" : "Тъмна тема"}
         state={isDarkTheme}
-        onChange={(newValue) => setIsDarkTheme(newValue)}
+        onChange={(newValue) => changeTheme(newValue)}
       />
       <FilterSwitch
         label={language === "en" ? "English" : "Български"}
         state={isEnglish}
-        onChange={(newValue) => setIsEnglish(newValue)}
+        onChange={(newValue) => changeLanguage(newValue)}
       />
     </View>
   );

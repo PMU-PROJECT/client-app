@@ -13,7 +13,9 @@ import { Loading } from "../../components/general/Loading";
 import { windowWidth } from "../../utils/Dimensions";
 import { Site } from "../../models/Site";
 
-import { useSwipe } from "../../hooks/useSwipe";
+import GestureRecognizer, {
+  GestureRecognizerProps,
+} from "react-native-swipe-gestures";
 import { mapCategory } from "../../utils/mapCategories";
 
 export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
@@ -22,21 +24,8 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
     (state: { user: UserState }) => state.user.language
   );
 
-  const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
-
-  function onSwipeLeft() {
-    console.log("SWIPE_LEFT");
-    setCategoryIndex((currentIndex) => {
-      if (currentIndex >= 1) {
-        return currentIndex - 1;
-      } else {
-        return currentIndex;
-      }
-    });
-  }
-
-  function onSwipeRight() {
-    console.log("SWIPE_RIGHT");
+  const onSwipeLeft = () => {
+    // console.log("SWIPE_LEFT");
     setCategoryIndex((currentIndex) => {
       if (currentIndex < 2) {
         return currentIndex + 1;
@@ -44,7 +33,18 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
         return currentIndex;
       }
     });
-  }
+  };
+
+  const onSwipeRight = () => {
+    // console.log("SWIPE_RIGHT");
+    setCategoryIndex((currentIndex) => {
+      if (currentIndex >= 1) {
+        return currentIndex - 1;
+      } else {
+        return currentIndex;
+      }
+    });
+  };
 
   const [categoryIndex, setCategoryIndex] = useState(0);
   // const [active, setActive] = useState<"all" | "visited" | "other">("all");
@@ -123,18 +123,22 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
             key={index}
             index={index}
             onSelect={setCategoryIndex}
-            item={language && language ? item : mapCategory(item as any)}
+            item={
+              language === "en" && language ? item : mapCategory(item as any)
+            }
             selectedIdx={categoryIndex}
           />
         ))}
       </View>
 
       {sites ? (
-        <View
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-          // showsHorizontalScrollIndicator={false}
-          // showsVerticalScrollIndicator={false}
+        <GestureRecognizer
+          onSwipeLeft={() => onSwipeLeft()}
+          onSwipeRight={() => onSwipeRight()}
+          config={{
+            velocityThreshold: 0.2,
+            directionalOffsetThreshold: 80,
+          }}
         >
           <FlatList
             // columnWrapperStyle={{ justifyContent: "space-between" }}
@@ -159,7 +163,7 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
               />
             )}
           />
-        </View>
+        </GestureRecognizer>
       ) : (
         <View>
           <Text
@@ -168,7 +172,7 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
               theme && theme === "dark" ? styles.darkText : styles.lightText,
             ]}
           >
-            Sorry we Fucked
+            Sorry
           </Text>
         </View>
       )}

@@ -1,8 +1,10 @@
 import { Alert } from "react-native";
+import { Rewards } from "../models/Rewards";
 import { Details } from "../models/Site";
 
 const linkURL = "http://0af1-78-90-52-121.eu.ngrok.io/api/";
 
+// /api/register && api/login [POST]
 export const makeAuthRequest = async (
   path: string,
   values: {
@@ -32,12 +34,7 @@ export const makeAuthRequest = async (
     });
     // console.log(JSON.stringify(res));
 
-    if (res.status === 400 || res.status === 422) {
-      const text = await res.json();
-      throw new Error(text.error);
-    }
-
-    if (res.status === 401) {
+    if (res.status !== 200) {
       const text = await res.json();
       throw new Error(text.error);
     }
@@ -52,6 +49,7 @@ export const makeAuthRequest = async (
   }
 };
 
+// /api/get_self_info [GET]
 export const getSelfInfo = async (token: string): Promise<[] | null> => {
   try {
     const res = await fetch(`${linkURL}get_self_info`, {
@@ -63,8 +61,9 @@ export const getSelfInfo = async (token: string): Promise<[] | null> => {
     });
 
     // console.log(JSON.stringify(res));
-    if (res.status === 401) {
-      throw new Error("Not Authorized!");
+    if (res.status !== 200) {
+      const text = await res.json();
+      throw new Error(text.error);
     }
 
     const data = await res.json();
@@ -72,11 +71,12 @@ export const getSelfInfo = async (token: string): Promise<[] | null> => {
   } catch (err: any) {
     console.log("Error getSelfInfo");
     console.log(err);
-    Alert.alert(`${err}`, `${err}`, [{ text: "Okay" }]);
+    Alert.alert(`Error`, `${err}`, [{ text: "Okay" }]);
     return null;
   }
 };
 
+// /api/get_all_sites [GET]
 export const fetchAllSites = async (
   token: string,
   filter: "all" | "visited" | "unvisited" = "all"
@@ -90,11 +90,9 @@ export const fetchAllSites = async (
       },
     });
 
-    if (res.status === 401) {
-      throw new Error("Auth Token Is Not Valid!");
-    }
-    if (res.status === 400) {
-      throw new Error("Filter Is Not Valid!");
+    if (res.status !== 200) {
+      const text = await res.json();
+      throw new Error(text.error);
     }
 
     const data: { sites: [] } = await res.json();
@@ -103,11 +101,12 @@ export const fetchAllSites = async (
   } catch (err: any) {
     console.log("Error fetchAllSites");
     console.log(err);
-    Alert.alert(`${err}`, `${err}`, [{ text: "Okay" }]);
+    Alert.alert(`Error`, `${err}`, [{ text: "Okay" }]);
     return null;
   }
 };
 
+// /api/get_id_token [GET]
 export const getQRCode = async (token: string): Promise<string | null> => {
   try {
     const res = await fetch(`${linkURL}get_id_token`, {
@@ -118,11 +117,10 @@ export const getQRCode = async (token: string): Promise<string | null> => {
       },
     });
 
-    if (res.status === 401) {
-      throw new Error("Not logged in!");
+    if (res.status !== 200) {
+      const text = await res.json();
+      throw new Error(text.error);
     }
-
-    // console.log(res);
 
     const data = await res.json();
     // console.log(data);
@@ -130,15 +128,16 @@ export const getQRCode = async (token: string): Promise<string | null> => {
   } catch (err: any) {
     console.log("Error getQRCode");
     console.log(err);
-    Alert.alert(`${err}`, `${err}`, [{ text: "Okay" }]);
+    Alert.alert(`Error`, `${err}`, [{ text: "Okay" }]);
     return null;
   }
 };
 
-export const receiveStamp = async (token: string, stampToken: string) => {
+// /api/make_stamp [POST]
+export const receiveStamp = async (token: string, id_token: string) => {
   try {
     let formData = new FormData();
-    formData.append("id_token", stampToken);
+    formData.append("id_token", id_token);
     // console.log("Auth " + token);
     // console.log("ST " + stampToken);
     const res = await fetch(`${linkURL}make_stamp`, {
@@ -150,12 +149,15 @@ export const receiveStamp = async (token: string, stampToken: string) => {
       },
     });
 
-    console.log(res);
-    if (res.status === 401) {
-      throw new Error("Not Authorized");
+    if (res.status !== 200) {
+      const text = await res.json();
+      throw new Error(text.error);
     }
-    if (res.status === 400) {
-      throw new Error("Invalid or Expired Token!");
+
+    if (res.status === 200) {
+      Alert.alert("Congratulations", "You have recieved a ne stamp!", [
+        { text: "Okay" },
+      ]);
     }
 
     const data = await res.json();
@@ -170,6 +172,7 @@ export const receiveStamp = async (token: string, stampToken: string) => {
   }
 };
 
+// /api/refresh_token [POST]
 export const refreshAuthToken = async (oldToken: string) => {
   try {
     const res = await fetch(`${linkURL}refresh_token`, {
@@ -191,6 +194,7 @@ export const refreshAuthToken = async (oldToken: string) => {
   }
 };
 
+// /api/get_site_info [GET]
 export const getSiteInfo = async (id: number, token: string) => {
   try {
     const res = await fetch(`${linkURL}get_site_info?id=${id}`, {
@@ -207,7 +211,48 @@ export const getSiteInfo = async (id: number, token: string) => {
   } catch (err: any) {
     console.log("Error getSiteInfo");
     console.log(err);
+    Alert.alert(`Error`, `${err}`, [{ text: "Okay" }]);
     // Alert.alert(`${err}`, `${err}`, [{ text: "Okay" }]);
     return null;
   }
 };
+
+// /api/oauth2/google [POST]
+
+// /api/get_employee_info [GET]
+
+// /api/get_user_info [GET]
+
+// /api/get_eligible_rewards [GET]
+export const getRewards = async (token: string, id_token: string) => {
+  try {
+    const res = await fetch(
+      `${linkURL}/get_eligible_rewards?id_token=${id_token}`,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+
+    console.log(JSON.stringify(res));
+
+    if (res.status !== 200) {
+      const text = await res.json();
+      throw new Error(text.error);
+    }
+
+    const data: Rewards = await res.json();
+    console.log(data);
+    return data;
+  } catch (err: any) {
+    console.log("Error get");
+    console.log(err);
+    Alert.alert(`Error`, `${err}`, [{ text: "Okay" }]);
+    return null;
+  }
+};
+
+// /api/post_reward [POST]
