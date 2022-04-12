@@ -24,3 +24,11 @@ export type ReceivedRewards = {
   reward_id: number;
   visitor_id: number;
 };
+
+export type EligibleRewards = {
+  description: string;
+  id: number;
+  minimum_stamps: number;
+  name: string;
+  picture: string;
+};

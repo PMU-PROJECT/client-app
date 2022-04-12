@@ -33,6 +33,8 @@ export const UserReducer = (
         last_name,
         profile_picture,
         stamps,
+        given_rewards,
+        eligible_rewards,
       } = action.payload.userData;
       const user = new User(
         first_name,
@@ -41,9 +43,11 @@ export const UserReducer = (
         employee_info,
         is_admin,
         profile_picture,
-        stamps
+        stamps,
+        given_rewards,
+        eligible_rewards
       );
-      // console.log(user);
+
       return {
         ...state,
         token: action.payload.token,
