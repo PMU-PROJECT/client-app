@@ -37,7 +37,7 @@ export const RewardsScreen = () => {
   const [selected, setSelected] = useState<null | number>(null);
 
   const giveReward = async () => {
-    console.log(selected);
+    // console.log(selected);
     if (selected === null) {
       Alert.alert("Error!", "Not Selected Reward.", [{ text: "Okay" }]);
     } else {
@@ -113,23 +113,25 @@ export const RewardsScreen = () => {
           marginVertical: 10,
         }}
       >
-        <TouchableOpacity
-          style={{
-            width: 150,
-            height: 55,
-            backgroundColor: new_green,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 15,
-          }}
-          onPress={async () => {
-            await giveReward();
-          }}
-        >
-          <Text>
-            {language && language === "en" ? "Give Reward" : "Дай Награда"}
-          </Text>
-        </TouchableOpacity>
+        {isEmployee ? (
+          <TouchableOpacity
+            style={{
+              width: 150,
+              height: 55,
+              backgroundColor: new_green,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 15,
+            }}
+            onPress={async () => {
+              await giveReward();
+            }}
+          >
+            <Text>
+              {language && language === "en" ? "Give Reward" : "Дай Награда"}
+            </Text>
+          </TouchableOpacity>
+        ) : null}
       </View>
     </View>
   );

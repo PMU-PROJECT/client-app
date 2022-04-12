@@ -7,7 +7,7 @@ export type Site = {
   is_stamped: boolean;
 };
 
-export type Details = {
+export type SiteDetails = {
   city: string;
   description: string;
   employees: [] | null;

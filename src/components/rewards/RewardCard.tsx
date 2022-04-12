@@ -57,7 +57,7 @@ export const RewardCard: React.FC<RewardCardProps> = ({
           <Text
             style={[
               {
-                fontSize: 14,
+                fontSize: 16,
               },
               theme === "dark" ? styles.textDark : styles.textLight,
             ]}
@@ -65,7 +65,7 @@ export const RewardCard: React.FC<RewardCardProps> = ({
             {"Title"}
           </Text>
           <ScalableText
-            fontSize={14}
+            fontSize={16}
             text={`Lorem ipsum dolor sit amet, consectetur adipisicing elit.`}
             numberOfLines={2}
             styles={[theme === "dark" ? styles.textDark : styles.textLight]}

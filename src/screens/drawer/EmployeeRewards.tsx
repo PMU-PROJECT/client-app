@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
 import Scanner from "../../components/QR/scanner";
 import { ColorSchema } from "../../constants/Colors";

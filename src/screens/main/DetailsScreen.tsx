@@ -10,13 +10,13 @@ import { getSiteInfo } from "../../utils/makeRequestToServer";
 import { PlacesNavProps } from "../../navigation/types";
 import { useSelector } from "react-redux";
 import { UserState } from "../../store/reducers/UserReducer";
-import { Details } from "../../models/Site";
+import { SiteDetails } from "../../models/Site";
 import { Loading } from "../../components/general/Loading";
 
 export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
   const id = route.params.id;
   const token = useSelector((state: { user: UserState }) => state.user.token);
-  const [details, setDetails] = useState<Details | null>(null);
+  const [details, setDetails] = useState<SiteDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const theme = useSelector((state: { user: UserState }) => state.user.theme);

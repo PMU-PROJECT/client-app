@@ -1,6 +1,8 @@
 import { Alert } from "react-native";
 import { Rewards } from "../models/Rewards";
-import { Details } from "../models/Site";
+import { Site, SiteDetails } from "../models/Site";
+import { TokenResponse } from "expo-auth-session";
+import { UserInfo } from "../models/UserInfo";
 
 const linkURL = "http://0af1-78-90-52-121.eu.ngrok.io/api/";
 
@@ -50,7 +52,7 @@ export const makeAuthRequest = async (
 };
 
 // /api/get_self_info [GET]
-export const getSelfInfo = async (token: string): Promise<[] | null> => {
+export const getSelfInfo = async (token: string): Promise<UserInfo | null> => {
   try {
     const res = await fetch(`${linkURL}get_self_info`, {
       mode: "cors",
@@ -80,7 +82,7 @@ export const getSelfInfo = async (token: string): Promise<[] | null> => {
 export const fetchAllSites = async (
   token: string,
   filter: "all" | "visited" | "unvisited" = "all"
-): Promise<[] | null> => {
+): Promise<Site[] | null> => {
   try {
     // console.log(token);
     const res = await fetch(`${linkURL}get_all_sites?filter=${filter}`, {
@@ -134,7 +136,10 @@ export const getQRCode = async (token: string): Promise<string | null> => {
 };
 
 // /api/make_stamp [POST]
-export const receiveStamp = async (token: string, id_token: string) => {
+export const receiveStamp = async (
+  token: string,
+  id_token: string
+): Promise<string | null> => {
   try {
     let formData = new FormData();
     formData.append("id_token", id_token);
@@ -173,7 +178,9 @@ export const receiveStamp = async (token: string, id_token: string) => {
 };
 
 // /api/refresh_token [POST]
-export const refreshAuthToken = async (oldToken: string) => {
+export const refreshAuthToken = async (
+  oldToken: string
+): Promise<string | null> => {
   try {
     const res = await fetch(`${linkURL}refresh_token`, {
       method: "GET",
@@ -195,7 +202,10 @@ export const refreshAuthToken = async (oldToken: string) => {
 };
 
 // /api/get_site_info [GET]
-export const getSiteInfo = async (id: number, token: string) => {
+export const getSiteInfo = async (
+  id: number,
+  token: string
+): Promise<SiteDetails | null> => {
   try {
     const res = await fetch(`${linkURL}get_site_info?id=${id}`, {
       method: "GET",
@@ -205,7 +215,7 @@ export const getSiteInfo = async (id: number, token: string) => {
       },
     });
     // console.log(JSON.stringify(res));
-    const data: Details = await res.json();
+    const data: SiteDetails = await res.json();
     // console.log(data);
     return data;
   } catch (err: any) {
@@ -218,13 +228,96 @@ export const getSiteInfo = async (id: number, token: string) => {
 };
 
 // /api/oauth2/google [POST]
+export const googleAuthRequest = async (
+  googleToken: TokenResponse
+): Promise<string | null> => {
+  try {
+    const res = await fetch(`${linkURL}/oauth2/google`, {
+      mode: "cors",
+      method: "POST",
+    });
+
+    // console.log(JSON.stringify(res));
+    if (res.status !== 200) {
+      const text = await res.json();
+      throw new Error(text.error);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (err: any) {
+    console.log("Error googleAuthRequest");
+    console.log(err);
+    Alert.alert(`Error`, `${err}`, [{ text: "Okay" }]);
+    return null;
+  }
+};
 
 // /api/get_employee_info [GET]
+export const getEmployeeInfo = async (
+  token: string,
+  id: number
+): Promise<{} | null> => {
+  try {
+    const res = await fetch(`${linkURL}get_employee_info?id=${id}`, {
+      mode: "cors",
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    // console.log(JSON.stringify(res));
+    if (res.status !== 200) {
+      const text = await res.json();
+      throw new Error(text.error);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (err: any) {
+    console.log("Error getEmployeeInfo");
+    console.log(err);
+    Alert.alert(`Error`, `${err}`, [{ text: "Okay" }]);
+    return null;
+  }
+};
 
 // /api/get_user_info [GET]
+export const getUserInfo = async (
+  token: string,
+  id: number
+): Promise<UserInfo | null> => {
+  try {
+    const res = await fetch(`${linkURL}get_user_info?id=${id}`, {
+      mode: "cors",
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    // console.log(JSON.stringify(res));
+    if (res.status !== 200) {
+      const text = await res.json();
+      throw new Error(text.error);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (err: any) {
+    console.log("Error getUserInfo");
+    console.log(err);
+    Alert.alert(`Error`, `${err}`, [{ text: "Okay" }]);
+    return null;
+  }
+};
 
 // /api/get_eligible_rewards [GET]
-export const getRewards = async (token: string, id_token: string) => {
+export const getRewards = async (
+  token: string,
+  id_token: string
+): Promise<Rewards | null> => {
   try {
     const res = await fetch(
       `${linkURL}/get_eligible_rewards?id_token=${id_token}`,
@@ -248,7 +341,7 @@ export const getRewards = async (token: string, id_token: string) => {
     console.log(data);
     return data;
   } catch (err: any) {
-    console.log("Error get");
+    console.log("Error getRewards");
     console.log(err);
     Alert.alert(`Error`, `${err}`, [{ text: "Okay" }]);
     return null;
@@ -256,3 +349,38 @@ export const getRewards = async (token: string, id_token: string) => {
 };
 
 // /api/post_reward [POST]
+export const giveRewards = async (
+  token: string,
+  id_token: string,
+  reward_id: number
+): Promise<string | null> => {
+  try {
+    const formData = new FormData();
+    formData.append("id_token", id_token);
+    formData.append("reward_id", `${reward_id}`);
+    const res = await fetch(`${linkURL}/post_reward`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Authorization: token,
+      },
+      body: formData,
+    });
+
+    console.log(JSON.stringify(res));
+
+    if (res.status !== 200) {
+      const text = await res.json();
+      throw new Error(text.error);
+    }
+
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err: any) {
+    console.log("Error giveRewards");
+    console.log(err);
+    Alert.alert(`Error`, `${err}`, [{ text: "Okay" }]);
+    return null;
+  }
+};
