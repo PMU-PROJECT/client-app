@@ -1,5 +1,5 @@
 export type Rewards = {
-  given_rewards: GivenRewards[];
+  eligible_rewards: EligibleRewards[];
   received_rewards: ReceivedRewards[];
 };
 
@@ -10,7 +10,7 @@ export type GivenRewards = {
   minimum_stamps: number;
   name: string;
   picture: string;
-  id: number;
+  reward_id: number;
   visitor_id: number;
 };
 
@@ -27,7 +27,7 @@ export type ReceivedRewards = {
 
 export type EligibleRewards = {
   description: string;
-  id: number;
+  reward_id: number;
   minimum_stamps: number;
   name: string;
   picture: string;

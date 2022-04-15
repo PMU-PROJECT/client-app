@@ -13,6 +13,9 @@ import { useSelector } from "react-redux";
 import { UserState } from "../../store/reducers/UserReducer";
 import { getRewards, receiveStamp } from "../../utils/makeRequestToServer";
 import { ScalableText } from "../general/ScalableText";
+import { useNavigation } from "@react-navigation/native";
+import { DrawerParamList } from "../../navigation/types";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
 
 type ScannerProps = {
   type: "stamp" | "reward";
@@ -30,6 +33,11 @@ export default function Scanner({ type }: ScannerProps) {
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
 
   const token = useSelector((state: { user: UserState }) => state.user.token);
+
+  const navigation: DrawerNavigationProp<
+    DrawerParamList,
+    "EmployeeRewards" | "ScanQR"
+  > = useNavigation();
 
   const [hasPermission, setHasPermission] = useState<null | boolean>(null);
   const [scanned, setScanned] = useState<boolean>(false);
@@ -59,6 +67,9 @@ export default function Scanner({ type }: ScannerProps) {
         const res = await receiveStamp(token!, params.data);
       } else if (type === "reward") {
         const res = await getRewards(token!, params.data);
+        if (res) {
+          navigation.navigate("Rewards", { rewards: res.eligible_rewards });
+        }
       }
     } else {
       Alert.alert("Invalid Scan!", "Please scan a valid QR code!", [

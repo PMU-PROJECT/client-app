@@ -1,6 +1,6 @@
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { ColorSchema } from "../../constants/Colors";
 import { UserActions } from "../../store/actions/UserActions";
@@ -168,10 +168,37 @@ export const LoginForm: React.FC = () => {
                 color={"white"}
                 backgroundColor={ColorSchema.default.dark_green}
                 onPress={async () => {
-                  if (token) {
-                    await getUserData();
-                  } else {
-                    promptAsync({ showInRecents: true });
+                  // if (token) {
+                  //   await getUserData();
+                  // } else {
+                  //   promptAsync({ showInRecents: true });
+                  // }
+                  try {
+                    const res = await fetch(
+                      `http://0af1-78-90-52-121.eu.ngrok.io/api/oauth2/google`
+                    );
+
+                    console.log(JSON.stringify(res));
+                    console.log(res.url);
+                    // if (res.status !== 200) {
+                    //   const text = await res.json();
+                    //   throw new Error(text.error);
+                    // }
+                    // {"web":{"client_id":"798626048018-mimb79khi9lgbs8ek99q6nccl04n7t78.apps.googleusercontent.com",
+                    // "project_id":"pmu-project-343407","auth_uri":"https://accounts.google.com/o/oauth2/auth",
+                    // "token_uri":"https://oauth2.googleapis.com/token",
+                    // "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+                    // "client_secret":"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",
+                    // "redirect_uris":["http://0af1-78-90-52-121.eu.ngrok.io/api/oauth2/google"]}}
+
+                    const data = await res.json();
+                    console.log(data);
+                    return data;
+                  } catch (err: any) {
+                    console.log("Error googleAuthRequest");
+                    console.log(err);
+                    Alert.alert(`Error`, `${err}`, [{ text: "Okay" }]);
+                    return null;
                   }
                 }}
               >

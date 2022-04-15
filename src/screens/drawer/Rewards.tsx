@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   Alert,
   FlatList,
+  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -10,17 +11,22 @@ import {
 import { useSelector } from "react-redux";
 import { RewardCard } from "../../components/rewards/RewardCard";
 import { ColorSchema, new_green } from "../../constants/Colors";
-import { EligibleRewards } from "../../models/Rewards";
+import { DrawerNavProps } from "../../navigation/types";
 import { UserState } from "../../store/reducers/UserReducer";
 
-export const RewardsScreen = () => {
-  const rewards: EligibleRewards[] | null = useSelector(
-    (state: { user: UserState }) => {
-      if (state.user.user) {
-        return state.user.user.eligible_rewards;
-      } else return null;
-    }
-  );
+export const RewardsScreen = ({ route }: DrawerNavProps<"Rewards">) => {
+  // const rewards: EligibleRewards[] | null = useSelector(
+  //   (state: { user: UserState }) => {
+  //     if (state.user.user) {
+  //       return state.user.user.eligible_rewards;
+  //     } else return null;
+  //   }
+  // );
+
+  const rewards = route.params.rewards;
+  const token = useSelector((state: { user: UserState }) => state.user.token);
+  console.log(token);
+
   const isEmployee: boolean = useSelector((state: { user: UserState }) => {
     if (state.user.user) {
       if (state.user.user.employeeInfo) {
@@ -45,6 +51,80 @@ export const RewardsScreen = () => {
     }
   };
 
+  const userView = (
+    <FlatList
+      style={{ marginTop: 25 }}
+      keyExtractor={(item) => `${item.reward_id}`}
+      renderItem={({ item }) => (
+        <RewardCard
+          id={item.reward_id}
+          name={item.name}
+          picture={item.picture}
+          description={item.description}
+          selected={selected}
+        />
+      )}
+      data={rewards}
+    />
+  );
+
+  const employeeView = (
+    <>
+      <FlatList
+        style={{ marginTop: 25 }}
+        keyExtractor={(item) => `${item.reward_id}`}
+        renderItem={({ item }) => (
+          <RewardCard
+            id={item.reward_id}
+            name={item.name}
+            picture={item.picture}
+            description={item.description}
+            setSelected={setSelected}
+            selected={selected}
+          />
+        )}
+        data={rewards}
+      />
+
+      <View
+        style={{
+          alignItems: "flex-end",
+          marginHorizontal: 25,
+          marginVertical: 10,
+        }}
+      >
+        {/* <Image
+          source={{
+            uri: "http://0af1-78-90-52-121.eu.ngrok.io/imageserver/rewards?name=pride_and_accomplishment.jpg",
+            headers: {
+              Authorization:
+                "c37dfed08ae797ecb6b8c88b310c305f890558f2a189ff455d5b6559979b5a275d5df9866ebf15eb9e5ccab85755ec6bd39ffcd717824c2a8b272dcbf6985e3118c63bc720380dac43002ffd",
+            },
+          }}
+          style={{ width: 50, height: 50 }}
+        /> */}
+
+        <TouchableOpacity
+          style={{
+            width: 150,
+            height: 55,
+            backgroundColor: new_green,
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 15,
+          }}
+          onPress={async () => {
+            await giveReward();
+          }}
+        >
+          <Text>
+            {language && language === "en" ? "Give Reward" : "Дай Награда"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </>
+  );
+
   return (
     <View
       style={[
@@ -57,82 +137,7 @@ export const RewardsScreen = () => {
         },
       ]}
     >
-      {isEmployee ? (
-        <FlatList
-          style={{ marginTop: 25 }}
-          keyExtractor={(item) => `${item.id}`}
-          renderItem={({ item }) => (
-            <RewardCard
-              id={item.id}
-              setSelected={setSelected}
-              selected={selected}
-            />
-          )}
-          data={
-            rewards && rewards.length !== 0
-              ? rewards
-              : ([
-                  { id: 1, data: 1 },
-                  { id: 2, data: 2 },
-                  { id: 3, data: 3 },
-                  { id: 4, data: 4 },
-                  { id: 5, data: 5 },
-                  { id: 6, data: 6 },
-                  { id: 7, data: 7 },
-                  { id: 8, data: 8 },
-                  { id: 9, data: 9 },
-                  { id: 10, data: 10 },
-                  { id: 11, data: 11 },
-                ] as any)
-          }
-        />
-      ) : (
-        <FlatList
-          style={{ marginTop: 25 }}
-          keyExtractor={(item) => `${item.id}`}
-          renderItem={({ item }) => (
-            <RewardCard id={item.id} selected={selected} />
-          )}
-          data={
-            rewards && rewards.length !== 0
-              ? rewards
-              : ([
-                  { id: 1, data: 1 },
-                  { id: 2, data: 2 },
-                  { id: 3, data: 3 },
-                  { id: 4, data: 4 },
-                  { id: 5, data: 5 },
-                ] as any)
-          }
-        />
-      )}
-      <View
-        style={{
-          alignItems: "flex-end",
-          marginHorizontal: 25,
-          marginVertical: 10,
-        }}
-      >
-        {isEmployee ? (
-          <TouchableOpacity
-            style={{
-              width: 150,
-              height: 55,
-              backgroundColor: new_green,
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 15,
-            }}
-            onPress={async () => {
-              await giveReward();
-            }}
-          >
-            <Text>
-              {language && language === "en" ? "Give Reward" : "Дай Награда"}
-            </Text>
-          </TouchableOpacity>
-        ) : null}
-      </View>
+      {isEmployee ? employeeView : userView}
     </View>
   );
 };

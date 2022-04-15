@@ -6,9 +6,13 @@ import { ColorSchema, new_green } from "../../constants/Colors";
 import { UserState } from "../../store/reducers/UserReducer";
 import { windowWidth } from "../../utils/Dimensions";
 import { ScalableText } from "../general/ScalableText";
+import { createRewardsImageUrl } from "../../utils/imageUrls";
 
 type RewardCardProps = {
   id: number;
+  picture: string;
+  description: string;
+  name: string;
   selected?: number | null;
   setSelected?: Function;
 };
@@ -19,10 +23,14 @@ const img2 =
 
 export const RewardCard: React.FC<RewardCardProps> = ({
   id,
+  description,
+  name,
+  picture,
   selected,
   setSelected,
 }) => {
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
+  const token = useSelector((state: { user: UserState }) => state.user.token);
 
   return (
     <TouchableOpacity
@@ -52,7 +60,15 @@ export const RewardCard: React.FC<RewardCardProps> = ({
             }}
           />
         ) : null}
-        <Image source={{ uri: img2 }} style={styles.image} />
+        <Image
+          source={{
+            uri: createRewardsImageUrl(picture),
+            headers: {
+              Authorization: token ? token : "",
+            },
+          }}
+          style={styles.image}
+        />
         <View style={{ alignItems: "center" }}>
           <Text
             style={[
@@ -62,11 +78,11 @@ export const RewardCard: React.FC<RewardCardProps> = ({
               theme === "dark" ? styles.textDark : styles.textLight,
             ]}
           >
-            {"Title"}
+            {name}
           </Text>
           <ScalableText
             fontSize={16}
-            text={`Lorem ipsum dolor sit amet, consectetur adipisicing elit.`}
+            text={description}
             numberOfLines={2}
             styles={[theme === "dark" ? styles.textDark : styles.textLight]}
           />

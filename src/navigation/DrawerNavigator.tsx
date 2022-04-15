@@ -8,6 +8,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { useSelector } from "react-redux";
 import { CustomDrawer } from "../components/drawer/CustomDrawer";
 import { ColorSchema } from "../constants/Colors";
+import { EligibleRewards } from "../models/Rewards";
 import { EmployeeRewardsScreen } from "../screens/drawer/EmployeeRewards";
 import { RewardsScreen } from "../screens/drawer/Rewards";
 import { ScanQRScreen } from "../screens/drawer/ScanQR";
@@ -24,6 +25,14 @@ export const DrawerNav: React.FC = ({}) => {
     (state: { user: UserState }) => state.user.language
   );
   const user = useSelector((state: { user: UserState }) => state.user.user);
+
+  const rewards: EligibleRewards[] = useSelector(
+    (state: { user: UserState }) => {
+      if (state.user.user) {
+        return state.user.user.eligible_rewards;
+      } else return [];
+    }
+  );
 
   return (
     <DrawerNavigator.Navigator
@@ -122,6 +131,7 @@ export const DrawerNav: React.FC = ({}) => {
       />
       <DrawerNavigator.Screen
         name="Rewards"
+        initialParams={{ rewards }}
         options={({ navigation }) => ({
           title: language === "en" ? "Rewards" : "Награди",
           headerShown: true,

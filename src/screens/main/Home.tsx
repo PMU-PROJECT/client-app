@@ -142,8 +142,12 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
         >
           <FlatList
             // columnWrapperStyle={{ justifyContent: "space-between" }}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ marginTop: 10, paddingBottom: 50 }}
+            showsVerticalScrollIndicator={true}
+            contentContainerStyle={{
+              // flex: 1,
+              marginTop: 10,
+              paddingBottom: 225,
+            }}
             numColumns={2}
             data={sites}
             keyExtractor={(item, _idx) => `${item.id}`}

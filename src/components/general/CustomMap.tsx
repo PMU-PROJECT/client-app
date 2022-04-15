@@ -1,12 +1,6 @@
 import React, { LegacyRef, useRef } from "react";
-import MapView, { Camera } from "react-native-maps";
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import MapView from "react-native-maps";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import { Marker } from "react-native-maps";
 import { windowHeight, windowWidth } from "../../utils/Dimensions";
 // import Geolocation from "react-native-geolocation-service";
@@ -48,8 +42,8 @@ export const CustomMap: React.FC<MapProps> = ({
   //   });
   // };
 
-  console.log(userLatitude, userLongitude);
-  console.log(markerLatitude, markerLongitude);
+  // console.log(userLatitude, userLongitude);
+  // console.log(markerLatitude, markerLongitude);
 
   return (
     <View style={styles.container}>

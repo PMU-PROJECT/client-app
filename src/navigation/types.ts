@@ -6,6 +6,8 @@ import {
   // NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { EligibleRewards, GivenRewards } from "../models/Rewards";
 
 export type AuthParamList = {
   Login: undefined;
@@ -45,11 +47,13 @@ export type DrawerParamList = {
   Tabs: undefined;
   Settings: undefined;
   ScanQR: undefined;
-  Rewards: undefined;
+  Rewards: {
+    rewards: EligibleRewards[] | GivenRewards[];
+  };
   EmployeeRewards: undefined;
 };
 
 export type DrawerNavProps<T extends keyof DrawerParamList> = {
-  navigation: StackNavigationProp<DrawerParamList, T>;
+  navigation: DrawerNavigationProp<DrawerParamList, T>;
   route: RouteProp<DrawerParamList, T>;
 };

@@ -330,7 +330,7 @@ export const getRewards = async (
       }
     );
 
-    console.log(JSON.stringify(res));
+    // console.log(JSON.stringify(res));
 
     if (res.status !== 200) {
       const text = await res.json();

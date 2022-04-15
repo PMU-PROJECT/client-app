@@ -9,7 +9,7 @@ import {
 import { useSelector } from "react-redux";
 import { UserState } from "../../store/reducers/UserReducer";
 import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import { createImageUrl } from "../../utils/imageUrls";
+import { createSitesImageUrl } from "../../utils/imageUrls";
 import ImageButton from "./ImageButton";
 import { VisitedBadge } from "./VisitedBadge";
 
@@ -43,7 +43,7 @@ export const PlaceCard: React.FC<CardProps> = (props: CardProps) => {
             source={
               {
                 // velyanova-kushta.jpg
-                uri: createImageUrl(props.imageUrl),
+                uri: createSitesImageUrl(props.imageUrl),
                 // uri: imgUri,
                 headers: {
                   Authorization: token,
