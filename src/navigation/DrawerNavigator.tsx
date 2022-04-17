@@ -9,8 +9,9 @@ import { useSelector } from "react-redux";
 import { CustomDrawer } from "../components/drawer/CustomDrawer";
 import { ColorSchema } from "../constants/Colors";
 import { EligibleRewards } from "../models/Rewards";
+import { EligibleRewardsScreen } from "../screens/drawer/EligibleRewards";
 import { EmployeeRewardsScreen } from "../screens/drawer/EmployeeRewards";
-import { RewardsScreen } from "../screens/drawer/Rewards";
+import { GivenRewardsScreen } from "../screens/drawer/GivenRewards";
 import { ScanQRScreen } from "../screens/drawer/ScanQR";
 import { SettingScreen } from "../screens/drawer/Settings";
 import { UserState } from "../store/reducers/UserReducer";
@@ -130,10 +131,9 @@ export const DrawerNav: React.FC = ({}) => {
         component={SettingScreen}
       />
       <DrawerNavigator.Screen
-        name="Rewards"
-        initialParams={{ rewards }}
+        name="GivenRewards"
         options={({ navigation }) => ({
-          title: language === "en" ? "Rewards" : "Награди",
+          title: language === "en" ? "Collected Rewards" : "Получени Награди",
           headerShown: true,
           headerTintColor:
             theme && theme === "dark"
@@ -165,10 +165,48 @@ export const DrawerNav: React.FC = ({}) => {
             />
           ),
         })}
-        component={RewardsScreen}
+        component={GivenRewardsScreen}
       />
       {user?.employeeInfo !== null ? (
         <>
+          <DrawerNavigator.Screen
+            name="EligibleRewards"
+            initialParams={{ rewards }}
+            options={({ navigation }) => ({
+              title: language === "en" ? "Eligible Rewards" : "Награди",
+              headerShown: true,
+              headerTintColor:
+                theme && theme === "dark"
+                  ? ColorSchema.dark.text
+                  : ColorSchema.light.text,
+              headerStyle: {
+                backgroundColor:
+                  theme && theme === "dark"
+                    ? ColorSchema.dark.background
+                    : ColorSchema.light.background,
+                borderBottomWidth: theme && theme === "dark" ? 1 : 1,
+                borderBottomColor: theme && theme === "dark" ? "grey" : "grey",
+              },
+              drawerIcon: ({ color }) => (
+                <FontAwesome5 name="gift" size={24} color={color} />
+              ),
+              headerLeft: () => (
+                <Ionicons
+                  name="menu"
+                  size={24}
+                  color={
+                    theme && theme === "dark"
+                      ? ColorSchema.dark.text
+                      : ColorSchema.light.text
+                  }
+                  onPress={() => {
+                    navigation.toggleDrawer();
+                  }}
+                />
+              ),
+            })}
+            component={EligibleRewardsScreen}
+          />
           <DrawerNavigator.Screen
             name="ScanQR"
             options={({ navigation }) => ({

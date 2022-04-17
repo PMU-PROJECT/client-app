@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { UserState } from "../../store/reducers/UserReducer";
 import { SiteDetails } from "../../models/Site";
 import { Loading } from "../../components/general/Loading";
+import { ErrorMessage } from "../../components/general/ErrorMessage";
 
 export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
   const id = route.params.id;
@@ -20,6 +21,9 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
+  const language = useSelector(
+    (state: { user: UserState }) => state.user.language
+  );
 
   useEffect(() => {
     const getInfo = async () => {
@@ -151,18 +155,20 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
                 {details!.city.trim()}, {details!.region.trim()}
               </Text>
             </View>
-            <Text
-              style={[
-                styles.description,
-                theme && theme === "dark"
-                  ? styles.textDescriptionDark
-                  : styles.textLight,
-              ]}
-            >
-              {"\n"}
-              {details!.description}
-              {"\n"}
-            </Text>
+            <View style={{ padding: 20 }}>
+              <Text
+                style={[
+                  styles.description,
+                  theme && theme === "dark"
+                    ? styles.textDescriptionDark
+                    : styles.textLight,
+                ]}
+              >
+                {"\n"}
+                {details!.description}
+                {"\n"}
+              </Text>
+            </View>
             <View
               style={{
                 flexDirection: "row",
@@ -187,16 +193,9 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
     );
   }
   return (
-    <View>
-      <Text
-        style={[
-          { fontSize: 25, fontWeight: "bold", textAlign: "center" },
-          theme && theme === "dark" ? styles.textDark : styles.textLight,
-        ]}
-      >
-        Sorry we Fucked
-      </Text>
-    </View>
+    <ErrorMessage
+      text={language === "en" ? "Error. Try to refresh." : "Грешка."}
+    />
   );
 };
 
@@ -230,7 +229,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 40,
   },
   description: {
-    textAlign: "center",
+    textAlign: "justify",
     fontSize: 17,
     // fontWeight: "bold",
   },

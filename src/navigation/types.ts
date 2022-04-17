@@ -47,9 +47,10 @@ export type DrawerParamList = {
   Tabs: undefined;
   Settings: undefined;
   ScanQR: undefined;
-  Rewards: {
+  EligibleRewards: {
     rewards: EligibleRewards[] | GivenRewards[];
   };
+  GivenRewards: undefined;
   EmployeeRewards: undefined;
 };
 

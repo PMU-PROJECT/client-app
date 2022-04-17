@@ -13,10 +13,9 @@ import { Loading } from "../../components/general/Loading";
 import { windowWidth } from "../../utils/Dimensions";
 import { Site } from "../../models/Site";
 
-import GestureRecognizer, {
-  GestureRecognizerProps,
-} from "react-native-swipe-gestures";
+import GestureRecognizer from "react-native-swipe-gestures";
 import { mapCategory } from "../../utils/mapCategories";
+import { ErrorMessage } from "../../components/general/ErrorMessage";
 
 export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
@@ -143,11 +142,7 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
           <FlatList
             // columnWrapperStyle={{ justifyContent: "space-between" }}
             showsVerticalScrollIndicator={true}
-            contentContainerStyle={{
-              // flex: 1,
-              marginTop: 10,
-              paddingBottom: 225,
-            }}
+            contentContainerStyle={{ marginTop: 10, paddingBottom: 50 }}
             numColumns={2}
             data={sites}
             keyExtractor={(item, _idx) => `${item.id}`}
@@ -169,16 +164,11 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
           />
         </GestureRecognizer>
       ) : (
-        <View>
-          <Text
-            style={[
-              { fontSize: 25, fontWeight: "bold", textAlign: "center" },
-              theme && theme === "dark" ? styles.darkText : styles.lightText,
-            ]}
-          >
-            Sorry
-          </Text>
-        </View>
+        <ErrorMessage
+          text={
+            language === "en" ? "No sites found. Try to reload." : "Грешка."
+          }
+        />
       )}
     </View>
   );
