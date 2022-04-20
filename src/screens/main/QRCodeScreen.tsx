@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { usePreventScreenCapture } from "expo-screen-capture";
 import { useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import { PlacesNavProps } from "../../navigation/types";
 import { UserState } from "../../store/reducers/UserReducer";
 import { getQRCode } from "../../utils/makeRequestToServer";
 import { Loading } from "../../components/general/Loading";
+import { ErrorMessage } from "../../components/general/ErrorMessage";
 
 export const QRCodeScreen = ({}: PlacesNavProps<"Home">) => {
   usePreventScreenCapture();
@@ -34,11 +35,12 @@ export const QRCodeScreen = ({}: PlacesNavProps<"Home">) => {
       setLoading(false);
     };
 
-    // setInterval(() => {
-    if (loading === false) {
-      generateNewQR();
-    }
-    // }, 30000);
+    generateNewQR();
+    setInterval(() => {
+      if (loading === false) {
+        generateNewQR();
+      }
+    }, 20000);
   }, []);
 
   if (loading) {
@@ -58,16 +60,7 @@ export const QRCodeScreen = ({}: PlacesNavProps<"Home">) => {
           },
         ]}
       >
-        <Text
-          style={{
-            color:
-              theme && theme === "dark"
-                ? ColorSchema.dark.text
-                : ColorSchema.light.text,
-          }}
-        >
-          NO QR
-        </Text>
+        <ErrorMessage text="No QR" />
       </View>
     );
   }

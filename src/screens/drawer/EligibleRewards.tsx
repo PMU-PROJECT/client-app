@@ -13,6 +13,7 @@ import { RewardCard } from "../../components/rewards/RewardCard";
 import { ColorSchema, new_green } from "../../constants/Colors";
 import { DrawerNavProps } from "../../navigation/types";
 import { UserState } from "../../store/reducers/UserReducer";
+import { giveRewards } from "../../utils/makeRequestToServer";
 
 export const EligibleRewardsScreen = ({
   route,
@@ -26,7 +27,8 @@ export const EligibleRewardsScreen = ({
   // );
 
   const rewards = route.params.rewards;
-  // const token = useSelector((state: { user: UserState }) => state.user.token);
+  const token_id = route.params.token_id;
+  const token = useSelector((state: { user: UserState }) => state.user.token);
 
   const canReward: boolean = useSelector((state: { user: UserState }) => {
     if (state.user.user) {
@@ -44,13 +46,38 @@ export const EligibleRewardsScreen = ({
   const [selected, setSelected] = useState<null | number>(null);
 
   const giveReward = async () => {
+    if (!token_id) return;
     // console.log(selected);
     if (selected === null) {
       Alert.alert("Error!", "Not Selected Reward.", [{ text: "Okay" }]);
     } else {
-      Alert.alert("Yay!", `Selected ${selected}`, [{ text: "Okay" }]);
+      // Alert.alert("Yay!", `Selected ${selected}`, [{ text: "Okay" }]);
+      if (token) {
+        const res = await giveRewards(token, token_id, selected);
+        if (res !== null) {
+          Alert.alert("Yay!", `${res.message}`, [{ text: "Okay" }]);
+        }
+      }
     }
   };
+
+  if (rewards.length === 0) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor:
+              theme && theme === "dark"
+                ? ColorSchema.dark.background
+                : ColorSchema.light.background,
+          },
+        ]}
+      >
+        <ErrorMessage text="No Rewards!" />
+      </View>
+    );
+  }
 
   return (
     <View
@@ -89,17 +116,6 @@ export const EligibleRewardsScreen = ({
               marginVertical: 10,
             }}
           >
-            {/* <Image
-          source={{
-            uri: "http://0af1-78-90-52-121.eu.ngrok.io/imageserver/rewards?name=pride_and_accomplishment.jpg",
-            headers: {
-              Authorization:
-                "c37dfed08ae797ecb6b8c88b310c305f890558f2a189ff455d5b6559979b5a275d5df9866ebf15eb9e5ccab85755ec6bd39ffcd717824c2a8b272dcbf6985e3118c63bc720380dac43002ffd",
-            },
-          }}
-          style={{ width: 50, height: 50 }}
-        /> */}
-
             <TouchableOpacity
               style={{
                 width: 150,
@@ -135,7 +151,6 @@ export const EligibleRewardsScreen = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   title: {
     textAlign: "center",

@@ -232,6 +232,7 @@ export const googleAuthRequest = async (
   googleToken: TokenResponse
 ): Promise<string | null> => {
   try {
+    console.log(googleToken);
     const res = await fetch(`${linkURL}/oauth2/google`, {
       mode: "cors",
       method: "POST",
@@ -320,7 +321,7 @@ export const getRewards = async (
 ): Promise<Rewards | null> => {
   try {
     const res = await fetch(
-      `${linkURL}/get_eligible_rewards?id_token=${id_token}`,
+      `${linkURL}get_eligible_rewards?id_token=${id_token}`,
       {
         method: "GET",
         mode: "cors",
@@ -338,7 +339,7 @@ export const getRewards = async (
     }
 
     const data: Rewards = await res.json();
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (err: any) {
     console.log("Error getRewards");
@@ -353,12 +354,12 @@ export const giveRewards = async (
   token: string,
   id_token: string,
   reward_id: number
-): Promise<string | null> => {
+): Promise<{ message: string } | null> => {
   try {
     const formData = new FormData();
     formData.append("id_token", id_token);
     formData.append("reward_id", `${reward_id}`);
-    const res = await fetch(`${linkURL}/post_reward`, {
+    const res = await fetch(`${linkURL}post_reward`, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -367,7 +368,7 @@ export const giveRewards = async (
       body: formData,
     });
 
-    console.log(JSON.stringify(res));
+    // console.log(JSON.stringify(res));
 
     if (res.status !== 200) {
       const text = await res.json();
@@ -375,7 +376,7 @@ export const giveRewards = async (
     }
 
     const data = await res.json();
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (err: any) {
     console.log("Error giveRewards");

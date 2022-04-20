@@ -77,7 +77,7 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
 
   if (!loading && details !== null) {
     return (
-      <View
+      <ScrollView
         style={[
           styles.container,
           {
@@ -189,7 +189,7 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
             </View>
           </ScrollView>
         </View>
-      </View>
+      </ScrollView>
     );
   }
   return (

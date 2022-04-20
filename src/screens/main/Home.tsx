@@ -23,6 +23,40 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
     (state: { user: UserState }) => state.user.language
   );
 
+  // const renderLeftActions = (progress: any, dragX) => {
+  //   const trans = dragX.interpolate({
+  //     inputRange: [0, 50, 100, 101],
+  //     outputRange: [-20, 0, 0, 1],
+  //   });
+  //   return (
+  //     <View>
+  //       <FlatList
+  //         // columnWrapperStyle={{ justifyContent: "space-between" }}
+  //         showsVerticalScrollIndicator={true}
+  //         contentContainerStyle={{ marginTop: 10, paddingBottom: 50 }}
+  //         numColumns={2}
+  //         data={sites}
+  //         keyExtractor={(item, _idx) => `${item.id}`}
+  //         renderItem={({ item }: { item: Site }) => (
+  //           <PlaceCard
+  //             key={item.id}
+  //             onPress={() => {
+  //               navigation.navigate("PlaceDetails", {
+  //                 id: item.id,
+  //                 title: item.region,
+  //               });
+  //             }}
+  //             description={`${item.city.trim()}`}
+  //             title={item.name}
+  //             imageUrl={item.image}
+  //             visited={item.is_stamped}
+  //           />
+  //         )}
+  //       />
+  //     </View>
+  //   );
+  // };
+
   const onSwipeLeft = () => {
     // console.log("SWIPE_LEFT");
     setCategoryIndex((currentIndex) => {
@@ -135,14 +169,14 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
           onSwipeLeft={() => onSwipeLeft()}
           onSwipeRight={() => onSwipeRight()}
           config={{
-            velocityThreshold: 0.2,
+            velocityThreshold: 0.4,
             directionalOffsetThreshold: 80,
           }}
         >
           <FlatList
             // columnWrapperStyle={{ justifyContent: "space-between" }}
             showsVerticalScrollIndicator={true}
-            contentContainerStyle={{ marginTop: 10, paddingBottom: 50 }}
+            contentContainerStyle={{ marginTop: 10, paddingBottom: 230 }}
             numColumns={2}
             data={sites}
             keyExtractor={(item, _idx) => `${item.id}`}
@@ -164,6 +198,38 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
           />
         </GestureRecognizer>
       ) : (
+        // <Swipeable
+        //   onSwipeableLeftOpen={onSwipeLeft}
+        //   onSwipeableRightOpen={onSwipeRight}
+        //   renderLeftActions={renderLeftActions}
+        //   renderRightActions={renderLeftActions}
+        // >
+        //   <View>
+        //     <FlatList
+        //       // columnWrapperStyle={{ justifyContent: "space-between" }}
+        //       showsVerticalScrollIndicator={true}
+        //       contentContainerStyle={{ marginTop: 10, paddingBottom: 50 }}
+        //       numColumns={2}
+        //       data={sites}
+        //       keyExtractor={(item, _idx) => `${item.id}`}
+        //       renderItem={({ item }: { item: Site }) => (
+        //         <PlaceCard
+        //           key={item.id}
+        //           onPress={() => {
+        //             navigation.navigate("PlaceDetails", {
+        //               id: item.id,
+        //               title: item.region,
+        //             });
+        //           }}
+        //           description={`${item.city.trim()}`}
+        //           title={item.name}
+        //           imageUrl={item.image}
+        //           visited={item.is_stamped}
+        //         />
+        //       )}
+        //     />
+        //   </View>
+        // </Swipeable>
         <ErrorMessage
           text={
             language === "en" ? "No sites found. Try to reload." : "Грешка."

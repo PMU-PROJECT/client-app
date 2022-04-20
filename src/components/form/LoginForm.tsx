@@ -15,13 +15,18 @@ import { FormContainer } from "./FormContainer";
 import { FormInput } from "./FormInput";
 import * as Google from "expo-auth-session/providers/google";
 import { TokenResponse } from "expo-auth-session";
+import { useNavigation } from "@react-navigation/native";
+import GestureRecognizer from "react-native-swipe-gestures";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AuthParamList } from "../../navigation/types";
 
 export const LoginForm: React.FC = () => {
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
   const language = useSelector(
     (state: { user: UserState }) => state.user.language
   );
-
+  const navigation: StackNavigationProp<AuthParamList, "Login" | "Register"> =
+    useNavigation();
   const dispatch = useDispatch();
 
   const [userInfo, setUserInfo] = useState({
@@ -69,10 +74,10 @@ export const LoginForm: React.FC = () => {
     }
   };
 
-  const [user, setuser] = useState<{ name: string; email: string } | null>(
-    null
-  );
-  const [token, settoken] = useState<TokenResponse | null>(null);
+  // const [user, setuser] = useState<{ name: string; email: string } | null>(
+  //   null
+  // );
+  const [googleToken, setGoogleToken] = useState<TokenResponse | null>(null);
 
   const [_request, response, promptAsync] = Google.useAuthRequest({
     androidClientId:
@@ -88,98 +93,135 @@ export const LoginForm: React.FC = () => {
     if (response?.type === "success") {
       const { authentication } = response;
       // console.log(response);
-      console.log(authentication);
+      // console.log(authentication);
       // console.log("/*******************/");
       // console.log(_request);
-      settoken(authentication);
+      setGoogleToken(authentication);
     }
   }, [response]);
 
-  async function getUserData() {
-    let res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
-      headers: {
-        Authorization: `Bearer ${token?.accessToken}`,
-        Authentication: `Bearer ${token?.accessToken}`,
-      },
-    });
+  // async function getUserData() {
+  //   let res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+  //     headers: {
+  //       Authorization: `Bearer ${googleToken?.accessToken}`,
+  //       Authentication: `Bearer ${googleToken?.accessToken}`,
+  //     },
+  //   });
 
-    // console.log(JSON.stringify(res));
-    const data = await res.json();
-    console.log(data);
-    setuser(data);
-  }
+  //   // console.log(JSON.stringify(res));
+  //   const data = await res.json();
+  //   console.log(data);
+  //   setuser(data);
+  // }
 
   return (
     <>
       <FormContainer>
-        <Text
-          style={[
-            styles.header,
-            theme && theme === "dark" ? styles.headerDark : styles.header,
-          ]}
+        <GestureRecognizer
+          config={{
+            velocityThreshold: 0.3,
+            directionalOffsetThreshold: 80,
+          }}
+          onSwipeLeft={() => {
+            navigation.navigate("Register");
+          }}
         >
-          {language && language === "en"
-            ? "Welcome Back!"
-            : "Добре дошли отново!"}
-        </Text>
-        {error && error.field === "all" ? (
-          <Text style={styles.textError}>{error.message}</Text>
-        ) : null}
-        <View style={styles.form}>
-          <FormInput
-            value={email}
-            onChangeText={(value: string) => handleOnChangeText(value, "email")}
-            label={language && language === "en" ? "Email" : "Имейл адрес"}
-            placeholder="example@email.com"
-            autoCapitalize="none"
-            error={error && error.field === "email" ? error.message : undefined}
-            returnKeyType="next"
-          />
-          <FormInput
-            value={password}
-            onChangeText={(value: string) =>
-              handleOnChangeText(value, "password")
-            }
-            label={language && language === "en" ? "Password" : "Парола"}
-            placeholder="********"
-            autoCapitalize="none"
-            secureTextEntry
-            error={error && error.field === "pass" ? error.message : undefined}
-            returnKeyType="done"
-          />
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.buttons}>
-              <AntDesign.Button
-                name="login"
-                size={25}
-                color={"white"}
-                backgroundColor={ColorSchema.default.dark_green}
-                onPress={() => {
-                  submitForm();
-                }}
-              >
-                {language && language === "en" ? "LOGIN" : "ВХОД"}
-              </AntDesign.Button>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttons}>
-              <FontAwesome.Button
-                name="google"
-                size={25}
-                color={"white"}
-                backgroundColor={ColorSchema.default.dark_green}
-                onPress={async () => {
-                  // if (token) {
-                  //   await getUserData();
-                  // } else {
-                  //   promptAsync({ showInRecents: true });
-                  // }
-                  try {
-                    const res = await fetch(
-                      `http://0af1-78-90-52-121.eu.ngrok.io/api/oauth2/google`
-                    );
+          <Text
+            style={[
+              styles.header,
+              theme && theme === "dark" ? styles.headerDark : styles.header,
+            ]}
+          >
+            {language && language === "en"
+              ? "Welcome Back!"
+              : "Добре дошли отново!"}
+          </Text>
+          {error && error.field === "all" ? (
+            <Text style={styles.textError}>{error.message}</Text>
+          ) : null}
+          <View style={styles.form}>
+            <FormInput
+              value={email}
+              onChangeText={(value: string) =>
+                handleOnChangeText(value, "email")
+              }
+              label={language && language === "en" ? "Email" : "Имейл адрес"}
+              placeholder="example@email.com"
+              autoCapitalize="none"
+              error={
+                error && error.field === "email" ? error.message : undefined
+              }
+              returnKeyType="next"
+            />
+            <FormInput
+              value={password}
+              onChangeText={(value: string) =>
+                handleOnChangeText(value, "password")
+              }
+              label={language && language === "en" ? "Password" : "Парола"}
+              placeholder="********"
+              autoCapitalize="none"
+              secureTextEntry
+              error={
+                error && error.field === "pass" ? error.message : undefined
+              }
+              returnKeyType="done"
+            />
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.buttons}>
+                <AntDesign.Button
+                  name="login"
+                  size={25}
+                  color={"white"}
+                  backgroundColor={ColorSchema.default.dark_green}
+                  onPress={() => {
+                    submitForm();
+                  }}
+                >
+                  {language && language === "en" ? "LOGIN" : "ВХОД"}
+                </AntDesign.Button>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.buttons}>
+                <FontAwesome.Button
+                  name="google"
+                  size={25}
+                  color={"white"}
+                  backgroundColor={ColorSchema.default.dark_green}
+                  onPress={async () => {
+                    await promptAsync({ showInRecents: true });
+                    // if (googleToken) {
+                    //   await getUserData();
+                    // }
+                    const token = await makeAuthRequest("login", {
+                      email: "dani_matev1@abv.bg",
+                      password: "123456",
+                    });
+                    if (token !== null) {
+                      const userInfo = await getSelfInfo(token);
+                      if (userInfo !== null) {
+                        dispatch({
+                          type: UserActions.LOGIN,
+                          payload: {
+                            token,
+                            userData: {
+                              ...userInfo,
+                            },
+                          },
+                        });
+                      }
+                    }
+                    // if (token) {
+                    //   await getUserData();
+                    // } else {
+                    //   promptAsync({ showInRecents: true });
+                    // }
+                    // try {
+                    //   const res = await fetch(
+                    //     `http://0af1-78-90-52-121.eu.ngrok.io/api/oauth2/google`
+                    //   );
 
-                    console.log(JSON.stringify(res));
-                    console.log(res.url);
+                    //   console.log(JSON.stringify(res));
+                    //   console.log(res.url);
                     // if (res.status !== 200) {
                     //   const text = await res.json();
                     //   throw new Error(text.error);
@@ -191,42 +233,25 @@ export const LoginForm: React.FC = () => {
                     // "client_secret":"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",
                     // "redirect_uris":["http://0af1-78-90-52-121.eu.ngrok.io/api/oauth2/google"]}}
 
-                    const data = await res.json();
-                    console.log(data);
-                    return data;
-                  } catch (err: any) {
-                    console.log("Error googleAuthRequest");
-                    console.log(err);
-                    Alert.alert(`Error`, `${err}`, [{ text: "Okay" }]);
-                    return null;
-                  }
-                }}
-              >
-                {language && language === "en"
-                  ? "REGISTER"
-                  : "Регистрация".toUpperCase()}
-              </FontAwesome.Button>
-            </TouchableOpacity>
-            {user ? (
-              <View>
-                <Text
-                  style={[
-                    theme === "dark" ? styles.headerDark : styles.headerLight,
-                  ]}
+                    //   const data = await res.json();
+                    //   console.log(data);
+                    //   return data;
+                    // } catch (err: any) {
+                    //   console.log("Error googleAuthRequest");
+                    //   console.log(err);
+                    //   Alert.alert(`Error`, `${err}`, [{ text: "Okay" }]);
+                    //   return null;
+                    // }
+                  }}
                 >
-                  {user.name}
-                </Text>
-                <Text
-                  style={[
-                    theme === "dark" ? styles.headerDark : styles.headerLight,
-                  ]}
-                >
-                  {user.email}
-                </Text>
-              </View>
-            ) : null}
+                  {language && language === "en"
+                    ? "REGISTER"
+                    : "Регистрация".toUpperCase()}
+                </FontAwesome.Button>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        </GestureRecognizer>
       </FormContainer>
     </>
   );

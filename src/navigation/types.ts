@@ -49,6 +49,7 @@ export type DrawerParamList = {
   ScanQR: undefined;
   EligibleRewards: {
     rewards: EligibleRewards[] | GivenRewards[];
+    token_id: string;
   };
   GivenRewards: undefined;
   EmployeeRewards: undefined;

@@ -4,9 +4,12 @@ import { ColorSchema } from "../../constants/Colors";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { UserState } from "../../store/reducers/UserReducer";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AuthParamList } from "../../navigation/types";
 
 export const FormNavButtons: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation: StackNavigationProp<AuthParamList, "Login" | "Register"> =
+    useNavigation();
   const route = useRoute();
   const language = useSelector(
     (state: { user: UserState }) => state.user.language

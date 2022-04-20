@@ -68,7 +68,10 @@ export default function Scanner({ type }: ScannerProps) {
       } else if (type === "reward") {
         const res = await getRewards(token!, params.data);
         if (res) {
-          navigation.navigate("Rewards", { rewards: res.eligible_rewards });
+          navigation.navigate("EligibleRewards", {
+            rewards: res.eligible_rewards,
+            token_id: params.data,
+          });
         }
       }
     } else {
