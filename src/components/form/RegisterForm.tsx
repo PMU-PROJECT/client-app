@@ -23,17 +23,20 @@ type UserInfo = {
   confirmPassword: string;
 };
 
+/**
+ * @compenent
+ * @description Returns register form component that contains the FormNavButtons,
+ * FormInputs for names, email and password and button for registration
+ */
 export const RegisterForm: React.FC = () => {
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
   const language = useSelector(
     (state: { user: UserState }) => state.user.language
   );
 
+  const dispatch = useDispatch();
   const navigation: StackNavigationProp<AuthParamList, "Login" | "Register"> =
     useNavigation();
-
-  const theme = useSelector((state: { user: UserState }) => state.user.theme);
-
-  const dispatch = useDispatch();
 
   const [userInfo, _setUserInfo] = useState<UserInfo>({
     firstName: "",
@@ -42,10 +45,6 @@ export const RegisterForm: React.FC = () => {
     password: "",
     confirmPassword: "",
   });
-
-  // const handleOnChangeText = (value: string, fieldName: string) => {
-  //   setUserInfo({ ...userInfo, [fieldName]: value });
-  // };
 
   const handleSubmit = async (
     values: UserInfo,
@@ -69,9 +68,9 @@ export const RegisterForm: React.FC = () => {
             },
           },
         });
+        formikHelpers.resetForm();
       }
     }
-    formikHelpers.resetForm();
     formikHelpers.setSubmitting(false);
   };
 

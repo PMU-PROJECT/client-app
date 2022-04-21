@@ -6,7 +6,16 @@ import { UserInfo } from "../models/UserInfo";
 
 const linkURL = "http://0af1-78-90-52-121.eu.ngrok.io/api/";
 
-// /api/register && api/login [POST]
+/**
+ * @async
+ * @function
+ * @param path string to where the request is made -> login or register
+ * @param values object containing user's email, password for login or
+ * email, password, first_name and last_name for registration
+ * @returns string token if request is successful or null if not
+ * @description Makes POST request to either to api/register or to api/login,
+ * depending on given path and variables
+ */
 export const makeAuthRequest = async (
   path: string,
   values: {
@@ -51,7 +60,13 @@ export const makeAuthRequest = async (
   }
 };
 
-// /api/get_self_info [GET]
+/**
+ * @async
+ * @function
+ * @param token string used for request's authorization
+ * @returns object of type UserInfo if request is successful or null
+ * @description Makes GET request to api/get_self_info to fetch information for current user
+ */
 export const getSelfInfo = async (token: string): Promise<UserInfo | null> => {
   try {
     const res = await fetch(`${linkURL}get_self_info`, {
@@ -78,7 +93,15 @@ export const getSelfInfo = async (token: string): Promise<UserInfo | null> => {
   }
 };
 
-// /api/get_all_sites [GET]
+/**
+ * @async
+ * @function
+ * @param token string used for request's authorization
+ * @param filter string used for filterring the results of the request
+ * @returns array of Site objects or null if request is not successful
+ * @description Makes GET request to api/get_all_sites to fetch information
+ * for the sites, based on selected filter
+ */
 export const fetchAllSites = async (
   token: string,
   filter: "all" | "visited" | "unvisited" = "all"
@@ -108,7 +131,14 @@ export const fetchAllSites = async (
   }
 };
 
-// /api/get_id_token [GET]
+/**
+ * @async
+ * @function
+ * @param token string used for request's authorization
+ * @returns string or null if request is not successful
+ * @description Makes GET request to apiget_id_token to get an id_token used
+ * for displaying the QR code
+ */
 export const getQRCode = async (token: string): Promise<string | null> => {
   try {
     const res = await fetch(`${linkURL}get_id_token`, {
@@ -136,6 +166,14 @@ export const getQRCode = async (token: string): Promise<string | null> => {
 };
 
 // /api/make_stamp [POST]
+/**
+ * @async
+ * @function
+ * @param token string used for request's authorization
+ * @returns string or null if request is not successful
+ * @description Makes GET request to apiget_id_token to get an id_token used
+ * for displaying the QR code
+ */
 export const receiveStamp = async (
   token: string,
   id_token: string

@@ -7,15 +7,18 @@ import { UserState } from "../../store/reducers/UserReducer";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AuthParamList } from "../../navigation/types";
 
+/**
+ * @compenent
+ * @description Returns two buttons for user navigation on login/register screens
+ */
 export const FormNavButtons: React.FC = () => {
-  const navigation: StackNavigationProp<AuthParamList, "Login" | "Register"> =
-    useNavigation();
-  const route = useRoute();
+  const theme = useSelector((state: { user: UserState }) => state.user.theme);
   const language = useSelector(
     (state: { user: UserState }) => state.user.language
   );
-
-  const theme = useSelector((state: { user: UserState }) => state.user.theme);
+  const route = useRoute();
+  const navigation: StackNavigationProp<AuthParamList, "Login" | "Register"> =
+    useNavigation();
 
   let active: "login" | "register" = "login";
 

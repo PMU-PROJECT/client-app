@@ -20,6 +20,11 @@ import GestureRecognizer from "react-native-swipe-gestures";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AuthParamList } from "../../navigation/types";
 
+/**
+ * @compenent
+ * @description Returns login form component that contains the FormNavButtons,
+ * FormInputs for email and password and buttons for login and google sign-up
+ */
 export const LoginForm: React.FC = () => {
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
   const language = useSelector(
@@ -29,14 +34,24 @@ export const LoginForm: React.FC = () => {
     useNavigation();
   const dispatch = useDispatch();
 
+  const [googleToken, setGoogleToken] = useState<TokenResponse | null>(null);
+  const [error, setError] = useState({ message: "", field: "" });
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
   });
-
-  const [error, setError] = useState({ message: "", field: "" });
-
   const { email, password } = userInfo;
+
+  const [_request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId:
+      "102677665631-i1jrt648jjl95l35c0vde36vlpnsh1bs.apps.googleusercontent.com",
+    expoClientId:
+      "102677665631-2bnoj2r075lhqpgtrdh46of7sq636uj5.apps.googleusercontent.com",
+    redirectUri: "https://auth.expo.io/@gen44o/pmu-app",
+    clientSecret: "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",
+    scopes: ["profile", "email"],
+  });
+
   const handleOnChangeText = (value: string, fieldName: string) => {
     setUserInfo({ ...userInfo, [fieldName]: value });
   };
@@ -74,45 +89,24 @@ export const LoginForm: React.FC = () => {
     }
   };
 
-  // const [user, setuser] = useState<{ name: string; email: string } | null>(
-  //   null
-  // );
-  const [googleToken, setGoogleToken] = useState<TokenResponse | null>(null);
-
-  const [_request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId:
-      "102677665631-i1jrt648jjl95l35c0vde36vlpnsh1bs.apps.googleusercontent.com",
-    expoClientId:
-      "102677665631-2bnoj2r075lhqpgtrdh46of7sq636uj5.apps.googleusercontent.com",
-    redirectUri: "https://auth.expo.io/@gen44o/pmu-app",
-    clientSecret: "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",
-    scopes: ["profile", "email"],
-  });
-
   useEffect(() => {
     if (response?.type === "success") {
       const { authentication } = response;
-      // console.log(response);
-      // console.log(authentication);
-      // console.log("/*******************/");
-      // console.log(_request);
       setGoogleToken(authentication);
     }
   }, [response]);
 
-  // async function getUserData() {
-  //   let res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
-  //     headers: {
-  //       Authorization: `Bearer ${googleToken?.accessToken}`,
-  //       Authentication: `Bearer ${googleToken?.accessToken}`,
-  //     },
-  //   });
-
-  //   // console.log(JSON.stringify(res));
-  //   const data = await res.json();
-  //   console.log(data);
-  //   setuser(data);
-  // }
+  async function getUserData() {
+    let res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+      headers: {
+        Authorization: `Bearer ${googleToken?.accessToken}`,
+        Authentication: `Bearer ${googleToken?.accessToken}`,
+      },
+    });
+    // console.log(JSON.stringify(res));
+    const data = await res.json();
+    console.log(data);
+  }
 
   return (
     <>
@@ -210,38 +204,6 @@ export const LoginForm: React.FC = () => {
                         });
                       }
                     }
-                    // if (token) {
-                    //   await getUserData();
-                    // } else {
-                    //   promptAsync({ showInRecents: true });
-                    // }
-                    // try {
-                    //   const res = await fetch(
-                    //     `http://0af1-78-90-52-121.eu.ngrok.io/api/oauth2/google`
-                    //   );
-
-                    //   console.log(JSON.stringify(res));
-                    //   console.log(res.url);
-                    // if (res.status !== 200) {
-                    //   const text = await res.json();
-                    //   throw new Error(text.error);
-                    // }
-                    // {"web":{"client_id":"798626048018-mimb79khi9lgbs8ek99q6nccl04n7t78.apps.googleusercontent.com",
-                    // "project_id":"pmu-project-343407","auth_uri":"https://accounts.google.com/o/oauth2/auth",
-                    // "token_uri":"https://oauth2.googleapis.com/token",
-                    // "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
-                    // "client_secret":"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",
-                    // "redirect_uris":["http://0af1-78-90-52-121.eu.ngrok.io/api/oauth2/google"]}}
-
-                    //   const data = await res.json();
-                    //   console.log(data);
-                    //   return data;
-                    // } catch (err: any) {
-                    //   console.log("Error googleAuthRequest");
-                    //   console.log(err);
-                    //   Alert.alert(`Error`, `${err}`, [{ text: "Okay" }]);
-                    //   return null;
-                    // }
                   }}
                 >
                   {language && language === "en"

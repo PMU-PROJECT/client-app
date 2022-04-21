@@ -20,6 +20,12 @@ type InputProps = {
   // onInputChange: Function;
 } & TextInputProps;
 
+/**
+ * @compenent
+ * @param props InputProps & TextInputProps
+ * @description Returns a custom text Input with a label, plus options for showing an
+ * error message for invalid user input
+ */
 export const FormInput: React.FC<InputProps> = (props: InputProps) => {
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
 
