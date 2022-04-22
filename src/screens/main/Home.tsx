@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Categories } from "../../components/home/Categories";
 import { PlaceCard } from "../../components/home/PlaceCard";
-import { ColorSchema, new_green } from "../../constants/Colors";
+import { ColorSchema } from "../../constants/Colors";
 import { PlacesNavProps } from "../../navigation/types";
 import { fetchAllSites } from "../../utils/makeRequestToServer";
 import { UserState } from "../../store/reducers/UserReducer";
@@ -90,8 +90,6 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const categories = ["all", "visited", "unvisited"];
-  // const imgUri =
-  //   "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
 
   useEffect(() => {
     if (!token) return;
@@ -141,7 +139,7 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
             style={[
               styles.title,
               theme && theme === "dark"
-                ? { color: new_green }
+                ? { color: ColorSchema.default.light_green }
                 : styles.lightText,
             ]}
           >
@@ -156,7 +154,7 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
             key={index}
             index={index}
             onSelect={setCategoryIndex}
-            item={
+            title={
               language === "en" && language ? item : mapCategory(item as any)
             }
             selectedIdx={categoryIndex}
@@ -164,7 +162,7 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
         ))}
       </View>
 
-      {sites ? (
+      {sites && sites.length !== 0 ? (
         <GestureRecognizer
           onSwipeLeft={() => onSwipeLeft()}
           onSwipeRight={() => onSwipeRight()}
@@ -264,7 +262,7 @@ const styles = StyleSheet.create({
   sortBtn: {
     height: 50,
     width: 50,
-    backgroundColor: new_green,
+    backgroundColor: ColorSchema.default.light_green,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
@@ -294,7 +292,7 @@ const styles = StyleSheet.create({
     // marginVertical: 5,
     // padding: 5,
     fontSize: 38,
-    color: new_green,
+    color: ColorSchema.default.light_green,
     fontWeight: "bold",
   },
   darkText: {

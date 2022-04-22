@@ -3,6 +3,10 @@ import { useSelector } from "react-redux";
 import { ColorSchema } from "../../constants/Colors";
 import { UserState } from "../../store/reducers/UserReducer";
 
+/**
+ * @component
+ * @description Component used for showing to the users during data loading process
+ */
 export const Loading = () => {
   const language = useSelector(
     (state: { user: UserState }) => state.user.language

@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { ColorSchema, new_green } from "../../constants/Colors";
+import { ColorSchema } from "../../constants/Colors";
 import { useSelector } from "react-redux";
 import { UserState } from "../../store/reducers/UserReducer";
 import { getRewards, receiveStamp } from "../../utils/makeRequestToServer";
@@ -25,6 +25,12 @@ type ScannerProps = {
   // >;
 };
 
+/**
+ * @component
+ * @param type string used for showing what function to start after scanning
+ * @description Component used for scanning the QR code with devise camera if user gave his permission
+ * or if he does notthe button will be rendered asking him to give permission
+ */
 export default function Scanner({ type }: ScannerProps) {
   const language = useSelector(
     (state: { user: UserState }) => state.user.language
@@ -143,9 +149,7 @@ export default function Scanner({ type }: ScannerProps) {
                 : ColorSchema.light.text,
           },
         ]}
-      >
-        {text}
-      </Text>
+      ></Text>
 
       {scanned && (
         <Button
@@ -156,7 +160,7 @@ export default function Scanner({ type }: ScannerProps) {
           color={
             theme && theme === "dark"
               ? ColorSchema.default.dark_green
-              : new_green
+              : ColorSchema.default.light_green
           }
         />
       )}

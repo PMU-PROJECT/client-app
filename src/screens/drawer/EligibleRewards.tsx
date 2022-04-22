@@ -10,7 +10,8 @@ import {
 import { useSelector } from "react-redux";
 import { ErrorMessage } from "../../components/general/ErrorMessage";
 import { RewardCard } from "../../components/rewards/RewardCard";
-import { ColorSchema, new_green } from "../../constants/Colors";
+import { ColorSchema } from "../../constants/Colors";
+import { EmployeeInfo } from "../../models/UserInfo";
 import { DrawerNavProps } from "../../navigation/types";
 import { UserState } from "../../store/reducers/UserReducer";
 import { giveRewards } from "../../utils/makeRequestToServer";
@@ -32,8 +33,13 @@ export const EligibleRewardsScreen = ({
 
   const canReward: boolean = useSelector((state: { user: UserState }) => {
     if (state.user.user) {
-      if (state.user.user.employeeInfo) {
-        return true;
+      const employeeInfo: EmployeeInfo | null = state.user.user.employeeInfo;
+      if (employeeInfo) {
+        if (employeeInfo.can_reward && employeeInfo.can_reward === true) {
+          return true;
+        } else {
+          return false;
+        }
       }
     }
     return false;
@@ -55,7 +61,7 @@ export const EligibleRewardsScreen = ({
       if (token) {
         const res = await giveRewards(token, token_id, selected);
         if (res !== null) {
-          Alert.alert("Yay!", `${res.message}`, [{ text: "Okay" }]);
+          Alert.alert("Yay!", `${res}`, [{ text: "Okay" }]);
         }
       }
     }
@@ -120,7 +126,7 @@ export const EligibleRewardsScreen = ({
               style={{
                 width: 150,
                 height: 55,
-                backgroundColor: new_green,
+                backgroundColor: ColorSchema.default.light_green,
                 justifyContent: "center",
                 alignItems: "center",
                 borderRadius: 15,

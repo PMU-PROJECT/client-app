@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
+import { ColorSchema } from "../../constants/Colors";
 import { UserState } from "../../store/reducers/UserReducer";
 import { windowWidth } from "../../utils/Dimensions";
 import { createSitesImageUrl } from "../../utils/imageUrls";
@@ -11,16 +12,17 @@ type CarouselProps = {
 };
 
 const height = windowWidth * 0.6;
+
+/**
+ * @component
+ * @param images array of image urls
+ * @description Image Carousel Component that takes array of urls and displays
+ * and returns an image slider
+ */
 export const CustomImageCarousel = ({ images }: CarouselProps) => {
-  // const imgUri =
-  //   "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
-  // const img2 =
-  //   "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg";
+  const token = useSelector((state: { user: UserState }) => state.user.token);
   const [activeIndex, setIndex] = useState<number>(0);
 
-  const token = useSelector((state: { user: UserState }) => state.user.token);
-  // const images = [imgUri, img2, imgUri, img2];
-  // console.log(images);
   return (
     <View style={styles.constainer}>
       <ScrollView
@@ -56,12 +58,12 @@ export const CustomImageCarousel = ({ images }: CarouselProps) => {
           <Text
             key={k}
             style={{
-              color: activeIndex === k ? "white" : "#888",
+              color: activeIndex === k ? ColorSchema.light.background : "#888",
               fontSize: 20,
               margin: 3,
             }}
           >
-            ●
+            •
           </Text>
         ))}
       </View>
@@ -87,7 +89,7 @@ const styles = StyleSheet.create({
     margin: 3,
   },
   text: {
-    color: "white",
+    color: ColorSchema.light.background,
     fontSize: 18,
     textAlign: "center",
   },

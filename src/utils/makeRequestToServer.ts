@@ -4,7 +4,7 @@ import { Site, SiteDetails } from "../models/Site";
 import { TokenResponse } from "expo-auth-session";
 import { UserInfo } from "../models/UserInfo";
 
-const linkURL = "http://0af1-78-90-52-121.eu.ngrok.io/api/";
+const linkURL = "https://2e6c-87-126-123-62.eu.ngrok.io/api/";
 
 /**
  * @async
@@ -12,7 +12,7 @@ const linkURL = "http://0af1-78-90-52-121.eu.ngrok.io/api/";
  * @param path string to where the request is made -> login or register
  * @param values object containing user's email, password for login or
  * email, password, first_name and last_name for registration
- * @returns string token if request is successful or null if not
+ * @returns string token if request was successful or null if not
  * @description Makes POST request to either to api/register or to api/login,
  * depending on given path and variables
  */
@@ -51,6 +51,9 @@ export const makeAuthRequest = async (
     }
 
     const data = await res.json();
+    Alert.alert(`Welcome!`, "Your login/registration was successful!", [
+      { text: "Okay" },
+    ]);
     return data.token;
   } catch (err: any) {
     console.log("Error makeAuthRequest");
@@ -64,7 +67,7 @@ export const makeAuthRequest = async (
  * @async
  * @function
  * @param token string used for request's authorization
- * @returns object of type UserInfo if request is successful or null
+ * @returns object of type UserInfo if request was successful or null
  * @description Makes GET request to api/get_self_info to fetch information for current user
  */
 export const getSelfInfo = async (token: string): Promise<UserInfo | null> => {
@@ -98,7 +101,7 @@ export const getSelfInfo = async (token: string): Promise<UserInfo | null> => {
  * @function
  * @param token string used for request's authorization
  * @param filter string used for filterring the results of the request
- * @returns array of Site objects or null if request is not successful
+ * @returns array of Site objects or null if request was not successful
  * @description Makes GET request to api/get_all_sites to fetch information
  * for the sites, based on selected filter
  */
@@ -135,8 +138,8 @@ export const fetchAllSites = async (
  * @async
  * @function
  * @param token string used for request's authorization
- * @returns string or null if request is not successful
- * @description Makes GET request to apiget_id_token to get an id_token used
+ * @returns string or null if request was not successful
+ * @description Makes GET request to api/get_id_token to get an id_token used
  * for displaying the QR code
  */
 export const getQRCode = async (token: string): Promise<string | null> => {
@@ -165,14 +168,14 @@ export const getQRCode = async (token: string): Promise<string | null> => {
   }
 };
 
-// /api/make_stamp [POST]
 /**
  * @async
  * @function
  * @param token string used for request's authorization
- * @returns string or null if request is not successful
- * @description Makes GET request to apiget_id_token to get an id_token used
- * for displaying the QR code
+ * @param id_token string get from scanning the QR code
+ * @returns string for successful receiving of a stamp or null
+ * @description Only for Employees! Makes POST request to api/make_stamp, to verify that
+ * user has visited the site and give them a stamp.
  */
 export const receiveStamp = async (
   token: string,
@@ -198,14 +201,14 @@ export const receiveStamp = async (
     }
 
     if (res.status === 200) {
-      Alert.alert("Congratulations", "You have recieved a ne stamp!", [
+      Alert.alert("Congratulations", "You have recieved a new stamp!", [
         { text: "Okay" },
       ]);
     }
 
     const data = await res.json();
     // const data2 = await res.text();
-    console.log(data);
+    // console.log(data);
     // console.log(data2);
     return data;
   } catch (err: any) {
@@ -215,7 +218,13 @@ export const receiveStamp = async (
   }
 };
 
-// /api/refresh_token [POST]
+/**
+ * @async
+ * @function
+ * @param oldToken string, get from the devise storage, and now used for request's authorization
+ * @returns string token used for authorization or null if request was not successful
+ * @description Makes POST request to api/refresh_token, to get new authorization token for the user.
+ */
 export const refreshAuthToken = async (
   oldToken: string
 ): Promise<string | null> => {
@@ -239,7 +248,14 @@ export const refreshAuthToken = async (
   }
 };
 
-// /api/get_site_info [GET]
+/**
+ * @async
+ * @function
+ * @param token string used for request's authorization
+ * @param id number used for getting a specific site
+ * @returns object of type SiteDetails or null if request was not successful
+ * @description Makes GET request to api/get_site_info, to get data for specific site.
+ */
 export const getSiteInfo = async (
   id: number,
   token: string
@@ -265,7 +281,13 @@ export const getSiteInfo = async (
   }
 };
 
-// /api/oauth2/google [POST]
+/**
+ * @async
+ * @function
+ * @param googleToken of type TokenResponse
+ * @returns string token if the request was successful or null
+ * @description Makes POST request to api/oauth2/google
+ */
 export const googleAuthRequest = async (
   googleToken: TokenResponse
 ): Promise<string | null> => {
@@ -292,7 +314,14 @@ export const googleAuthRequest = async (
   }
 };
 
-// /api/get_employee_info [GET]
+/**
+ * @async
+ * @function
+ * @param token string used for request's authorization
+ * @param id number used for getting a specific employee
+ * @returns object containing the employee information or null if request was not successful
+ * @description Makes GET request to api/get_employee_info, to get information for specific employee.
+ */
 export const getEmployeeInfo = async (
   token: string,
   id: number
@@ -322,7 +351,14 @@ export const getEmployeeInfo = async (
   }
 };
 
-// /api/get_user_info [GET]
+/**
+ * @async
+ * @function
+ * @param token string used for request's authorization
+ * @param id number used for getting a specific user
+ * @returns object of type UserInfo or null if request was not successful
+ * @description Makes GET request to api/get_user_info, to get information for specific user.
+ */
 export const getUserInfo = async (
   token: string,
   id: number
@@ -352,7 +388,15 @@ export const getUserInfo = async (
   }
 };
 
-// /api/get_eligible_rewards [GET]
+/**
+ * @async
+ * @function
+ * @param token string used for request's authorization
+ * @param id_token string get from scanning the QR code
+ * @returns object of type Rewards or null if request was not successful
+ * @description For Employees Only! Makes GET request to api/get_eligible_rewards, to get
+ * all the rewards was given and the ones that user is currently eligible to get.
+ */
 export const getRewards = async (
   token: string,
   id_token: string
@@ -387,12 +431,20 @@ export const getRewards = async (
   }
 };
 
-// /api/post_reward [POST]
+/**
+ * @async
+ * @function
+ * @param token string used for request's authorization
+ * @param id_token string get from scanning the QR code
+ * @param reward_id number id of the selected reward
+ * @returns string for successful receiving of a reward or null
+ * @description For Employees Only! Makes POST request to api/post_reward, to giea a user reward if he is eligible for it.
+ */
 export const giveRewards = async (
   token: string,
   id_token: string,
   reward_id: number
-): Promise<{ message: string } | null> => {
+): Promise<string | null> => {
   try {
     const formData = new FormData();
     formData.append("id_token", id_token);
@@ -415,7 +467,7 @@ export const giveRewards = async (
 
     const data = await res.json();
     // console.log(data);
-    return data;
+    return data.message;
   } catch (err: any) {
     console.log("Error giveRewards");
     console.log(err);

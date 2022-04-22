@@ -1,12 +1,12 @@
 import { EligibleRewards, GivenRewards } from "./Rewards";
-import { UserInfo } from "./UserInfo";
+import { EmployeeInfo, UserInfo } from "./UserInfo";
 
 class User implements UserInfo {
   constructor(
     firstName: string,
     lastName: string,
     email: string,
-    employeeInfo: {} | null = null,
+    employeeInfo: EmployeeInfo | null = null,
     is_admin: boolean = false,
     profile_picture: string,
     stamps: [] = [],
@@ -26,7 +26,7 @@ class User implements UserInfo {
   firstName: string;
   lastName: string;
   email: string;
-  employeeInfo: {} | null;
+  employeeInfo: EmployeeInfo | null;
   is_admin: boolean;
   profile_picture: string;
   stamps;

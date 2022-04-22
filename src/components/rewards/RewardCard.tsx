@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import Checkbox from "expo-checkbox";
 import { useSelector } from "react-redux";
-import { ColorSchema, new_green } from "../../constants/Colors";
+import { ColorSchema } from "../../constants/Colors";
 import { UserState } from "../../store/reducers/UserReducer";
 import { windowWidth } from "../../utils/Dimensions";
 import { ScalableText } from "../general/ScalableText";
@@ -16,11 +16,18 @@ type RewardCardProps = {
   selected?: number | null;
   setSelected?: Function;
 };
-// const imgUri =
-//   "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
-const img2 =
-  "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg";
 
+/**
+ * @component
+ * @param id index number of the reward
+ * @param picture string of the image url
+ * @param description string description of the reward
+ * @param name string with the name of the reward
+ * @param selected optional boolean to show if reward is selected
+ * @param setSelected optional function to set the index of the selected reward
+ * @description Component use for showing the reward card with some optional
+ * variables for employees that are use for selecting a reward to give to user
+ */
 export const RewardCard: React.FC<RewardCardProps> = ({
   id,
   description,
@@ -44,7 +51,9 @@ export const RewardCard: React.FC<RewardCardProps> = ({
         style={[
           {
             backgroundColor:
-              selected && selected === id ? new_green : undefined,
+              selected && selected === id
+                ? ColorSchema.default.light_green
+                : undefined,
           },
           styles.container,
         ]}

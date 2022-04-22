@@ -1,6 +1,6 @@
 import { Platform, StyleSheet, Switch, Text, View } from "react-native";
 import { useSelector } from "react-redux";
-import { ColorSchema, new_green } from "../../constants/Colors";
+import { ColorSchema } from "../../constants/Colors";
 import { UserState } from "../../store/reducers/UserReducer";
 
 type FilterSwitchProps = {
@@ -9,6 +9,14 @@ type FilterSwitchProps = {
   onChange: ((value: boolean) => void | Promise<void>) | null | undefined;
 };
 
+/**
+ * @component
+ * @param label string with the label of switch
+ * @param state boolean showing is the switch is flipped or not
+ * @param onChange function to set the switch to new value
+ * @description Custom component used for settings changes that
+ * renders a Switch button with some text
+ */
 export const FilterSwitch = (props: FilterSwitchProps) => {
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
   return (
@@ -23,10 +31,12 @@ export const FilterSwitch = (props: FilterSwitchProps) => {
       </Text>
       <Switch
         trackColor={{
-          true: new_green,
+          true: ColorSchema.default.light_green,
           false: ColorSchema.default.disabledButton,
         }}
-        thumbColor={Platform.OS === "android" ? new_green : ""}
+        thumbColor={
+          Platform.OS === "android" ? ColorSchema.default.light_green : ""
+        }
         value={props.state}
         onValueChange={props.onChange}
       />

@@ -22,8 +22,19 @@ type CardProps = {
   visited: boolean;
 };
 
+/**
+ * @component
+ * @param id optional string showing the id of the site/place
+ * @param title sting title of the site
+ * @param imageUrl sting url of the site's image
+ * @param description sting description of the site
+ * @param onPress function that should run on pressing the card
+ * @param visited boolean showing if the user has visited the site
+ * @description Component displaying the cards of the sites on the home screen, showing
+ * image of the place for background and ImageButton with title and description, and onPress
+ * redirects to place details
+ */
 export const PlaceCard: React.FC<CardProps> = (props: CardProps) => {
-  // https://reactnative.dev/img/tiny_logo.png
   const token = useSelector((state: { user: UserState }) => state.user.token);
   // const imgUri =
   //   "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
@@ -42,13 +53,9 @@ export const PlaceCard: React.FC<CardProps> = (props: CardProps) => {
             imageStyle={styles.image}
             source={
               {
-                // velyanova-kushta.jpg
                 uri: createSitesImageUrl(props.imageUrl),
-                // uri: imgUri,
                 headers: {
                   Authorization: token,
-                  // "da32e590530ed0d486effc634b76ef10b77c19b4e1bbbf55d6fe861de1c75c72b4c2c292de5c27c2d87a8d158e7f370a0f2975295ada6c841e8d87da7996c194feff402fab5ae4277adcc6cb",
-                  //"fce8f2107973873ff4c90bb6d5a3a60a385f69327f106c8c5fcad19e7f3868545f697e58d1467d7efbd8ef43cca6f20670aa66f04042645e2d29da434bff9f49837c1ff2eb816a13459bfed3",
                 },
               } as ImageSourcePropType
             }

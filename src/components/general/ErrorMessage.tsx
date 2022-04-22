@@ -9,6 +9,11 @@ type ErrorMessageProps = {
   text: string;
 };
 
+/**
+ * @component
+ * @param text string of the message
+ * @description Component used for showing error messeges to the users
+ */
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({ text }) => {
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
 

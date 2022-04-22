@@ -17,7 +17,6 @@ import { ScalableText } from "../general/ScalableText";
  * @description Custom View that wraps the Drawwer Navigator items, and adds a
  * User profile picture and custom logout button
  */
-
 export const CustomDrawer = (props: any) => {
   const dispatch = useDispatch();
   const user = useSelector((state: { user: UserState }) => state.user.user);
