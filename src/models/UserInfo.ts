@@ -16,6 +16,7 @@ export type EmployeeInfo = {
   place_id: number;
   profile_picture: string;
 };
+
 export interface UserInfo {
   firstName: string;
   lastName: string;

@@ -7,6 +7,10 @@ const AuthNavigator = createStackNavigator<AuthParamList>();
 
 interface AuthStackProps {}
 
+/**
+ * @compenent
+ * @description Stack Navigator for the Login and Register screens
+ */
 export const AuthStack: React.FC<AuthStackProps> = () => {
   return (
     <AuthNavigator.Navigator

@@ -20,6 +20,12 @@ import { DrawerParamList } from "./types";
 
 const DrawerNavigator = createDrawerNavigator<DrawerParamList>();
 
+/**
+ * @compenent
+ * @description Drawer Navigator used as main navigation after user is authenticated.
+ * Also contains the bottom tab navigator and its content is wrapped inside my Custom Drawer Component.
+ * Used for Home, Settings, GivenRewards, EligibleRewards, ScanQR, and EmployeeRewards screens.
+ */
 export const DrawerNav: React.FC = ({}) => {
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
   const language = useSelector(

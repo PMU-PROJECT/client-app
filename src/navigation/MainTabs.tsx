@@ -12,6 +12,11 @@ interface TabsProps {}
 
 const Tabs = createBottomTabNavigator<MainTabParamList>();
 
+/**
+ * @compenent
+ * @description Bottom Tab Navigator used inside the Drawer navigator,
+ * Containing the screens for Main statck navigator(Home + SiteDetails) and QR code.
+ */
 export const AppTabs: React.FC<TabsProps> = ({}) => {
   const language = useSelector(
     (state: { user: UserState }) => state.user.language
@@ -50,7 +55,6 @@ export const AppTabs: React.FC<TabsProps> = ({}) => {
           ),
         })}
       />
-
       <Tabs.Screen
         name="QRCode"
         component={QRCodeScreen}
