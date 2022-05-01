@@ -57,7 +57,7 @@ export const UserReducer = (
 
     case UserActions.LOGOUT: {
       deleteTable();
-      return { ...state, token: null };
+      return { ...state, user: null, token: null };
     }
 
     case UserActions.LANGUAGE_CHANGE: {
