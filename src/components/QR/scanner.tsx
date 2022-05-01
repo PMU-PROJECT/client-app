@@ -64,22 +64,34 @@ export default function Scanner({ type }: ScannerProps) {
     type: number;
     data: string;
   }) => {
+    if (!token) return;
     setScanned(true);
-    setText(params.data);
+    setText("Scanning!");
     // console.log("Type: " + params.type + "\nData: " + params.data);
 
     if (params.type === 256) {
       if (type === "stamp") {
-        const res = await receiveStamp(token!, params.data);
+        const res = await receiveStamp(token, params.data);
       } else if (type === "reward") {
-        const res = await getRewards(token!, params.data);
+        const res = await getRewards(token, params.data);
         if (res) {
-          navigation.navigate("EligibleRewards", {
+          navigation.navigate("EmployeeRewards", {
             rewards: res.eligible_rewards,
             token_id: params.data,
           });
         }
       }
+      // const userInfo: UserInfo | null = await getSelfInfo(token);
+      // if (userInfo !== null) {
+      //   dispatch({
+      //     type: UserActions.REFRESH_USER_INFO,
+      //     payload: {
+      //       userInfo: {
+      //         ...userInfo,
+      //       },
+      //     },
+      //   });
+      // }
     } else {
       Alert.alert("Invalid Scan!", "Please scan a valid QR code!", [
         { text: "Okay" },
@@ -149,14 +161,19 @@ export default function Scanner({ type }: ScannerProps) {
                 : ColorSchema.light.text,
           },
         ]}
-      ></Text>
+      >
+        {text}
+      </Text>
 
       {scanned && (
         <Button
           title={
             language && language === "en" ? "Scan Again" : "Сканирай отново"
           }
-          onPress={() => setScanned(false)}
+          onPress={() => {
+            setScanned(false);
+            setText("Not yet scanned");
+          }}
           color={
             theme && theme === "dark"
               ? ColorSchema.default.dark_green

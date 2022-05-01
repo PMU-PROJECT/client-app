@@ -47,12 +47,13 @@ export type DrawerParamList = {
   Tabs: undefined;
   Settings: undefined;
   ScanQR: undefined;
-  EligibleRewards: {
+  ScanRewards: undefined;
+  EmployeeRewards: {
     rewards: EligibleRewards[] | GivenRewards[];
     token_id: string;
   };
+  EligibleRewards: undefined;
   GivenRewards: undefined;
-  EmployeeRewards: undefined;
 };
 
 export type DrawerNavProps<T extends keyof DrawerParamList> = {

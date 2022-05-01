@@ -93,9 +93,9 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
 
   useEffect(() => {
     if (!token) return;
+    setLoading(true);
 
     const fetchSites = async () => {
-      setLoading(true);
       const fetchedSites = await fetchAllSites(
         token,
         categories[categoryIndex] as any
@@ -104,14 +104,14 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
         type: SitesActions.SET_SITES,
         payload: { sites: fetchedSites },
       });
-      setLoading(false);
     };
 
     fetchSites();
+    setLoading(false);
   }, [categoryIndex, token]);
 
   if (loading) {
-    <Loading />;
+    return <Loading />;
   }
 
   return (
@@ -133,17 +133,12 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
           >
             {language && language === "en"
               ? "Welcome To"
-              : "Остроумно заглавие"}
+              : "Приятно използване на"}
           </Text>
           <Text
-            style={[
-              styles.title,
-              theme && theme === "dark"
-                ? { color: ColorSchema.default.light_green }
-                : styles.lightText,
-            ]}
+            style={[styles.title, { color: ColorSchema.default.light_green }]}
           >
-            {language && language === "en" ? "App Name" : "Име На Приложението"}
+            {language && language === "en" ? "TOURISTER" : "ТУРИСТЪР"}
           </Text>
         </View>
       </View>
@@ -228,11 +223,12 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
         //     />
         //   </View>
         // </Swipeable>
-        <ErrorMessage
-          text={
-            language === "en" ? "No sites found. Try to reload." : "Грешка."
-          }
-        />
+        <Loading />
+        // <ErrorMessage
+        //   text={
+        //     language === "en" ? "No sites found. Try to reload." : "Грешка."
+        //   }
+        // />
       )}
     </View>
   );

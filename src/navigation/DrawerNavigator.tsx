@@ -10,13 +10,14 @@ import { CustomDrawer } from "../components/drawer/CustomDrawer";
 import { ColorSchema } from "../constants/Colors";
 import { EligibleRewards } from "../models/Rewards";
 import { EligibleRewardsScreen } from "../screens/drawer/EligibleRewards";
-import { EmployeeRewardsScreen } from "../screens/drawer/EmployeeRewards";
+import { ScanRewardsScreen } from "../screens/drawer/ScanRewards";
 import { GivenRewardsScreen } from "../screens/drawer/GivenRewards";
 import { ScanQRScreen } from "../screens/drawer/ScanQR";
 import { SettingScreen } from "../screens/drawer/Settings";
 import { UserState } from "../store/reducers/UserReducer";
 import { AppTabs } from "./MainTabs";
 import { DrawerParamList } from "./types";
+import { EmployeeRewardsScreen } from "../screens/drawer/EmployeeRewards";
 
 const DrawerNavigator = createDrawerNavigator<DrawerParamList>();
 
@@ -173,13 +174,56 @@ export const DrawerNav: React.FC = ({}) => {
         })}
         component={GivenRewardsScreen}
       />
+      <DrawerNavigator.Screen
+        name="EligibleRewards"
+        options={({ navigation }) => ({
+          title: language === "en" ? "Eligible Rewards" : "Отключени Награди",
+          headerShown: true,
+          headerTintColor:
+            theme && theme === "dark"
+              ? ColorSchema.dark.text
+              : ColorSchema.light.text,
+          headerStyle: {
+            backgroundColor:
+              theme && theme === "dark"
+                ? ColorSchema.dark.background
+                : ColorSchema.light.background,
+            borderBottomWidth: theme && theme === "dark" ? 1 : 1,
+            borderBottomColor: theme && theme === "dark" ? "grey" : "grey",
+          },
+          drawerIcon: ({ color }) => (
+            <FontAwesome5 name="gift" size={24} color={color} />
+          ),
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={24}
+              color={
+                theme && theme === "dark"
+                  ? ColorSchema.dark.text
+                  : ColorSchema.light.text
+              }
+              onPress={() => {
+                navigation.toggleDrawer();
+              }}
+            />
+          ),
+        })}
+        component={EligibleRewardsScreen}
+      />
       {user?.employeeInfo !== null ? (
         <>
           <DrawerNavigator.Screen
-            name="EligibleRewards"
+            name="EmployeeRewards"
             initialParams={{ rewards }}
             options={({ navigation }) => ({
-              title: language === "en" ? "Eligible Rewards" : "Награди",
+              drawerItemStyle: {
+                display: "none",
+              },
+              title:
+                language === "en"
+                  ? "Employee Available Rewards"
+                  : "Награди За Раздаване",
               headerShown: true,
               headerTintColor:
                 theme && theme === "dark"
@@ -194,7 +238,7 @@ export const DrawerNav: React.FC = ({}) => {
                 borderBottomColor: theme && theme === "dark" ? "grey" : "grey",
               },
               drawerIcon: ({ color }) => (
-                <FontAwesome5 name="gift" size={24} color={color} />
+                <FontAwesome5 name="user-check" size={24} color={color} />
               ),
               headerLeft: () => (
                 <Ionicons
@@ -211,7 +255,7 @@ export const DrawerNav: React.FC = ({}) => {
                 />
               ),
             })}
-            component={EligibleRewardsScreen}
+            component={EmployeeRewardsScreen}
           />
           <DrawerNavigator.Screen
             name="ScanQR"
@@ -251,10 +295,10 @@ export const DrawerNav: React.FC = ({}) => {
             component={ScanQRScreen}
           />
           <DrawerNavigator.Screen
-            name="EmployeeRewards"
+            name="ScanRewards"
             options={({ navigation }) => ({
               headerShown: true,
-              title: language === "en" ? "Give Rewards" : "Дай Награди",
+              title: language === "en" ? "Give Rewards" : "Дай Награди!",
               headerTintColor:
                 theme && theme === "dark"
                   ? ColorSchema.dark.text
@@ -268,7 +312,7 @@ export const DrawerNav: React.FC = ({}) => {
                 borderBottomColor: theme && theme === "dark" ? "grey" : "grey",
               },
               drawerIcon: ({ color }) => (
-                <FontAwesome5 name="user-check" size={24} color={color} />
+                <AntDesign name="scan1" size={24} color={color} />
               ),
               headerLeft: () => (
                 <Ionicons
@@ -285,7 +329,7 @@ export const DrawerNav: React.FC = ({}) => {
                 />
               ),
             })}
-            component={EmployeeRewardsScreen}
+            component={ScanRewardsScreen}
           />
         </>
       ) : null}

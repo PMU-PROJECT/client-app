@@ -78,7 +78,7 @@ export const RewardCard: React.FC<RewardCardProps> = ({
           }}
           style={styles.image}
         />
-        <View style={{ alignItems: "center" }}>
+        <View style={{ alignItems: "center", width: "80%" }}>
           <Text
             style={[
               {
@@ -92,7 +92,7 @@ export const RewardCard: React.FC<RewardCardProps> = ({
           <ScalableText
             fontSize={16}
             text={description}
-            numberOfLines={2}
+            numberOfLines={4}
             styles={[theme === "dark" ? styles.textDark : styles.textLight]}
           />
         </View>
@@ -120,6 +120,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
     width: windowWidth,
-    padding: 5,
+    padding: 10,
   },
 });

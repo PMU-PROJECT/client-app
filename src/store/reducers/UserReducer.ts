@@ -55,6 +55,36 @@ export const UserReducer = (
       };
     }
 
+    case UserActions.REFRESH_USER_INFO: {
+      const {
+        email,
+        employee_info,
+        first_name,
+        is_admin,
+        last_name,
+        profile_picture,
+        stamps,
+        given_rewards,
+        eligible_rewards,
+      } = action.payload.userInfo;
+      const user = new User(
+        first_name,
+        last_name,
+        email,
+        employee_info,
+        is_admin,
+        profile_picture,
+        stamps,
+        given_rewards,
+        eligible_rewards
+      );
+
+      return {
+        ...state,
+        user,
+      };
+    }
+
     case UserActions.LOGOUT: {
       deleteTable();
       return { ...state, user: null, token: null };
