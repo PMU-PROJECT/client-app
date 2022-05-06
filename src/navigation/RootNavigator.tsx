@@ -12,29 +12,24 @@ import { DrawerNav } from "./DrawerNavigator";
 import { StatusBar } from "expo-status-bar";
 import { store } from "../store/RootReducer";
 
-// const Root = createStackNavigator();
-export type ColorTheme = {
-  theme: "dark" | "light";
-};
-
-// export const ColorContext = createContext<ColorTheme>({ theme: "dark" });
-
-// export type UserToken = {
-//   token: string | null;
-//   setToken: React.Dispatch<React.SetStateAction<string | null>>;
-// };
-
-// export const UserTokenContext = createContext<UserToken>({
-//   token: null,
-//   setToken: () => {},
-// });
-
+/**
+ * @compenent
+ * @description Component used for controlling navigation's logic,
+ * containing the Auth navigator and Drawer Navigator, and conditionaly rendering one of them
+ * if an user authentiction token is present
+ */
 export const RootNavigator: React.FC = ({}) => {
   const [loading, setLoading] = useState<boolean | null>(false);
   // const [image, setImage] = useState();
   const token = useSelector((state: { user: UserState }) => state.user.token);
   const dispatch = useDispatch();
 
+  /**
+   * @async
+   * @function
+   * @description Function used for checking the sqlite database on the devise,
+   * to see if a token is present and get it to used it for requesting new one from server
+   */
   const getNewToken = async () => {
     const dbToken = await getToken();
     // console.log(dbToken);
@@ -53,7 +48,6 @@ export const RootNavigator: React.FC = ({}) => {
               },
             },
           });
-
           // setValidToken(refreshedToken);
         }
       }
@@ -65,12 +59,6 @@ export const RootNavigator: React.FC = ({}) => {
     // deleteTable();
     setLoading(true);
     getNewToken();
-    // console.log("****");
-    // console.log(JSON.stringify(token));
-    // console.log("****");
-    // deleteToken(1);
-    // saveToken("1224");
-    // values@first_name.com
     () => setLoading(null);
   }, []);
 
@@ -93,11 +81,7 @@ export const RootNavigator: React.FC = ({}) => {
       <NavigationContainer>
         <StatusBar hidden={true} />
         {token ? <DrawerNav /> : <AuthStack />}
-        {/* <DrawerNav /> */}
-        {/* <AuthStack /> */}
       </NavigationContainer>
     </Provider>
-    // <ColorContext.Provider value={{ theme: "light" }}>
-    // </ColorContext.Provider>
   );
 };

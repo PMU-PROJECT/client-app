@@ -11,6 +11,12 @@ import { UserActions } from "../../store/actions/UserActions";
 import { UserState } from "../../store/reducers/UserReducer";
 import { ScalableText } from "../general/ScalableText";
 
+/**
+ * @component
+ * @param props any
+ * @description Custom View that wraps the Drawwer Navigator items, and adds a
+ * User profile picture and custom logout button
+ */
 export const CustomDrawer = (props: any) => {
   const dispatch = useDispatch();
   const user = useSelector((state: { user: UserState }) => state.user.user);
@@ -30,18 +36,6 @@ export const CustomDrawer = (props: any) => {
             : styles.contentContainerLight
         }
       >
-        {/* <LinearGradient
-          colors={[
-            ColorSchema.default.success,
-            ColorSchema.light.formButton,
-            ColorSchema.dark.dark_green_alpha,
-          ]}
-          start={[2, 2]}
-          end={{ x: 1, y: 0 }}
-        ></LinearGradient> */}
-        {/* <ImageBackground
-          source={require("../../../assets/images/Vine.jpg")}
-        ></ImageBackground> */}
         <View
           style={[
             styles.userInfoContainer,

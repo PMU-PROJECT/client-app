@@ -9,6 +9,11 @@ import { UserState } from "../store/reducers/UserReducer";
 
 const PlacesNavigator = createStackNavigator<PlacesParamList>();
 
+/**
+ * @compenent
+ * @description Stack Navigator used inside the MainTabs Bottom Navigator,
+ * Containing the screens for Home and SiteDetails
+ */
 export const PlacesStack: React.FC = () => {
   const language = useSelector(
     (state: { user: UserState }) => state.user.language

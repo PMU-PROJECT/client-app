@@ -5,7 +5,7 @@ import { ColorSchema } from "../../constants/Colors";
 import { DrawerNavProps } from "../../navigation/types";
 import { UserState } from "../../store/reducers/UserReducer";
 
-export const ScanQRScreen = ({}: DrawerNavProps<"ScanQR">) => {
+export const ScanRewardsScreen = ({}: DrawerNavProps<"ScanRewards">) => {
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
 
   return (
@@ -17,7 +17,7 @@ export const ScanQRScreen = ({}: DrawerNavProps<"ScanQR">) => {
           : styles.containerLight,
       ]}
     >
-      <Scanner type="stamp" />
+      <Scanner type="reward" />
     </View>
   );
 };

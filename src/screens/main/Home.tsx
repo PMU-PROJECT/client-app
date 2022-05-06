@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Categories } from "../../components/home/Categories";
 import { PlaceCard } from "../../components/home/PlaceCard";
-import { ColorSchema, new_green } from "../../constants/Colors";
+import { ColorSchema } from "../../constants/Colors";
 import { PlacesNavProps } from "../../navigation/types";
 import { fetchAllSites } from "../../utils/makeRequestToServer";
 import { UserState } from "../../store/reducers/UserReducer";
@@ -13,8 +13,9 @@ import { Loading } from "../../components/general/Loading";
 import { windowWidth } from "../../utils/Dimensions";
 import { Site } from "../../models/Site";
 
-import { useSwipe } from "../../hooks/useSwipe";
+import GestureRecognizer from "react-native-swipe-gestures";
 import { mapCategory } from "../../utils/mapCategories";
+import { ErrorMessage } from "../../components/general/ErrorMessage";
 
 export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
@@ -22,21 +23,42 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
     (state: { user: UserState }) => state.user.language
   );
 
-  const { onTouchStart, onTouchEnd } = useSwipe(onSwipeLeft, onSwipeRight, 6);
+  // const renderLeftActions = (progress: any, dragX) => {
+  //   const trans = dragX.interpolate({
+  //     inputRange: [0, 50, 100, 101],
+  //     outputRange: [-20, 0, 0, 1],
+  //   });
+  //   return (
+  //     <View>
+  //       <FlatList
+  //         // columnWrapperStyle={{ justifyContent: "space-between" }}
+  //         showsVerticalScrollIndicator={true}
+  //         contentContainerStyle={{ marginTop: 10, paddingBottom: 50 }}
+  //         numColumns={2}
+  //         data={sites}
+  //         keyExtractor={(item, _idx) => `${item.id}`}
+  //         renderItem={({ item }: { item: Site }) => (
+  //           <PlaceCard
+  //             key={item.id}
+  //             onPress={() => {
+  //               navigation.navigate("PlaceDetails", {
+  //                 id: item.id,
+  //                 title: item.region,
+  //               });
+  //             }}
+  //             description={`${item.city.trim()}`}
+  //             title={item.name}
+  //             imageUrl={item.image}
+  //             visited={item.is_stamped}
+  //           />
+  //         )}
+  //       />
+  //     </View>
+  //   );
+  // };
 
-  function onSwipeLeft() {
-    console.log("SWIPE_LEFT");
-    setCategoryIndex((currentIndex) => {
-      if (currentIndex >= 1) {
-        return currentIndex - 1;
-      } else {
-        return currentIndex;
-      }
-    });
-  }
-
-  function onSwipeRight() {
-    console.log("SWIPE_RIGHT");
+  const onSwipeLeft = () => {
+    // console.log("SWIPE_LEFT");
     setCategoryIndex((currentIndex) => {
       if (currentIndex < 2) {
         return currentIndex + 1;
@@ -44,7 +66,18 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
         return currentIndex;
       }
     });
-  }
+  };
+
+  const onSwipeRight = () => {
+    // console.log("SWIPE_RIGHT");
+    setCategoryIndex((currentIndex) => {
+      if (currentIndex >= 1) {
+        return currentIndex - 1;
+      } else {
+        return currentIndex;
+      }
+    });
+  };
 
   const [categoryIndex, setCategoryIndex] = useState(0);
   // const [active, setActive] = useState<"all" | "visited" | "other">("all");
@@ -57,14 +90,12 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const categories = ["all", "visited", "unvisited"];
-  // const imgUri =
-  //   "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg";
 
   useEffect(() => {
     if (!token) return;
+    setLoading(true);
 
     const fetchSites = async () => {
-      setLoading(true);
       const fetchedSites = await fetchAllSites(
         token,
         categories[categoryIndex] as any
@@ -73,14 +104,14 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
         type: SitesActions.SET_SITES,
         payload: { sites: fetchedSites },
       });
-      setLoading(false);
     };
 
     fetchSites();
+    setLoading(false);
   }, [categoryIndex, token]);
 
   if (loading) {
-    <Loading />;
+    return <Loading />;
   }
 
   return (
@@ -102,17 +133,12 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
           >
             {language && language === "en"
               ? "Welcome To"
-              : "Остроумно заглавие"}
+              : "Приятно използване на"}
           </Text>
           <Text
-            style={[
-              styles.title,
-              theme && theme === "dark"
-                ? { color: new_green }
-                : styles.lightText,
-            ]}
+            style={[styles.title, { color: ColorSchema.default.light_green }]}
           >
-            {language && language === "en" ? "App Name" : "Име На Приложението"}
+            {language && language === "en" ? "TOURISTER" : "ТУРИСТЪР"}
           </Text>
         </View>
       </View>
@@ -123,23 +149,27 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
             key={index}
             index={index}
             onSelect={setCategoryIndex}
-            item={language && language ? item : mapCategory(item as any)}
+            title={
+              language === "en" && language ? item : mapCategory(item as any)
+            }
             selectedIdx={categoryIndex}
           />
         ))}
       </View>
 
-      {sites ? (
-        <View
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-          // showsHorizontalScrollIndicator={false}
-          // showsVerticalScrollIndicator={false}
+      {sites && sites.length !== 0 ? (
+        <GestureRecognizer
+          onSwipeLeft={() => onSwipeLeft()}
+          onSwipeRight={() => onSwipeRight()}
+          config={{
+            velocityThreshold: 0.4,
+            directionalOffsetThreshold: 80,
+          }}
         >
           <FlatList
             // columnWrapperStyle={{ justifyContent: "space-between" }}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ marginTop: 10, paddingBottom: 50 }}
+            showsVerticalScrollIndicator={true}
+            contentContainerStyle={{ marginTop: 10, paddingBottom: 230 }}
             numColumns={2}
             data={sites}
             keyExtractor={(item, _idx) => `${item.id}`}
@@ -159,18 +189,46 @@ export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
               />
             )}
           />
-        </View>
+        </GestureRecognizer>
       ) : (
-        <View>
-          <Text
-            style={[
-              { fontSize: 25, fontWeight: "bold", textAlign: "center" },
-              theme && theme === "dark" ? styles.darkText : styles.lightText,
-            ]}
-          >
-            Sorry we Fucked
-          </Text>
-        </View>
+        // <Swipeable
+        //   onSwipeableLeftOpen={onSwipeLeft}
+        //   onSwipeableRightOpen={onSwipeRight}
+        //   renderLeftActions={renderLeftActions}
+        //   renderRightActions={renderLeftActions}
+        // >
+        //   <View>
+        //     <FlatList
+        //       // columnWrapperStyle={{ justifyContent: "space-between" }}
+        //       showsVerticalScrollIndicator={true}
+        //       contentContainerStyle={{ marginTop: 10, paddingBottom: 50 }}
+        //       numColumns={2}
+        //       data={sites}
+        //       keyExtractor={(item, _idx) => `${item.id}`}
+        //       renderItem={({ item }: { item: Site }) => (
+        //         <PlaceCard
+        //           key={item.id}
+        //           onPress={() => {
+        //             navigation.navigate("PlaceDetails", {
+        //               id: item.id,
+        //               title: item.region,
+        //             });
+        //           }}
+        //           description={`${item.city.trim()}`}
+        //           title={item.name}
+        //           imageUrl={item.image}
+        //           visited={item.is_stamped}
+        //         />
+        //       )}
+        //     />
+        //   </View>
+        // </Swipeable>
+        <Loading />
+        // <ErrorMessage
+        //   text={
+        //     language === "en" ? "No sites found. Try to reload." : "Грешка."
+        //   }
+        // />
       )}
     </View>
   );
@@ -200,7 +258,7 @@ const styles = StyleSheet.create({
   sortBtn: {
     height: 50,
     width: 50,
-    backgroundColor: new_green,
+    backgroundColor: ColorSchema.default.light_green,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
@@ -230,7 +288,7 @@ const styles = StyleSheet.create({
     // marginVertical: 5,
     // padding: 5,
     fontSize: 38,
-    color: new_green,
+    color: ColorSchema.default.light_green,
     fontWeight: "bold",
   },
   darkText: {

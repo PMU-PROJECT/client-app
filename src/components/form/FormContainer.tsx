@@ -2,6 +2,11 @@ import React from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { FormNavButtons } from "./FormNavButtons";
 
+/**
+ * @component
+ * @param props register/login form component
+ * @description Higher-Order Component that wraps a form in KeyboardAvoidingView
+ */
 export const FormContainer: React.FC = (props: any) => {
   return (
     <>
@@ -29,6 +34,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     borderRadius: 10,
     padding: 20,
+    paddingBottom: 0,
   },
   navButtons: {
     alignSelf: "flex-start",

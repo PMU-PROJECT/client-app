@@ -14,6 +14,13 @@ type ImageButtonProps = {
   onPress: ((event: GestureResponderEvent) => void) | undefined;
 };
 
+/**
+ * @component
+ * @param onPress function that should run when the button is pressed
+ * @param description string containig the region of the site
+ * @param title string title of the site
+ * @description Custom text component for automaticly sizing the text to fit
+ */
 export default function ImageButton({
   title,
   description,

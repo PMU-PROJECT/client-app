@@ -1,17 +1,25 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { new_green } from "../../constants/Colors";
+import { ColorSchema } from "../../constants/Colors";
 
 type CategoryProps = {
   index: number;
   onSelect: Function;
   selectedIdx: number;
-  item: string;
+  title: string;
 };
 
+/**
+ * @component
+ * @param index number showing items index
+ * @param onSelect Function to be fired when new item is selected
+ * @param selectedIdx number showing the index of new selected element
+ * @param title string title of the category
+ * @description Component used for containing the categories data on the main screen
+ */
 export const Categories: React.FC<CategoryProps> = ({
   index,
-  item,
+  title,
   onSelect,
   selectedIdx,
 }) => {
@@ -27,7 +35,7 @@ export const Categories: React.FC<CategoryProps> = ({
           selectedIdx === index && styles.categoryTextSelected,
         ]}
       >
-        {item.toUpperCase()}
+        {title.toUpperCase()}
       </Text>
     </TouchableOpacity>
   );
@@ -40,9 +48,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   categoryTextSelected: {
-    color: new_green,
+    color: ColorSchema.default.light_green,
     paddingBottom: 5,
     borderBottomWidth: 2,
-    borderColor: new_green,
+    borderColor: ColorSchema.default.light_green,
   },
 });

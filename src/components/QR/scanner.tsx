@@ -1,12 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button, Alert } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { ColorSchema, new_green } from "../../constants/Colors";
+import { ColorSchema } from "../../constants/Colors";
 import { useSelector } from "react-redux";
 import { UserState } from "../../store/reducers/UserReducer";
-import { receiveStamp } from "../../utils/makeRequestToServer";
+import { getRewards, receiveStamp } from "../../utils/makeRequestToServer";
+import { ScalableText } from "../general/ScalableText";
+import { useNavigation } from "@react-navigation/native";
+import { DrawerParamList } from "../../navigation/types";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
 
-export default function Scanner() {
+type ScannerProps = {
+  type: "stamp" | "reward";
+  // navigation: StackNavigationProp<
+  //   DrawerParamList,
+  //   "EmployeeRewards" | "ScanQR"
+  // >;
+};
+
+/**
+ * @component
+ * @param type string used for showing what function to start after scanning
+ * @description Component used for scanning the QR code with devise camera if user gave his permission
+ * or if he does notthe button will be rendered asking him to give permission
+ */
+export default function Scanner({ type }: ScannerProps) {
   const language = useSelector(
     (state: { user: UserState }) => state.user.language
   );
@@ -14,6 +39,11 @@ export default function Scanner() {
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
 
   const token = useSelector((state: { user: UserState }) => state.user.token);
+
+  const navigation: DrawerNavigationProp<
+    DrawerParamList,
+    "EmployeeRewards" | "ScanQR"
+  > = useNavigation();
 
   const [hasPermission, setHasPermission] = useState<null | boolean>(null);
   const [scanned, setScanned] = useState<boolean>(false);
@@ -34,12 +64,34 @@ export default function Scanner() {
     type: number;
     data: string;
   }) => {
+    if (!token) return;
     setScanned(true);
-    setText(params.data);
+    setText("Scanning!");
     // console.log("Type: " + params.type + "\nData: " + params.data);
 
     if (params.type === 256) {
-      const res = await receiveStamp(token!, params.data);
+      if (type === "stamp") {
+        const res = await receiveStamp(token, params.data);
+      } else if (type === "reward") {
+        const res = await getRewards(token, params.data);
+        if (res) {
+          navigation.navigate("EmployeeRewards", {
+            rewards: res.eligible_rewards,
+            token_id: params.data,
+          });
+        }
+      }
+      // const userInfo: UserInfo | null = await getSelfInfo(token);
+      // if (userInfo !== null) {
+      //   dispatch({
+      //     type: UserActions.REFRESH_USER_INFO,
+      //     payload: {
+      //       userInfo: {
+      //         ...userInfo,
+      //       },
+      //     },
+      //   });
+      // }
     } else {
       Alert.alert("Invalid Scan!", "Please scan a valid QR code!", [
         { text: "Okay" },
@@ -58,10 +110,25 @@ export default function Scanner() {
     return (
       <View style={styles.container}>
         <Text style={{ margin: 10 }}>No access to camera</Text>
-        <Button
-          title={"Allow Camera"}
-          onPress={() => askForCameraPermission()}
-        />
+        <TouchableOpacity
+          onPress={() => {}}
+          style={{
+            backgroundColor: ColorSchema.default.dark_green_alpha,
+            padding: 10,
+            width: 100,
+            borderRadius: 20,
+          }}
+        >
+          <ScalableText
+            fontSize={18}
+            numberOfLines={2}
+            styles={{
+              color: "#fff",
+              textAlign: "center",
+            }}
+            text={"Allow Camera"}
+          />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -103,11 +170,14 @@ export default function Scanner() {
           title={
             language && language === "en" ? "Scan Again" : "Сканирай отново"
           }
-          onPress={() => setScanned(false)}
+          onPress={() => {
+            setScanned(false);
+            setText("Not yet scanned");
+          }}
           color={
             theme && theme === "dark"
               ? ColorSchema.default.dark_green
-              : new_green
+              : ColorSchema.default.light_green
           }
         />
       )}

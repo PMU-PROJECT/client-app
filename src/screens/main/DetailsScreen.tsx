@@ -10,16 +10,20 @@ import { getSiteInfo } from "../../utils/makeRequestToServer";
 import { PlacesNavProps } from "../../navigation/types";
 import { useSelector } from "react-redux";
 import { UserState } from "../../store/reducers/UserReducer";
-import { Details } from "../../models/Site";
+import { SiteDetails } from "../../models/Site";
 import { Loading } from "../../components/general/Loading";
+import { ErrorMessage } from "../../components/general/ErrorMessage";
 
 export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
   const id = route.params.id;
   const token = useSelector((state: { user: UserState }) => state.user.token);
-  const [details, setDetails] = useState<Details | null>(null);
+  const [details, setDetails] = useState<SiteDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
+  const language = useSelector(
+    (state: { user: UserState }) => state.user.language
+  );
 
   useEffect(() => {
     const getInfo = async () => {
@@ -73,7 +77,7 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
 
   if (!loading && details !== null) {
     return (
-      <View
+      <ScrollView
         style={[
           styles.container,
           {
@@ -151,18 +155,20 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
                 {details!.city.trim()}, {details!.region.trim()}
               </Text>
             </View>
-            <Text
-              style={[
-                styles.description,
-                theme && theme === "dark"
-                  ? styles.textDescriptionDark
-                  : styles.textLight,
-              ]}
-            >
-              {"\n"}
-              {details!.description}
-              {"\n"}
-            </Text>
+            <View style={{ padding: 20 }}>
+              <Text
+                style={[
+                  styles.description,
+                  theme && theme === "dark"
+                    ? styles.textDescriptionDark
+                    : styles.textLight,
+                ]}
+              >
+                {"\n"}
+                {details!.description}
+                {"\n"}
+              </Text>
+            </View>
             <View
               style={{
                 flexDirection: "row",
@@ -183,20 +189,13 @@ export const DetailsScreen = ({ route }: PlacesNavProps<"PlaceDetails">) => {
             </View>
           </ScrollView>
         </View>
-      </View>
+      </ScrollView>
     );
   }
   return (
-    <View>
-      <Text
-        style={[
-          { fontSize: 25, fontWeight: "bold", textAlign: "center" },
-          theme && theme === "dark" ? styles.textDark : styles.textLight,
-        ]}
-      >
-        Sorry we Fucked
-      </Text>
-    </View>
+    <ErrorMessage
+      text={language === "en" ? "Error. Try to refresh." : "Грешка."}
+    />
   );
 };
 
@@ -209,6 +208,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     fontSize: 22,
     fontWeight: "bold",
+    paddingHorizontal: 10,
   },
   info: {
     textAlign: "center",
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 40,
   },
   description: {
-    textAlign: "center",
+    textAlign: "justify",
     fontSize: 17,
     // fontWeight: "bold",
   },

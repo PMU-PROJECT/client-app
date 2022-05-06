@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
-import { ColorSchema, new_green } from "../../constants/Colors";
+import { ColorSchema } from "../../constants/Colors";
 // import { useNavigation, useRoute } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { UserState } from "../../store/reducers/UserReducer";
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     color: ColorSchema.light.text,
   },
   buttonActive: {
-    backgroundColor: new_green,
+    backgroundColor: ColorSchema.default.light_green,
     width: "34%",
     color: "#fff",
     height: 40,

@@ -5,6 +5,10 @@ import { ColorSchema } from "../../constants/Colors";
 import { AuthNavProps } from "../../navigation/types";
 import { UserState } from "../../store/reducers/UserReducer";
 
+/**
+ * @compenent
+ * @description Returns the Login screens
+ */
 export const LoginScreen = ({}: AuthNavProps<"Login">) => {
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
 

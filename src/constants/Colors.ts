@@ -39,6 +39,7 @@ export const ColorSchema = {
     tabIconSelected: text_dark_secondary,
   },
   default: {
+    light_green: new_green,
     dark_green: "#00664e",
     dark_green_alpha: "rgba(0, 102, 78, 0.85)",
     warning: warning_main,

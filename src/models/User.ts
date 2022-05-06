@@ -1,35 +1,17 @@
-class User {
-  firstName: string;
-  lastName: string;
-  email: string;
-  employeeInfo: {
-    // {
-    //     "added_by": int,
-    //     "can_reward": bool,
-    //     "email": str,
-    //     "first_name": str,
-    //     "last_name": str,
-    //     "place_id": int,
-    //     "profile_picture": str
-    // },
-  } | null;
-  is_admin: boolean;
-  profile_picture: string;
-  stamps: []; // {
-  //     "employee_id": int,
-  //     "given_on": str,
-  //     "place_id": int,
-  //     "visitor_id": int
-  //   }
+import { EligibleRewards, GivenRewards } from "./Rewards";
+import { EmployeeInfo, UserInfo } from "./UserInfo";
 
+class User implements UserInfo {
   constructor(
     firstName: string,
     lastName: string,
     email: string,
-    employeeInfo: {} | null = null,
+    employeeInfo: EmployeeInfo | null = null,
     is_admin: boolean = false,
     profile_picture: string,
-    stamps: [] = []
+    stamps: [] = [],
+    given_rewards: GivenRewards[] = [],
+    eligible_rewards: EligibleRewards[] = []
   ) {
     this.firstName = firstName;
     this.lastName = lastName;
@@ -38,7 +20,18 @@ class User {
     this.employeeInfo = employeeInfo;
     this.profile_picture = profile_picture;
     this.stamps = stamps;
+    this.given_rewards = given_rewards;
+    this.eligible_rewards = eligible_rewards;
   }
+  firstName: string;
+  lastName: string;
+  email: string;
+  employeeInfo: EmployeeInfo | null;
+  is_admin: boolean;
+  profile_picture: string;
+  stamps;
+  given_rewards: GivenRewards[];
+  eligible_rewards: EligibleRewards[];
 }
 
 export default User;

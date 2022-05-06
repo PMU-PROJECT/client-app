@@ -1,6 +1,10 @@
-// import { enablePromise, openDatabase } from "react-native-sqlite-storage"
 import * as SQLite from "expo-sqlite";
 
+/**
+ * @function
+ * @description Function used for creating the database and the token table
+ * on the devise
+ */
 export const setupDB = () => {
   try {
     const db = SQLite.openDatabase("DBNAME.db");
@@ -18,6 +22,11 @@ export const setupDB = () => {
   }
 };
 
+/**
+ * @function
+ * @description Function used for searching the database for a token
+ * @returns string token or null if the query fails
+ */
 export const getToken: () => Promise<string | null> = () => {
   return new Promise((resolve) => {
     try {
@@ -55,6 +64,12 @@ export const getToken: () => Promise<string | null> = () => {
   });
 };
 
+/**
+ * @function
+ * @param token string
+ * @description Function used for inserting a token string
+ * to the database
+ */
 export const saveToken = (token: string) => {
   try {
     const db = SQLite.openDatabase("DBNAME.db");
@@ -68,6 +83,12 @@ export const saveToken = (token: string) => {
   }
 };
 
+/**
+ * @function
+ * @param id number of the token
+ * @description Function used for deleting token from
+ * the database based on given id number
+ */
 export const deleteToken = async (id: number) => {
   try {
     const db = SQLite.openDatabase("DBNAME.db");
@@ -80,6 +101,10 @@ export const deleteToken = async (id: number) => {
   }
 };
 
+/**
+ * @function
+ * @description Function used for deleting the entire database from the device
+ */
 export const deleteTable = () => {
   try {
     const db = SQLite.openDatabase("DBNAME.db");
