@@ -11,7 +11,7 @@ import { Loading } from "../../components/general/Loading";
 import { ErrorMessage } from "../../components/general/ErrorMessage";
 
 export const QRCodeScreen = ({}: PlacesNavProps<"Home">) => {
-  usePreventScreenCapture();
+  // usePreventScreenCapture();
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
 
   const [token, setToken] = useState<null | string>(null);
