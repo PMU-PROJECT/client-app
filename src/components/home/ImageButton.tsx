@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
+    padding: 2.5,
     fontWeight: "bold",
     textAlign: "center",
     color: ColorSchema.dark.text,
