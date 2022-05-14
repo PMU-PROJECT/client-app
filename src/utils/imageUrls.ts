@@ -1,4 +1,4 @@
-const serverUrl = "https://2e6c-87-126-123-62.eu.ngrok.io/imageserver/";
+const serverUrl = "https://afa5-78-90-52-121.eu.ngrok.io/imageserver/";
 
 export const createSitesImageUrl = (picture_name: string) => {
   return `${serverUrl}tourist_sites?name=${picture_name}`;

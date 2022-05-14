@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessage } from "../../components/general/ErrorMessage";
+import { Loading } from "../../components/general/Loading";
 import { RewardCard } from "../../components/rewards/RewardCard";
 import { ColorSchema } from "../../constants/Colors";
 import { GivenRewards } from "../../models/Rewards";
 import { DrawerNavProps } from "../../navigation/types";
+import { UserActions } from "../../store/actions/UserActions";
 import { UserState } from "../../store/reducers/UserReducer";
+import { getSelfInfo } from "../../utils/makeRequestToServer";
 
 export const GivenRewardsScreen = ({}: DrawerNavProps<"GivenRewards">) => {
   const rewards: GivenRewards[] | null = useSelector(
@@ -17,10 +20,39 @@ export const GivenRewardsScreen = ({}: DrawerNavProps<"GivenRewards">) => {
     }
   );
 
+  const token = useSelector((state: { user: UserState }) => state.user.token);
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
   const language = useSelector(
     (state: { user: UserState }) => state.user.language
   );
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setLoading(true);
+    const refresh = async () => {
+      if (!token) return;
+      const userInfo = await getSelfInfo(token);
+      if (userInfo !== null) {
+        dispatch({
+          type: UserActions.REFRESH_USER_INFO,
+          payload: {
+            userInfo: {
+              ...userInfo,
+            },
+          },
+        });
+      }
+    };
+
+    refresh();
+    setLoading(false);
+  }, [token]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <View

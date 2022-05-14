@@ -4,7 +4,7 @@ import { Site, SiteDetails } from "../models/Site";
 import { TokenResponse } from "expo-auth-session";
 import { UserInfo } from "../models/UserInfo";
 
-const linkURL = "https://2e6c-87-126-123-62.eu.ngrok.io/api/";
+const linkURL = "https://afa5-78-90-52-121.eu.ngrok.io/api/";
 
 /**
  * @async

@@ -1,5 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
-import AppLoading from "expo-app-loading";
+import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { Provider, useDispatch, useSelector } from "react-redux";
@@ -9,7 +10,7 @@ import { getToken, setupDB } from "../utils/databaseUtils";
 import { getSelfInfo, refreshAuthToken } from "../utils/makeRequestToServer";
 import { AuthStack } from "./AuthStack";
 import { DrawerNav } from "./DrawerNavigator";
-import { StatusBar } from "expo-status-bar";
+import { Loading } from "../components/general/Loading";
 import { store } from "../store/RootReducer";
 
 /**
@@ -19,7 +20,7 @@ import { store } from "../store/RootReducer";
  * if an user authentiction token is present
  */
 export const RootNavigator: React.FC = ({}) => {
-  const [loading, setLoading] = useState<boolean | null>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   // const [image, setImage] = useState();
   const token = useSelector((state: { user: UserState }) => state.user.token);
   const dispatch = useDispatch();
@@ -54,26 +55,30 @@ export const RootNavigator: React.FC = ({}) => {
     }
   };
 
+  async function prepare() {
+    try {
+      setLoading(true);
+      // Keep the splash screen visible while we fetch resources
+      await SplashScreen.preventAutoHideAsync();
+      // Pre-load fonts, make any API calls you need to do here
+      await getNewToken();
+    } catch (error: any) {
+      console.warn(error);
+      Alert.alert(`${error.name}`, `${error.message}`, [{ text: "Okay" }]);
+    } finally {
+      // Tell the application to render
+      setLoading(false);
+      await SplashScreen.hideAsync();
+    }
+  }
+
   useEffect(() => {
     setupDB();
-    // deleteTable();
-    setLoading(true);
-    getNewToken();
-    () => setLoading(null);
+    prepare();
   }, []);
 
   if (loading) {
-    return (
-      <AppLoading
-        startAsync={getNewToken}
-        onFinish={() => {
-          setLoading(false);
-        }}
-        onError={(error) =>
-          Alert.alert(`${error.name}`, `${error.message}`, [{ text: "Okay" }])
-        }
-      />
-    );
+    return null; //<Loading />;
   }
 
   return (
