@@ -15,13 +15,14 @@ export const setupDB = () => {
           id INTEGER NOT NULL PRIMARY KEY,
           language TEXT NOT NULL,
           theme TEXT NOT NULL
-        );
-        CREATE TABLE IF NOT EXISTS token (
-          id INTEGER NOT NULL PRIMARY KEY,
-          value TEXT NOT NULL
-        );
-         `
+        );`
       );
+      tx.executeSql(`
+      CREATE TABLE IF NOT EXISTS token (
+        id INTEGER NOT NULL PRIMARY KEY,
+        value TEXT NOT NULL
+      );
+      `);
     });
   } catch (err) {
     console.log("Error setupDB");

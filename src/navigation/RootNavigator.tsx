@@ -70,7 +70,7 @@ export const RootNavigator: React.FC = ({}) => {
     const dbLang = await getLanguageSetting();
     const dbTheme = await getThemeSetting();
 
-    if (dbLang !== null) {
+    if (dbLang !== null && dbLang !== undefined) {
       dispatch({
         type: UserActions.LANGUAGE_CHANGE,
         payload: {
@@ -79,7 +79,7 @@ export const RootNavigator: React.FC = ({}) => {
       });
     }
 
-    if (dbTheme !== null) {
+    if (dbTheme !== null && dbTheme !== undefined) {
       dispatch({
         type: UserActions.THEME_CHANGE,
         payload: {
