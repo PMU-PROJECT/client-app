@@ -1,5 +1,10 @@
 import User from "../../models/User";
-import { deleteTable, saveToken } from "../../utils/databaseUtils";
+import {
+  deleteSettingsTable,
+  deleteTokenTable,
+  saveSettings,
+  saveToken,
+} from "../../utils/databaseUtils";
 import { UserActions } from "../actions/UserActions";
 
 export interface UserState {
@@ -23,7 +28,7 @@ export const UserReducer = (
   switch (action.type) {
     case UserActions.LOGIN:
     case UserActions.REGISTER: {
-      deleteTable();
+      deleteTokenTable();
       saveToken(action.payload.token);
       const {
         email,
@@ -86,11 +91,13 @@ export const UserReducer = (
     }
 
     case UserActions.LOGOUT: {
-      deleteTable();
+      deleteTokenTable();
       return { ...state, user: null, token: null };
     }
 
     case UserActions.LANGUAGE_CHANGE: {
+      deleteSettingsTable();
+      saveSettings(action.payload.language, state.theme);
       return {
         ...state,
         language: action.payload.language,
@@ -98,6 +105,8 @@ export const UserReducer = (
     }
 
     case UserActions.THEME_CHANGE: {
+      deleteSettingsTable();
+      saveSettings(state.language, action.payload.theme);
       return {
         ...state,
         theme: action.payload.theme,
