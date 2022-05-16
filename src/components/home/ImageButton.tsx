@@ -34,6 +34,7 @@ export default function ImageButton({
             height: "75%",
             alignItems: "center",
             justifyContent: "center",
+            padding: 5,
           }}
         >
           <ScalableText

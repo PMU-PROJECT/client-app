@@ -6,7 +6,12 @@ import { Alert } from "react-native";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { UserActions } from "../store/actions/UserActions";
 import { UserState } from "../store/reducers/UserReducer";
-import { getToken, setupDB } from "../utils/databaseUtils";
+import {
+  getLanguageSetting,
+  getThemeSetting,
+  getToken,
+  setupDB,
+} from "../utils/databaseUtils";
 import { getSelfInfo, refreshAuthToken } from "../utils/makeRequestToServer";
 import { AuthStack } from "./AuthStack";
 import { DrawerNav } from "./DrawerNavigator";
@@ -55,6 +60,35 @@ export const RootNavigator: React.FC = ({}) => {
     }
   };
 
+  /**
+   * @async
+   * @function
+   * @description Function used for checking the sqlite database on the devise,
+   * to see if any settings are present and get and set them
+   */
+  const getSettings = async () => {
+    const dbLang = await getLanguageSetting();
+    const dbTheme = await getThemeSetting();
+
+    if (dbLang !== null && dbLang !== undefined) {
+      dispatch({
+        type: UserActions.LANGUAGE_CHANGE,
+        payload: {
+          language: dbLang,
+        },
+      });
+    }
+
+    if (dbTheme !== null && dbTheme !== undefined) {
+      dispatch({
+        type: UserActions.THEME_CHANGE,
+        payload: {
+          theme: dbTheme,
+        },
+      });
+    }
+  };
+
   async function prepare() {
     try {
       setLoading(true);
@@ -62,6 +96,7 @@ export const RootNavigator: React.FC = ({}) => {
       await SplashScreen.preventAutoHideAsync();
       // Pre-load fonts, make any API calls you need to do here
       await getNewToken();
+      await getSettings();
     } catch (error: any) {
       console.warn(error);
       Alert.alert(`${error.name}`, `${error.message}`, [{ text: "Okay" }]);

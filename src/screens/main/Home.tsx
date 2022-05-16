@@ -15,7 +15,6 @@ import { Site } from "../../models/Site";
 
 import GestureRecognizer from "react-native-swipe-gestures";
 import { mapCategory } from "../../utils/mapCategories";
-import { ErrorMessage } from "../../components/general/ErrorMessage";
 
 export const HomeScreen = ({ navigation }: PlacesNavProps<"Home">) => {
   const theme = useSelector((state: { user: UserState }) => state.user.theme);
