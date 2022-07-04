@@ -2,7 +2,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/genadi53/react-shop-app">
-    <img src="assets/images/white-bg.png" alt="tourister-logo-white-bg" width="80" height="80">
+    <img src="assets/images/white-bg.png" alt="tourister-logo-white-bg" width="480" height="480">
   </a>
 
 <br />
