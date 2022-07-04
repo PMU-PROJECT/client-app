@@ -2,25 +2,27 @@
 <br />
 <p align="center">
   <a href="https://github.com/genadi53/react-shop-app">
-    <img src="assets/images/logo-white.png" alt="tourister-logo-white-bg" width="80" height="80">
+    <img src="assets/images/logo-white.png" alt="tourister-logo-white-bg" width="120" height="120">
   </a>
 
-<br />
-  <h1 align="center">TOURISTER</h1>
+## TOURISTER
 
-## Introduction
-
+Tourister is the digital version of the booklet of the 100 national tourist sites. Our application aims to help the Bulgarian tourist by providing information about all tourist sites a few clicks away and to digitize the morally outdated system of paper books. With Tourister everything you need is always in your pocket.
+  
 ## Built With
 
 - [React](https://reactjs.org/)
-- [SASS](https://sass-lan)
+- [React Native](https://reactnative.dev/)
+- [Expo](https://docs.expo.dev/)
+- [React Navigation](https://reactnavigation.org/)
 - [Redux](https://redux.js.org/)
+- [SASS](https://sass-lan)
 
 <!-- GETTING STARTED -->
 
 ## Getting Started
 
-To get a local copy up and running follow these simple steps.
+You can download Expo mobile client and copy this [link](https://expo.dev/@gen44o/tourister) and pasting it in the app or get a local copy up and running by following these simple steps.
 
 ### Installation
 
